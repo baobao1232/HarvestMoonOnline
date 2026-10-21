@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://bxnxe2xpgb6xd"]
+
+[ext_resource type="Script" uid="uid://810sndudgb6m" path="res://scripts/select_char.gd" id="1_ikwvk"]
+
+[node name="SelectChar" type="Control" unique_id=1468898547]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ikwvk")
+
+[node name="Char1" type="Button" parent="." unique_id=1101031050]
+layout_direction = 2
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -298.0
+offset_top = -79.0
+offset_right = 298.0
+offset_bottom = 79.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 64
+text = "Char1"
+
+[node name="Create" type="Button" parent="." unique_id=1735355099]
+layout_mode = 0
+offset_left = -223.0
+offset_top = 101.0
+offset_right = 186.0
+offset_bottom = 201.0
+theme_override_font_sizes/font_size = 64
+text = "Tạo nhân vật"
+
+[node name="Enter" type="Button" parent="." unique_id=983252043]
+layout_mode = 0
+offset_left = -149.0
+offset_top = 223.0
+offset_right = 141.0
+offset_bottom = 323.0
+theme_override_font_sizes/font_size = 64
+text = "Tham gia"
+
+[connection signal="pressed" from="Char1" to="." method="_on_char_1_pressed"]
+[connection signal="pressed" from="Create" to="." method="_on_create_pressed"]
+[connection signal="pressed" from="Enter" to="." method="_on_enter_pressed"]

@@ -1,0 +1,225 @@
+[gd_scene format=3 uid="uid://bh6q6s0y7mh2o"]
+
+[ext_resource type="Texture2D" uid="uid://cgu2il68bn8co" path="res://Assest/Maps/Farm Map (Autumn).png" id="1_1xrin"]
+[ext_resource type="Script" uid="uid://dciyt2bv1m35" path="res://scripts/Maps/farm.gd" id="1_mdcsu"]
+[ext_resource type="Texture2D" uid="uid://dpta1bule4vdu" path="res://Assest/Buildings/chicken_house.png" id="3_r1v2c"]
+[ext_resource type="Texture2D" uid="uid://bsq25tfe3gvdn" path="res://Assest/Buildings/CoiXoayNuoc.png" id="4_hf0jr"]
+[ext_resource type="Script" uid="uid://c1evi4507st0i" path="res://scripts/Teleport.gd" id="5_hf0jr"]
+[ext_resource type="PackedScene" uid="uid://djrh5nd0j6eln" path="res://scn/Icons/Sign.tscn" id="5_iea4n"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4pd2g"]
+size = Vector2(208, 98.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y3y5q"]
+size = Vector2(209, 97)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ncudm"]
+size = Vector2(46.875, 82)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_18xoq"]
+size = Vector2(47, 74)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2u5jx"]
+size = Vector2(22, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fhj50"]
+size = Vector2(754.5, 59.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ikn1w"]
+size = Vector2(640, 55.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3b6x3"]
+size = Vector2(81, 502)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ksy64"]
+size = Vector2(81.5, 61)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2oy18"]
+size = Vector2(24, 602)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1xrin"]
+size = Vector2(24.5, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ia0u1"]
+size = Vector2(695, 409)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8adul"]
+size = Vector2(118, 27.375)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hf0jr"]
+size = Vector2(128, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_of67g"]
+size = Vector2(72.625, 6.625)
+
+[node name="Farm" type="Node2D" unique_id=757533557]
+script = ExtResource("1_mdcsu")
+
+[node name="Map" type="Sprite2D" parent="." unique_id=660203788]
+texture_filter = 1
+texture = ExtResource("1_1xrin")
+centered = false
+metadata/_edit_lock_ = true
+
+[node name="Collision" type="Node2D" parent="." unique_id=2130798031]
+metadata/_edit_lock_ = true
+
+[node name="NhaBo" type="StaticBody2D" parent="Collision" unique_id=2053070813]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Collision/NhaBo" unique_id=488941043]
+position = Vector2(520, 63)
+shape = SubResource("RectangleShape2D_4pd2g")
+metadata/_edit_lock_ = true
+
+[node name="NhaChinh" type="StaticBody2D" parent="Collision" unique_id=695665499]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Collision/NhaChinh" unique_id=971322469]
+position = Vector2(168, 63)
+shape = SubResource("RectangleShape2D_y3y5q")
+metadata/_edit_lock_ = true
+
+[node name="NhaNgua" type="StaticBody2D" parent="Collision" unique_id=1071096382]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Collision/NhaNgua" unique_id=398484571]
+position = Vector2(751.5625, 69)
+shape = SubResource("RectangleShape2D_ncudm")
+metadata/_edit_lock_ = true
+
+[node name="NhaGo" type="StaticBody2D" parent="Collision" unique_id=746090920]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Collision/NhaGo" unique_id=770998026]
+position = Vector2(695.5, 76)
+shape = SubResource("RectangleShape2D_18xoq")
+metadata/_edit_lock_ = true
+
+[node name="ThungBanNongSan" type="StaticBody2D" parent="Collision" unique_id=1347776926]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Collision/ThungBanNongSan" unique_id=182418192]
+position = Vector2(244, 188)
+shape = SubResource("RectangleShape2D_2u5jx")
+metadata/_edit_lock_ = true
+
+[node name="AoNuoc" type="StaticBody2D" parent="Collision" unique_id=324189565]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Collision/AoNuoc" unique_id=1152714730]
+polygon = PackedVector2Array(200, 296, 257, 296, 257, 336, 248, 339, 257, 343, 256, 360, 218, 361, 200, 354, 200, 329)
+metadata/_edit_lock_ = true
+
+[node name="Khac" type="StaticBody2D" parent="Collision" unique_id=1543295798]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Collision/Khac" unique_id=1042293154]
+position = Vector2(664.75, 672.75)
+shape = SubResource("RectangleShape2D_fhj50")
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Collision/Khac" unique_id=301982558]
+position = Vector2(704, 28.25)
+shape = SubResource("RectangleShape2D_ikn1w")
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Collision/Khac" unique_id=1515561151]
+position = Vector2(30.5, 241)
+shape = SubResource("RectangleShape2D_3b6x3")
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Collision/Khac" unique_id=1221392459]
+position = Vector2(254.75, 26.5)
+shape = SubResource("RectangleShape2D_ksy64")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Collision/Khac" unique_id=522730054]
+polygon = PackedVector2Array(241, 641, 130, 641, 128, 624, 97, 623, 95, 585, 78, 586, 77, 562, 63, 561, 65, 508, -5, 510, 7, 699, 242, 708)
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D5" type="CollisionShape2D" parent="Collision/Khac" unique_id=934810123]
+position = Vector2(1012, 342)
+shape = SubResource("RectangleShape2D_2oy18")
+
+[node name="NhaCho" type="StaticBody2D" parent="Collision" unique_id=2028531268]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Collision/NhaCho" unique_id=1268089421]
+position = Vector2(404.25, 72)
+shape = SubResource("RectangleShape2D_1xrin")
+metadata/_edit_lock_ = true
+
+[node name="BaiDat" type="Area2D" parent="Collision" unique_id=895295908]
+metadata/_edit_lock_ = true
+
+[node name="Colli_Dat" type="CollisionShape2D" parent="Collision/BaiDat" unique_id=576679221]
+position = Vector2(616.5, 375.5)
+shape = SubResource("RectangleShape2D_ia0u1")
+metadata/_edit_lock_ = true
+
+[node name="YSort" type="Node2D" parent="." unique_id=939599736]
+y_sort_enabled = true
+texture_filter = 1
+
+[node name="Spawn" type="Marker2D" parent="YSort" unique_id=1785936315]
+position = Vector2(151, 146)
+metadata/_edit_lock_ = true
+
+[node name="SpawnTown1" type="Marker2D" parent="YSort" unique_id=2076977971]
+position = Vector2(339, 40)
+metadata/_edit_lock_ = true
+
+[node name="SpawnFarm1" type="Marker2D" parent="YSort" unique_id=184065317]
+position = Vector2(263, 667)
+
+[node name="ChuongGa" type="StaticBody2D" parent="YSort" unique_id=1850223050]
+visible = false
+position = Vector2(174, 497)
+metadata/_edit_lock_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="YSort/ChuongGa" unique_id=908555489]
+texture_filter = 1
+position = Vector2(2, -31)
+texture = ExtResource("3_r1v2c")
+metadata/_edit_lock_ = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="YSort/ChuongGa" unique_id=1902151028]
+position = Vector2(-174, -495)
+polygon = PackedVector2Array(113, 482, 193, 480, 240, 479, 240, 511, 157, 511, 157, 481, 135, 481, 136, 512, 112, 510)
+metadata/_edit_lock_ = true
+
+[node name="Coixoaynuoc" type="StaticBody2D" parent="YSort" unique_id=1294205888]
+position = Vector2(91, 503)
+metadata/_edit_lock_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="YSort/Coixoaynuoc" unique_id=70018853]
+texture_filter = 1
+position = Vector2(-20, -23)
+texture = ExtResource("4_hf0jr")
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="YSort/Coixoaynuoc" unique_id=598100893]
+position = Vector2(-38, -5)
+shape = SubResource("RectangleShape2D_8adul")
+metadata/_edit_lock_ = true
+
+[node name="Sign" parent="YSort" unique_id=1521790615 instance=ExtResource("5_iea4n")]
+position = Vector2(82, 203)
+dialog_lines = Array[String](["Chưa mở đâu bạn"])
+
+[node name="ToTown" type="Area2D" parent="." unique_id=569387098]
+position = Vector2(338, 8)
+script = ExtResource("5_hf0jr")
+target_map = "res://scn/Maps/town1.tscn"
+target_spawn = "SpawnFarm"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ToTown" unique_id=278201021]
+position = Vector2(2, -1)
+shape = SubResource("RectangleShape2D_hf0jr")
+
+[node name="ToForest" type="Area2D" parent="." unique_id=1323395951]
+script = ExtResource("5_hf0jr")
+target_map = "res://scn/Maps/forest.tscn"
+target_spawn = "SpawnFarm"
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ToForest" unique_id=940518569]
+position = Vector2(265, 703)
+shape = SubResource("RectangleShape2D_of67g")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1208121335]
+
+[connection signal="body_entered" from="ToTown" to="ToTown" method="_on_body_entered"]
+[connection signal="body_entered" from="ToForest" to="ToForest" method="_on_body_entered"]

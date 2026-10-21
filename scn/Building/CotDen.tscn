@@ -1,0 +1,85 @@
+[gd_scene format=3 uid="uid://b8qdu173sub00"]
+
+[ext_resource type="Texture2D" uid="uid://xqa6vfwe3ka0" path="res://Assest/Buildings/den_duong.png" id="1_cgn5h"]
+[ext_resource type="Shader" uid="uid://diluvbh52q672" path="res://shader/CotDen.gdshader" id="1_m743h"]
+[ext_resource type="Script" uid="uid://bqbm861r0y0j5" path="res://scripts/Buildings/cot_den.gd" id="1_q11e8"]
+[ext_resource type="Texture2D" uid="uid://cbcd7pt241kw1" path="res://Assest/Buildings/den_duong_sang.png" id="3_q11e8"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7pf6h"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_m743h"]
+shader = ExtResource("1_m743h")
+shader_parameter/light_pos = Vector2(0.5, 0.5)
+shader_parameter/radius = 0.4
+shader_parameter/softness = 0.5
+shader_parameter/light_color = Color(1, 0.9, 0.6, 1)
+shader_parameter/intensity = 1.2
+
+[sub_resource type="Gradient" id="Gradient_q11e8"]
+offsets = PackedFloat32Array(0.8492729, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_7pf6h"]
+gradient = SubResource("Gradient_q11e8")
+fill = 1
+fill_from = Vector2(0.5199147, 0.50282055)
+fill_to = Vector2(0.70916015, 0.9686325)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cgn5h"]
+size = Vector2(5, 6.5)
+
+[node name="CotDen" type="StaticBody2D" unique_id=1680690737]
+z_index = 1
+texture_filter = 1
+material = SubResource("ShaderMaterial_7pf6h")
+script = ExtResource("1_q11e8")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1940547924]
+visible = false
+material = SubResource("ShaderMaterial_m743h")
+offset_left = -103.0
+offset_top = -125.0
+offset_right = 100.0
+offset_bottom = 57.0
+metadata/_edit_lock_ = true
+
+[node name="BanNgay" type="TextureRect" parent="." unique_id=1218591810]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -9.0
+offset_top = -43.0
+offset_right = 7.0
+offset_bottom = 3.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_cgn5h")
+
+[node name="BanDem" type="TextureRect" parent="." unique_id=579589446]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -4.0
+offset_top = -42.0
+offset_right = 4.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_q11e8")
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=967590400]
+visible = false
+position = Vector2(0, -33)
+scale = Vector2(1.7753906, 1.6835938)
+shadow_enabled = true
+texture = SubResource("GradientTexture2D_7pf6h")
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=946260889]
+position = Vector2(0, -0.75)
+shape = SubResource("RectangleShape2D_cgn5h")
+metadata/_edit_lock_ = true

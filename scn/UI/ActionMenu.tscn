@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://duotjwg5tx3qg"]
+
+[ext_resource type="Texture2D" uid="uid://btmy0xrjfej0r" path="res://Assest/UI/selector_box.png" id="1_a6xj3"]
+[ext_resource type="Script" uid="uid://c8uahl52mv381" path="res://scripts/UI/action_menu.gd" id="1_pkc8t"]
+[ext_resource type="PackedScene" uid="uid://cqwngmjvvlf10" path="res://scn/UI/ActionItem.tscn" id="2_3p3x2"]
+[ext_resource type="Texture2D" uid="uid://cph8ira74rjl3" path="res://Assest/UI/cursor.png" id="4_owkba"]
+
+[node name="ActionMenu" type="Control" unique_id=589353346]
+texture_filter = 1
+layout_mode = 3
+anchor_right = 0.19700001
+anchor_bottom = 0.29500002
+offset_right = 4.839981
+offset_bottom = -7.400009
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_pkc8t")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=944877341]
+layout_mode = 0
+offset_right = 328.0
+offset_bottom = 223.0
+texture = ExtResource("1_a6xj3")
+
+[node name="Vbox" type="VBoxContainer" parent="." unique_id=729067821]
+layout_mode = 0
+offset_left = 46.0
+offset_top = 20.0
+offset_right = 301.0
+offset_bottom = 201.0
+alignment = 1
+
+[node name="Item" parent="Vbox" unique_id=898325194 instance=ExtResource("2_3p3x2")]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Item2" parent="Vbox" unique_id=913189123 instance=ExtResource("2_3p3x2")]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Item3" parent="Vbox" unique_id=914205169 instance=ExtResource("2_3p3x2")]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Cursor" type="TextureRect" parent="." unique_id=782455197]
+layout_mode = 0
+offset_left = 262.0
+offset_top = 27.0
+offset_right = 304.0
+offset_bottom = 77.0
+texture = ExtResource("4_owkba")

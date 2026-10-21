@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://cv2ln5f80reaw"]
+
+[ext_resource type="Texture2D" uid="uid://de27hund2ikxg" path="res://Assest/Buildings/goccay02.png" id="2_rgs26"]
+[ext_resource type="Texture2D" uid="uid://dddh8fyh7kr7m" path="res://Assest/Buildings/laccay02.png" id="3_oiavt"]
+[ext_resource type="Shader" uid="uid://dvfohp8bs33xh" path="res://shader/Animation_LaCay.gdshader" id="3_w8r71"]
+[ext_resource type="Script" uid="uid://dn3cau67mbglh" path="res://scripts/ShadowCaster.gd" id="5_rgs26"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wwoys"]
+shader = ExtResource("3_w8r71")
+shader_parameter/strength = 0.03
+shader_parameter/speed = 2.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1y0x0"]
+size = Vector2(18, 9)
+
+[node name="CayThong" type="StaticBody2D" unique_id=1327789601]
+position = Vector2(92, 128)
+
+[node name="Thancay" type="Sprite2D" parent="." unique_id=60842265]
+texture_filter = 1
+position = Vector2(1, -5)
+texture = ExtResource("2_rgs26")
+
+[node name="Lacay" type="Sprite2D" parent="." unique_id=953452841]
+z_index = 10
+texture_filter = 1
+material = SubResource("ShaderMaterial_wwoys")
+position = Vector2(-2, -49)
+texture = ExtResource("3_oiavt")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1273983124]
+position = Vector2(0, -1)
+shape = SubResource("RectangleShape2D_1y0x0")
+
+[node name="ShadowThaan" type="Sprite2D" parent="." unique_id=2086386966]
+texture_filter = 1
+position = Vector2(-0.99999976, 1)
+scale = Vector2(1.1796875, 1)
+script = ExtResource("5_rgs26")
+target_path = NodePath("../Thancay")
+trunk_path = NodePath("../Thancay")
+length_max = -2.0
+
+[node name="ShadowLa" type="Sprite2D" parent="." unique_id=2055138024]
+script = ExtResource("5_rgs26")
+shadow_type = 1
+target_path = NodePath("../Lacay")
+trunk_path = NodePath("../Thancay")
+length_max = -2.0
+foot_offset = -15.0

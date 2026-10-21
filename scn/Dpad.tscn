@@ -1,0 +1,124 @@
+[gd_scene format=3 uid="uid://e2wpgl6fpprc"]
+
+[ext_resource type="Texture2D" uid="uid://8dh3da0sef1c" path="res://Assest/joystick/joy_up.png" id="1_7s7ji"]
+[ext_resource type="Script" uid="uid://efu0aql507c4" path="res://Dpad.gd" id="1_gv43l"]
+[ext_resource type="Texture2D" uid="uid://dd4idkifm8ph5" path="res://Assest/joystick/joy_up_press.png" id="2_gv43l"]
+[ext_resource type="Texture2D" uid="uid://bvgfxe64nnl6e" path="res://Assest/joystick/joy_down.png" id="3_rex3i"]
+[ext_resource type="Texture2D" uid="uid://dmvlwfej5w1mk" path="res://Assest/joystick/joy_down_press.png" id="4_lknby"]
+[ext_resource type="Texture2D" uid="uid://b7h8ul4rvtul" path="res://Assest/joystick/joy_left.png" id="5_q53wj"]
+[ext_resource type="Texture2D" uid="uid://dubgbbfheto" path="res://Assest/joystick/joy_left_press.png" id="6_okaep"]
+[ext_resource type="Texture2D" uid="uid://cl61f317g1amg" path="res://Assest/joystick/joy_right.png" id="7_m5lsa"]
+[ext_resource type="Texture2D" uid="uid://c3r8wafx07dhy" path="res://Assest/joystick/joy_right_press.png" id="8_8l21t"]
+[ext_resource type="Texture2D" uid="uid://cn0f16f2djw26" path="res://Assest/joystick/btnA.png" id="10_lknby"]
+[ext_resource type="Script" uid="uid://c1k2y8en3mlwa" path="res://scripts/UI/button.gd" id="10_m5lsa"]
+[ext_resource type="Texture2D" uid="uid://ddcf7flsj38pf" path="res://Assest/joystick/btnA_down.png" id="11_q53wj"]
+[ext_resource type="Texture2D" uid="uid://bihok03hty8te" path="res://Assest/joystick/btnX.png" id="12_okaep"]
+[ext_resource type="Texture2D" uid="uid://gdv0cwkuao1y" path="res://Assest/joystick/btnX_down.png" id="13_m5lsa"]
+
+[node name="CanvasLayer" type="CanvasLayer" unique_id=1698848684]
+layer = 0
+
+[node name="Dpad" type="Control" parent="." unique_id=1502041825]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 25.0
+offset_top = -336.99997
+offset_right = 74.66667
+offset_bottom = -287.16666
+grow_vertical = 0
+scale = Vector2(6, 6)
+mouse_filter = 2
+script = ExtResource("1_gv43l")
+
+[node name="BtnUp" type="TextureButton" parent="Dpad" unique_id=1362233985]
+texture_filter = 1
+layout_mode = 0
+offset_left = 14.0
+offset_top = 0.16666651
+offset_right = 25.0
+offset_bottom = 11.166666
+scale = Vector2(2, 2)
+mouse_filter = 1
+texture_normal = ExtResource("1_7s7ji")
+texture_pressed = ExtResource("2_gv43l")
+metadata/_edit_lock_ = true
+
+[node name="BtnDown" type="TextureButton" parent="Dpad" unique_id=2085032708]
+texture_filter = 1
+layout_mode = 0
+offset_left = 14.000001
+offset_top = 27.666666
+offset_right = 25.000004
+offset_bottom = 38.666664
+scale = Vector2(2, 2)
+mouse_filter = 1
+texture_normal = ExtResource("3_rex3i")
+texture_pressed = ExtResource("4_lknby")
+metadata/_edit_lock_ = true
+
+[node name="BtnLeft" type="TextureButton" parent="Dpad" unique_id=504702780]
+texture_filter = 1
+layout_mode = 0
+offset_left = -0.16666667
+offset_top = 13.999999
+offset_right = 10.833333
+offset_bottom = 25.0
+scale = Vector2(2, 2)
+mouse_filter = 1
+texture_normal = ExtResource("5_q53wj")
+texture_pressed = ExtResource("6_okaep")
+metadata/_edit_lock_ = true
+
+[node name="BtnRight" type="TextureButton" parent="Dpad" unique_id=1664517078]
+texture_filter = 1
+layout_mode = 0
+offset_left = 28.0
+offset_top = 14.0
+offset_right = 39.0
+offset_bottom = 25.0
+scale = Vector2(2, 2)
+mouse_filter = 1
+texture_normal = ExtResource("7_m5lsa")
+texture_pressed = ExtResource("8_8l21t")
+metadata/_edit_lock_ = true
+
+[node name="Button" type="Control" parent="." unique_id=1351652221]
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -320.99994
+offset_top = 79.00003
+offset_right = -66.0
+offset_bottom = 313.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("10_m5lsa")
+
+[node name="BtnA" type="TextureButton" parent="Button" unique_id=1941752166]
+layout_mode = 0
+offset_left = 3.999939
+offset_top = 50.99997
+offset_right = 133.99994
+offset_bottom = 180.99997
+mouse_filter = 1
+texture_normal = ExtResource("10_lknby")
+texture_pressed = ExtResource("11_q53wj")
+stretch_mode = 0
+
+[node name="BtnX" type="TextureButton" parent="Button" unique_id=707487176]
+layout_mode = 0
+offset_left = 117.99994
+offset_top = 49.99997
+offset_right = 247.99994
+offset_bottom = 179.99997
+mouse_filter = 1
+texture_normal = ExtResource("12_okaep")
+texture_pressed = ExtResource("13_m5lsa")
+stretch_mode = 0

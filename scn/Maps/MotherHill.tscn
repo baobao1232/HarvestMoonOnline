@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://dxu20g70s2r72"]
+
+[ext_resource type="Texture2D" uid="uid://cyjx6ifpl0fx" path="res://Assest/Maps/Mother's Hill (Autumn).png" id="1_dffn6"]
+[ext_resource type="Script" uid="uid://b6evg8xldl5ng" path="res://scripts/Maps/motherhill.gd" id="1_iulk8"]
+[ext_resource type="Script" uid="uid://c1evi4507st0i" path="res://scripts/Teleport.gd" id="3_1dao2"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_au6ne"]
+size = Vector2(14.5, 58)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ddc6e"]
+size = Vector2(12.25, 76)
+
+[node name="MotherHill" type="Node2D" unique_id=1532246478]
+script = ExtResource("1_iulk8")
+metadata/_edit_lock_ = true
+
+[node name="Map" type="Sprite2D" parent="." unique_id=1216223172]
+texture_filter = 1
+texture = ExtResource("1_dffn6")
+centered = false
+metadata/_edit_lock_ = true
+
+[node name="YSort" type="Node2D" parent="." unique_id=1823480038]
+metadata/_edit_lock_ = true
+
+[node name="SpawnForest1" type="Marker2D" parent="YSort" unique_id=804276416]
+position = Vector2(1163, 501)
+
+[node name="SpawnForest2" type="Marker2D" parent="YSort" unique_id=1812981478]
+position = Vector2(1135, 752)
+
+[node name="ToForest1" type="Area2D" parent="." unique_id=671954663]
+position = Vector2(1203, 535)
+script = ExtResource("3_1dao2")
+target_map = "res://scn/Maps/forest.tscn"
+target_spawn = "SpawnForest1"
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ToForest1" unique_id=364903187]
+shape = SubResource("RectangleShape2D_au6ne")
+
+[node name="ToForest2" type="Area2D" parent="." unique_id=1323583658]
+position = Vector2(1201, 744)
+script = ExtResource("3_1dao2")
+target_map = "res://scn/Maps/forest.tscn"
+target_spawn = "SpawnForest2"
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ToForest2" unique_id=1945117146]
+shape = SubResource("RectangleShape2D_ddc6e")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=389083208]
+
+[connection signal="body_entered" from="ToForest1" to="ToForest1" method="_on_body_entered"]
+[connection signal="body_entered" from="ToForest2" to="ToForest2" method="_on_body_entered"]

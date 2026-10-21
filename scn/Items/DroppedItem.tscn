@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://bk8nlchi2tvrt"]
+
+[ext_resource type="Script" uid="uid://ong88kpbd2qo" path="res://scripts/Items/dropped_item.gd" id="1_183yo"]
+[ext_resource type="Shader" uid="uid://cqytro6aomoos" path="res://shader/DroppedItem.gdshader" id="2_sedwv"]
+[ext_resource type="Texture2D" uid="uid://c0o8tg3lt8f28" path="res://Assest/Items/tools/cuoc_normal.png" id="3_bkcfj"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w6i5s"]
+shader = ExtResource("2_sedwv")
+shader_parameter/glow_color = Color(1, 1, 0.6, 1)
+shader_parameter/outline_size = 1.0
+shader_parameter/glow_strength = 0.6
+shader_parameter/shadow_offset = Vector2(0, 3)
+shader_parameter/shadow_alpha = 0.4
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_183yo"]
+size = Vector2(15, 15)
+
+[node name="DroppedItem" type="Node2D" unique_id=887923334]
+texture_filter = 1
+position = Vector2(10, 12)
+script = ExtResource("1_183yo")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1816515589]
+material = SubResource("ShaderMaterial_w6i5s")
+position = Vector2(-0.5, -0.5)
+scale = Vector2(0.9375, 0.9375)
+texture = ExtResource("3_bkcfj")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1559683714]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=415886748]
+position = Vector2(-0.5, -0.5)
+shape = SubResource("RectangleShape2D_183yo")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

@@ -1,0 +1,116 @@
+[gd_scene format=3 uid="uid://duxq04tvhrd2n"]
+
+[ext_resource type="Texture2D" uid="uid://bmxicobeva3r" path="res://Assest/Maps/North Side of Mineral Town (Autumn).png" id="1_f035c"]
+[ext_resource type="Script" uid="uid://dyiqau3qg4uo2" path="res://scripts/Maps/town2.gd" id="1_pwxgg"]
+[ext_resource type="Script" uid="uid://c1evi4507st0i" path="res://scripts/Teleport.gd" id="3_a634l"]
+[ext_resource type="PackedScene" uid="uid://b8qdu173sub00" path="res://scn/Building/CotDen.tscn" id="3_qqc3y"]
+[ext_resource type="PackedScene" uid="uid://cylfj1gxh30ow" path="res://scn/House/Ann_Building.tscn" id="4_jocjv"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_n4ogb"]
+size = Vector2(111.25, 37.75)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a634l"]
+size = Vector2(52.125, 13.5)
+
+[node name="Town2" type="Node2D" unique_id=861065534]
+script = ExtResource("1_pwxgg")
+
+[node name="Map" type="Sprite2D" parent="." unique_id=479001452]
+texture_filter = 1
+texture = ExtResource("1_f035c")
+centered = false
+metadata/_edit_lock_ = true
+
+[node name="Coliision" type="Node2D" parent="Map" unique_id=665510460]
+
+[node name="Housse" type="StaticBody2D" parent="Map/Coliision" unique_id=1640771302]
+
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="Map/Coliision/Housse" unique_id=1949875398]
+polygon = PackedVector2Array(324, 184, 368, 184, 382, 184, 380, 161, 388, 158, 390, 130, 411, 132, 410, 157, 422, 158, 423, 184, 465, 184, 467, 161, 471, 160, 470, 132, 492, 131, 491, 161, 499, 164, 499, 183, 612, 184, 602, 88, 320, 82)
+metadata/_edit_lock_ = true
+
+[node name="CollisionPolygon2D3" type="CollisionPolygon2D" parent="Map/Coliision/Housse" unique_id=76353795]
+polygon = PackedVector2Array(1249, 150, 1279, 151, 1280, 87, 1187, 91, 600, 81, 603, 184, 672, 186, 677, 131, 707, 132, 703, 159, 704, 182, 737, 183, 739, 160, 792, 157, 791, 184, 829, 184, 843, 165, 837, 125, 872, 120, 872, 164, 887, 182, 1070, 184, 1062, 139, 1175, 136, 1176, 154, 1215, 152, 1215, 123, 1247, 123)
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionPolygon2D" parent="Map/Coliision/Housse" unique_id=649438969]
+polygon = PackedVector2Array(1299, -6, 1305, 188, 1445, 189, 1426, -5, 1212, -12, 1192, 93, 1285, 96, 1281, 2)
+metadata/_edit_lock_ = true
+
+[node name="CollisionPolygon2D6" type="CollisionPolygon2D" parent="Map/Coliision/Housse" unique_id=764491652]
+polygon = PackedVector2Array(830, 259, 851, 235, 1222, 237, 1243, 259, 1238, 498, 1213, 518, 851, 514, 832, 501)
+metadata/_edit_lock_ = true
+
+[node name="CollisionPolygon2D7" type="CollisionPolygon2D" parent="Map/Coliision/Housse" unique_id=1864113103]
+polygon = PackedVector2Array(1578, 173, 1277, 184, 1280, 703, 1240, 702, 1240, 575, 1219, 555, 156, 556, 124, 587, 128, 702, 71, 705, 70, 159, -119, 229, -122, 857, 1516, 856)
+metadata/_edit_lock_ = true
+
+[node name="CollisionPolygon2D5" type="CollisionPolygon2D" parent="Map/Coliision/Housse" unique_id=1448458903]
+polygon = PackedVector2Array(125, 377, 124, 471, 126, 265, 155, 237, 773, 236, 792, 256, 788, 402, 498, 388, 488, 292, 302.5814, 290.23413, 173, 289, 174, 384)
+metadata/_edit_lock_ = true
+
+[node name="YSort" type="Node2D" parent="." unique_id=1798834072]
+
+[node name="SpawnTown1" type="Marker2D" parent="YSort" unique_id=1131560593]
+position = Vector2(101, 669)
+metadata/_edit_lock_ = true
+
+[node name="SpawnTown3" type="Marker2D" parent="YSort" unique_id=1321808803]
+position = Vector2(1260, 656)
+metadata/_edit_lock_ = true
+
+[node name="CotDen" parent="YSort" unique_id=1709426782 instance=ExtResource("3_qqc3y")]
+position = Vector2(314, 195)
+
+[node name="CotDen2" parent="YSort" unique_id=1680690737 instance=ExtResource("3_qqc3y")]
+position = Vector2(476, 234)
+
+[node name="CotDen3" parent="YSort" unique_id=403401926 instance=ExtResource("3_qqc3y")]
+position = Vector2(636, 234)
+metadata/_edit_lock_ = true
+
+[node name="CotDen4" parent="YSort" unique_id=2069185082 instance=ExtResource("3_qqc3y")]
+position = Vector2(133, 258)
+metadata/_edit_lock_ = true
+
+[node name="CotDen5" parent="YSort" unique_id=108946124 instance=ExtResource("3_qqc3y")]
+position = Vector2(796, 362)
+metadata/_edit_lock_ = true
+
+[node name="CotDen6" parent="YSort" unique_id=1165479660 instance=ExtResource("3_qqc3y")]
+position = Vector2(776, 515)
+metadata/_edit_lock_ = true
+
+[node name="CotDen7" parent="YSort" unique_id=346815561 instance=ExtResource("3_qqc3y")]
+position = Vector2(844, 514)
+metadata/_edit_lock_ = true
+
+[node name="AnnBuilding" parent="YSort" unique_id=1845202547 instance=ExtResource("4_jocjv")]
+position = Vector2(630, 447)
+
+[node name="ToTown1" type="Area2D" parent="." unique_id=1691474002]
+script = ExtResource("3_a634l")
+target_map = "res://scn/Maps/town1.tscn"
+target_spawn = "SpawnTown2"
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ToTown1" unique_id=124589025]
+position = Vector2(120, 712)
+shape = SubResource("RectangleShape2D_n4ogb")
+metadata/_edit_lock_ = true
+
+[node name="ToTown3" type="Area2D" parent="." unique_id=1747599473]
+script = ExtResource("3_a634l")
+target_map = "res://scn/Maps/town3.tscn"
+target_spawn = "SpawnTown2"
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ToTown3" unique_id=135256222]
+position = Vector2(1261, 704)
+shape = SubResource("RectangleShape2D_a634l")
+metadata/_edit_lock_ = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1295852239]
+
+[connection signal="body_entered" from="ToTown1" to="ToTown1" method="_on_body_entered"]
+[connection signal="body_entered" from="ToTown3" to="ToTown3" method="_on_body_entered"]

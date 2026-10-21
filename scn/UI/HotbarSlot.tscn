@@ -1,0 +1,68 @@
+[gd_scene format=3 uid="uid://bgifqxd5cad5x"]
+
+[ext_resource type="Script" uid="uid://hgkhl0g8los5" path="res://scripts/UI/hotbar_slot.gd" id="1_55jfy"]
+[ext_resource type="Texture2D" uid="uid://ck4n237cfhnaf" path="res://Assest/UI/bg_stack.png" id="4_xbxau"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_wih5u"]
+load_path = "res://.godot/imported/hotbar_slot.png-20ba6770161bdda1877f20c2a0af248d.ctex"
+
+[node name="HotbarSlot" type="Control" unique_id=1813759039]
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 0
+offset_right = 80.0
+offset_bottom = 80.0
+script = ExtResource("1_55jfy")
+
+[node name="BG" type="TextureRect" parent="." unique_id=721272828]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -40.0
+offset_right = 40.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("CompressedTexture2D_wih5u")
+metadata/_edit_lock_ = true
+
+[node name="Amount_BG" type="TextureRect" parent="BG" unique_id=868616849]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -18.0
+offset_top = -5.0
+offset_right = 6.0
+offset_bottom = 18.0
+grow_horizontal = 0
+texture = ExtResource("4_xbxau")
+
+[node name="Amount" type="Label" parent="BG/Amount_BG" unique_id=1314458730]
+layout_mode = 0
+offset_right = 24.0
+offset_bottom = 23.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 9
+text = "100"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="Icon" type="TextureRect" parent="." unique_id=2002593880]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -33.0
+offset_top = -33.0
+offset_right = 33.0
+offset_bottom = 33.0
+metadata/_edit_lock_ = true

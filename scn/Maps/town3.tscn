@@ -1,0 +1,87 @@
+[gd_scene format=3 uid="uid://bg8dgrsw1k4y8"]
+
+[ext_resource type="Texture2D" uid="uid://l75mo7k53gr4" path="res://Assest/Maps/Rose Square (Autumn).png" id="1_4m6jb"]
+[ext_resource type="Script" uid="uid://b2a2lp13s21ki" path="res://scripts/Maps/town3.gd" id="1_ppqey"]
+[ext_resource type="Script" uid="uid://c1evi4507st0i" path="res://scripts/Teleport.gd" id="2_b2jo8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ppqey"]
+size = Vector2(83, 18)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g5rlq"]
+size = Vector2(56.5, 11)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_80pd4"]
+size = Vector2(14.75, 60.75)
+
+[node name="Town3" type="Node2D" unique_id=1502913143]
+script = ExtResource("1_ppqey")
+metadata/_edit_lock_ = true
+
+[node name="Map" type="Sprite2D" parent="." unique_id=1658159232]
+texture_filter = 1
+texture = ExtResource("1_4m6jb")
+centered = false
+metadata/_edit_lock_ = true
+
+[node name="Collision" type="Node2D" parent="." unique_id=258243724]
+metadata/_edit_lock_ = true
+
+[node name="Parallax2D" type="StaticBody2D" parent="Collision" unique_id=2011531576]
+metadata/_edit_lock_ = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Collision/Parallax2D" unique_id=1580550361]
+polygon = PackedVector2Array(194, 518, 192, 415, 33, 417, 33.77649, 135.91257, 34, 55, 200, 58, 199, 2, 240, -1, 242, 57, 300.8899, 56.64524, 408, 56, 405, 111, 478, 111, 480, 152, 407, 151, 408, 414, 243, 417, 248, 548, 672, 559, 699, -121, -93, -112, -190, 432)
+metadata/_edit_lock_ = true
+
+[node name="YSort" type="Node2D" parent="." unique_id=1751948891]
+
+[node name="SpawnTown1" type="Marker2D" parent="YSort" unique_id=1644861673]
+position = Vector2(220, 406)
+metadata/_edit_lock_ = true
+
+[node name="SpawnTown2" type="Marker2D" parent="YSort" unique_id=1408380979]
+position = Vector2(220, 44)
+metadata/_edit_lock_ = true
+
+[node name="SpawnBeach" type="Marker2D" parent="YSort" unique_id=1349532486]
+position = Vector2(422, 127)
+metadata/_edit_lock_ = true
+
+[node name="ToTown1" type="Area2D" parent="." unique_id=1805843316]
+script = ExtResource("2_b2jo8")
+target_map = "res://scn/Maps/town1.tscn"
+target_spawn = "SpawnTown3"
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ToTown1" unique_id=1528805198]
+position = Vector2(219.5, 446)
+shape = SubResource("RectangleShape2D_ppqey")
+metadata/_edit_lock_ = true
+
+[node name="ToTown2" type="Area2D" parent="." unique_id=1867260372]
+script = ExtResource("2_b2jo8")
+target_map = "res://scn/Maps/town2.tscn"
+target_spawn = "SpawnTown3"
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ToTown2" unique_id=245201672]
+position = Vector2(218, 1)
+shape = SubResource("RectangleShape2D_g5rlq")
+metadata/_edit_lock_ = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1111489034]
+
+[node name="ToBeach" type="Area2D" parent="." unique_id=2071159621]
+script = ExtResource("2_b2jo8")
+target_map = "res://scn/Maps/beach.tscn"
+target_spawn = "SpawnTown3"
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ToBeach" unique_id=133090350]
+position = Vector2(479.625, 130.625)
+shape = SubResource("RectangleShape2D_80pd4")
+metadata/_edit_lock_ = true
+
+[connection signal="body_entered" from="ToTown1" to="ToTown1" method="_on_body_entered"]
+[connection signal="body_entered" from="ToTown2" to="ToTown2" method="_on_body_entered"]
+[connection signal="body_entered" from="ToBeach" to="ToBeach" method="_on_body_entered"]

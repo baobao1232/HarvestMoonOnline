@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://ccdfiavyqabfb"]
+
+[ext_resource type="Script" uid="uid://dtacek3v4ph8t" path="res://scripts/register.gd" id="1_hcdjm"]
+
+[node name="register" type="Control" unique_id=775478804]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_hcdjm")
+metadata/_edit_lock_ = true
+
+[node name="name" type="LineEdit" parent="." unique_id=787428770]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -269.0
+offset_top = -207.0
+offset_right = 331.0
+offset_bottom = -87.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 64
+placeholder_text = "Tên tài khoản"
+
+[node name="pass" type="LineEdit" parent="." unique_id=1697075665]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -269.0
+offset_top = -74.0
+offset_right = 331.0
+offset_bottom = 46.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 64
+placeholder_text = "Mật khẩu"
+
+[node name="confirm" type="Button" parent="." unique_id=1860444572]
+layout_mode = 0
+offset_left = -88.0
+offset_top = 97.0
+offset_right = 133.0
+offset_bottom = 197.0
+theme_override_font_sizes/font_size = 64
+text = "Đồng ý"
+
+[connection signal="pressed" from="confirm" to="." method="_on_confirm_pressed"]

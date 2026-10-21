@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://dbw7ixdom7ub5"]
+
+[ext_resource type="Texture2D" uid="uid://xyufyotg4h7d" path="res://Assest/Buildings/goccay01.png" id="2_m5fgf"]
+[ext_resource type="Shader" uid="uid://dvfohp8bs33xh" path="res://shader/Animation_LaCay.gdshader" id="3_jxdoj"]
+[ext_resource type="Texture2D" uid="uid://bg1h2q8wc73hv" path="res://Assest/Buildings/laccay01.png" id="4_2k3b7"]
+[ext_resource type="Script" uid="uid://dn3cau67mbglh" path="res://scripts/ShadowCaster.gd" id="5_2k3b7"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wwoys"]
+shader = ExtResource("3_jxdoj")
+shader_parameter/strength = 0.03
+shader_parameter/speed = 2.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1y0x0"]
+size = Vector2(17, 8)
+
+[node name="HoaAnhDao" type="StaticBody2D" unique_id=1327789601]
+position = Vector2(66, 87)
+
+[node name="Thancay" type="Sprite2D" parent="." unique_id=60842265]
+texture_filter = 1
+position = Vector2(0, -7)
+texture = ExtResource("2_m5fgf")
+
+[node name="Lacay" type="Sprite2D" parent="." unique_id=953452841]
+z_index = 10
+texture_filter = 1
+material = SubResource("ShaderMaterial_wwoys")
+position = Vector2(0, -22)
+texture = ExtResource("4_2k3b7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1273983124]
+position = Vector2(0.5, -2)
+shape = SubResource("RectangleShape2D_1y0x0")
+
+[node name="ShadowLa" type="Sprite2D" parent="." unique_id=941663458]
+script = ExtResource("5_2k3b7")
+shadow_type = 1
+target_path = NodePath("../Lacay")
+trunk_path = NodePath("../Thancay")
+length_max = -2.0
+
+[node name="ShadowThan" type="Sprite2D" parent="." unique_id=1374451414]
+script = ExtResource("5_2k3b7")
+target_path = NodePath("../Thancay")
+trunk_path = NodePath("../Thancay")
+length_max = -2.0

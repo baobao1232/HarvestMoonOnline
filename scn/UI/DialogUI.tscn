@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://5s0gedueggof"]
+
+[ext_resource type="Script" uid="uid://dtaxdv64tb4g3" path="res://scripts/UI/dialog_ui.gd" id="1_dlpf7"]
+[ext_resource type="Texture2D" uid="uid://c1uaurin76tx" path="res://Assest/UI/Dialog.png" id="2_x26t8"]
+
+[sub_resource type="FontVariation" id="FontVariation_dlpf7"]
+
+[node name="DialogGui" type="CanvasLayer" unique_id=716711542]
+script = ExtResource("1_dlpf7")
+
+[node name="DialogBox" type="NinePatchRect" parent="." unique_id=747208331]
+texture_filter = 1
+texture_repeat = 2
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -476.0
+offset_top = 40.0
+offset_right = 434.0
+offset_bottom = 210.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_x26t8")
+patch_margin_left = 16
+patch_margin_top = 16
+patch_margin_right = 16
+patch_margin_bottom = 16
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="Avatar" type="TextureRect" parent="DialogBox" unique_id=826384546]
+texture_filter = 1
+layout_mode = 1
+offset_left = 679.0
+offset_top = -57.0
+offset_right = 901.0
+offset_bottom = 161.0
+expand_mode = 2
+
+[node name="Text" type="RichTextLabel" parent="DialogBox" unique_id=56184028]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 10.0
+offset_right = -247.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_fonts/normal_font = SubResource("FontVariation_dlpf7")
+theme_override_font_sizes/normal_font_size = 26

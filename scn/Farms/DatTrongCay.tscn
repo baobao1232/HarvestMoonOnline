@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://idsgihtccawy"]
+
+[ext_resource type="Script" uid="uid://ca4d3h3hp375d" path="res://scripts/Frams/dat_trong_cay.gd" id="1_8s5eg"]
+[ext_resource type="Texture2D" uid="uid://bc0b7q8oubs2w" path="res://Assest/Crops/dat_cuoc.png" id="2_df0n1"]
+[ext_resource type="Texture2D" uid="uid://b0wpp2xxywftg" path="res://Assest/Crops/dat_da_tuoi.png" id="3_4vjnp"]
+[ext_resource type="Texture2D" uid="uid://cuuyn2js25hlp" path="res://Assest/Crops/hatgiong_trendat.png" id="4_3mrg6"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8s5eg"]
+size = Vector2(16, 16)
+
+[node name="DatTrongCay" type="Node2D" unique_id=1911407027]
+texture_filter = 1
+position = Vector2(13, 10)
+script = ExtResource("1_8s5eg")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=855119000]
+collision_layer = 2
+collision_mask = 0
+
+[node name="Dat" type="Sprite2D" parent="StaticBody2D" unique_id=1360366978]
+texture = ExtResource("2_df0n1")
+
+[node name="HatGiong" type="Sprite2D" parent="StaticBody2D" unique_id=141009535]
+visible = false
+texture = ExtResource("4_3mrg6")
+
+[node name="Dat_DaTuoi" type="Sprite2D" parent="StaticBody2D" unique_id=2078063556]
+visible = false
+texture = ExtResource("3_4vjnp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=998173544]
+shape = SubResource("RectangleShape2D_8s5eg")
+
+[node name="GrowLabel" type="Label" parent="StaticBody2D" unique_id=1914694405]
+z_index = 10
+texture_filter = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -12.0
+offset_top = 9.0
+offset_right = 11.0
+offset_bottom = 21.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 8
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true

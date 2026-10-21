@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://dbtft7wix45bi"]
+
+[ext_resource type="Texture2D" uid="uid://c0o8tg3lt8f28" path="res://Assest/Items/tools/cuoc_normal.png" id="1_ee0xc"]
+[ext_resource type="Script" uid="uid://crd5bdjovw4hg" path="res://scripts/ItemData.gd" id="1_tqy0c"]
+
+[resource]
+script = ExtResource("1_tqy0c")
+id = "cuoc_normal"
+name = "Cuốc thường"
+icon = ExtResource("1_ee0xc")
+max_stack = 1
+type = 4
+tool_type = 1
+atk = 1
+def = 1
+metadata/_custom_type_script = "uid://crd5bdjovw4hg"

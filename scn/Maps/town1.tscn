@@ -1,0 +1,186 @@
+[gd_scene format=3 uid="uid://b4s0lb0jr36fu"]
+
+[ext_resource type="Texture2D" uid="uid://cpvfn3yqtkyal" path="res://Assest/Maps/South Side of Mineral Town (Autumn).png" id="1_1uw6m"]
+[ext_resource type="Script" uid="uid://bxe6enh7jext6" path="res://scripts/Maps/town1.gd" id="1_hsw2w"]
+[ext_resource type="PackedScene" uid="uid://brqvkx3ohe45o" path="res://scn/House/ThoRen.tscn" id="3_102ug"]
+[ext_resource type="Script" uid="uid://c1evi4507st0i" path="res://scripts/Teleport.gd" id="3_asqsy"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hsw2w"]
+size = Vector2(92, 53.8125)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_asqsy"]
+size = Vector2(64.25, 147)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bb43o"]
+size = Vector2(116.5, 72.1875)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_k4mi0"]
+size = Vector2(51, 72.75)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_x4dy3"]
+size = Vector2(59.25, 74.25)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_04pl4"]
+size = Vector2(100.5, 140)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cem08"]
+size = Vector2(110, 42)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_avm58"]
+size = Vector2(647, 187)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lv0yr"]
+size = Vector2(100, 17)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ertwj"]
+size = Vector2(92, 18.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_74n2k"]
+size = Vector2(61, 11)
+
+[node name="Town1" type="Node2D" unique_id=1887984561]
+script = ExtResource("1_hsw2w")
+metadata/_edit_lock_ = true
+
+[node name="Map" type="Sprite2D" parent="." unique_id=257971188]
+texture_filter = 1
+texture = ExtResource("1_1uw6m")
+centered = false
+metadata/_edit_lock_ = true
+
+[node name="ThoRen" parent="." unique_id=2102536894 instance=ExtResource("3_102ug")]
+position = Vector2(229, 12)
+
+[node name="Coliision" type="Node2D" parent="." unique_id=882365525]
+metadata/_edit_lock_ = true
+
+[node name="Unknow" type="StaticBody2D" parent="Coliision" unique_id=656284837]
+metadata/_edit_lock_ = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Coliision/Unknow" unique_id=1396311708]
+polygon = PackedVector2Array(537, 49, 538, 81, 469, 93, 466, -9, 606, -5, 599, 90, 561, 83, 560, 51)
+metadata/_edit_lock_ = true
+
+[node name="chickenshop" type="StaticBody2D" parent="Coliision" unique_id=684597761]
+metadata/_edit_lock_ = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Coliision/chickenshop" unique_id=1554351910]
+polygon = PackedVector2Array(558, 195, 556, 220, 553, 232, 538, 235, 530, 178, 615, 179, 608, 237, 589, 233, 594, 196)
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Coliision/chickenshop" unique_id=1905942633]
+position = Vector2(576, 349.09375)
+shape = SubResource("RectangleShape2D_hsw2w")
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Coliision/chickenshop" unique_id=1366361744]
+position = Vector2(381.875, 282.5)
+shape = SubResource("RectangleShape2D_asqsy")
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Coliision/chickenshop" unique_id=434936273]
+position = Vector2(373, 388.25)
+shape = SubResource("RectangleShape2D_bb43o")
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Coliision/chickenshop" unique_id=943465666]
+position = Vector2(592.5, 412.625)
+shape = SubResource("RectangleShape2D_k4mi0")
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D5" type="CollisionShape2D" parent="Coliision/chickenshop" unique_id=993396139]
+position = Vector2(374, 457)
+shape = SubResource("RectangleShape2D_x4dy3")
+metadata/_edit_lock_ = true
+
+[node name="line" type="StaticBody2D" parent="Coliision" unique_id=252373668]
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Coliision/line" unique_id=1211905490]
+position = Vector2(216.25, 56)
+shape = SubResource("RectangleShape2D_04pl4")
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Coliision/line" unique_id=133845769]
+position = Vector2(423, 105)
+shape = SubResource("RectangleShape2D_cem08")
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Coliision/line" unique_id=838768149]
+position = Vector2(915.5, 32.5)
+shape = SubResource("RectangleShape2D_avm58")
+metadata/_edit_lock_ = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Coliision/line" unique_id=1930165156]
+polygon = PackedVector2Array(1310, -9, 1312, 175, 1247, 177, 1244, 457, 939, 456, 920, 277, 974, 277, 978, 199, 1007, 198, 1027, 264, 1034, 180, 916, 181, 841, 179, 833, 471, 832, 523, 1406, 532, 1412, -18)
+metadata/_edit_lock_ = true
+
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="Coliision/line" unique_id=430248323]
+polygon = PackedVector2Array(793, 517, 792, 461, 782, 462, 783, 182, 613, 181, 619, 458, 344, 454, 348, 179, 183, 180, 185, 512, 129, 511, 71, 513, 69, -4, -1, -1, -68, 4, -54, 530, -44, 647, 789, 614)
+metadata/_edit_lock_ = true
+
+[node name="CollisionPolygon2D3" type="CollisionPolygon2D" parent="Coliision/line" unique_id=1319695450]
+polygon = PackedVector2Array(1250, 177, 1088, 179, 1088, 193, 1103, 192, 1107, 224, 1199, 223, 1201, 268, 1248, 270)
+metadata/_edit_lock_ = true
+
+[node name="YSort" type="Node2D" parent="." unique_id=666087279]
+metadata/_edit_lock_ = true
+
+[node name="SpawnFarm" type="Marker2D" parent="YSort" unique_id=103699160]
+position = Vector2(103, 436)
+metadata/_edit_lock_ = true
+
+[node name="SpawnTown2" type="Marker2D" parent="YSort" unique_id=1442645363]
+position = Vector2(105, 45)
+metadata/_edit_lock_ = true
+
+[node name="SpawnTown3" type="Marker2D" parent="YSort" unique_id=1685215319]
+position = Vector2(1273, 38)
+metadata/_edit_lock_ = true
+
+[node name="SpawnForest" type="Marker2D" parent="YSort" unique_id=1796566506]
+position = Vector2(811, 471)
+metadata/_edit_lock_ = true
+
+[node name="SpawnThoRenToTown1" type="Marker2D" parent="YSort" unique_id=531371915]
+position = Vector2(294, 126)
+metadata/_edit_lock_ = true
+
+[node name="ToTown2" type="Area2D" parent="." unique_id=754787854]
+script = ExtResource("3_asqsy")
+target_map = "res://scn/Maps/town2.tscn"
+target_spawn = "SpawnTown1"
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ToTown2" unique_id=2084123678]
+position = Vector2(117, 8.5)
+shape = SubResource("RectangleShape2D_lv0yr")
+metadata/_edit_lock_ = true
+
+[node name="ToTown3" type="Area2D" parent="." unique_id=505030805]
+script = ExtResource("3_asqsy")
+target_map = "res://scn/Maps/town3.tscn"
+target_spawn = "SpawnTown1"
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ToTown3" unique_id=1036309427]
+position = Vector2(1277, 3.25)
+shape = SubResource("RectangleShape2D_ertwj")
+metadata/_edit_lock_ = true
+
+[node name="ToForest" type="Area2D" parent="." unique_id=1053693979]
+position = Vector2(750, 402)
+script = ExtResource("3_asqsy")
+target_map = "res://scn/Maps/forest.tscn"
+target_spawn = "SpawnTown1"
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ToForest" unique_id=1592555726]
+position = Vector2(65, 113)
+shape = SubResource("RectangleShape2D_74n2k")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=233638958]
+
+[connection signal="body_entered" from="ToTown2" to="ToTown2" method="_on_body_entered"]
+[connection signal="body_entered" from="ToTown3" to="ToTown3" method="_on_body_entered"]
+[connection signal="body_entered" from="ToForest" to="ToForest" method="_on_body_entered"]

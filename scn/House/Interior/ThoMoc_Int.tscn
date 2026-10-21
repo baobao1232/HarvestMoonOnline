@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://cjkxr0sn36a52"]
+
+[ext_resource type="Script" uid="uid://bqliea5j8guyj" path="res://scripts/Buildings/House/tho_moc_int.gd" id="1_l0jl5"]
+[ext_resource type="Texture2D" uid="uid://d345eh6fij1ap" path="res://Assest/Interior_House/Woodcutter's House.png" id="1_qexoa"]
+[ext_resource type="Script" uid="uid://c1evi4507st0i" path="res://scripts/Teleport.gd" id="2_l0jl5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qri3w"]
+size = Vector2(35, 11)
+
+[node name="ThoMocInt" type="Node2D" unique_id=658216963]
+texture_filter = 1
+script = ExtResource("1_l0jl5")
+is_indoor = true
+
+[node name="Map" type="Sprite2D" parent="." unique_id=1445382517]
+position = Vector2(120, 112)
+texture = ExtResource("1_qexoa")
+metadata/_edit_lock_ = true
+
+[node name="YSort" type="Node2D" parent="." unique_id=422135750]
+
+[node name="SpawnForest" type="Marker2D" parent="YSort" unique_id=364302764]
+position = Vector2(120, 176)
+
+[node name="ToForest" type="Area2D" parent="." unique_id=1227966206]
+visible = false
+script = ExtResource("2_l0jl5")
+target_map = "res://scn/Maps/forest.tscn"
+target_spawn = "SpawnNhaThoMoc"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ToForest" unique_id=1167779896]
+position = Vector2(120, 225)
+shape = SubResource("RectangleShape2D_qri3w")
+
+[node name="Area2D" type="StaticBody2D" parent="." unique_id=663572221]
+visible = false
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D" unique_id=1778739324]
+polygon = PackedVector2Array(-56, 22, -74, 234, 104, 239, 103, 208, 8, 208, 8, 54, 46.255188, 54.17002, 139.5192, 54.584526, 233, 55, 233, 208, 136, 208, 136, 228, 242, 225, 240, -1, -8, 0)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1861996403]
+
+[connection signal="body_entered" from="ToForest" to="ToForest" method="_on_body_entered"]

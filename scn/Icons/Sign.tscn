@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://djrh5nd0j6eln"]
+
+[ext_resource type="Script" uid="uid://c0qxveu5ltwmg" path="res://scripts/Icons/sign.gd" id="1_cei78"]
+[ext_resource type="Texture2D" uid="uid://d1yg2h6u8dx2w" path="res://Assest/Icons/sign (1).png" id="1_n8aeh"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cei78"]
+size = Vector2(15.75, 5.8125)
+
+[node name="Sign" type="Area2D" unique_id=1521790615]
+texture_filter = 1
+script = ExtResource("1_cei78")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1763298183]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1320890371]
+z_index = 1
+position = Vector2(0.125, -2.90625)
+shape = SubResource("RectangleShape2D_cei78")
+
+[node name="Sign" type="Sprite2D" parent="." unique_id=1899912948]
+z_index = 1
+position = Vector2(-8, -16)
+texture = ExtResource("1_n8aeh")
+centered = false

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://cdc3nnxjn35t2"]
+
+[ext_resource type="Texture2D" uid="uid://blpjhe0yfwndl" path="res://Assest/Crops/caytrong/cucai/cucai_item.png" id="1_cl3n7"]
+[ext_resource type="Script" uid="uid://crd5bdjovw4hg" path="res://scripts/ItemData.gd" id="1_xf2qy"]
+
+[resource]
+script = ExtResource("1_xf2qy")
+id = "cucai"
+name = "Củ cải"
+icon = ExtResource("1_cl3n7")
+description = "Củ cải tươi"
+need_water = false
+tags = Array[int]([0])
+metadata/_custom_type_script = "uid://crd5bdjovw4hg"

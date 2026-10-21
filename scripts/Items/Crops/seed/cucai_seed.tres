@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://bjprxmpbfu7xw"]
+
+[ext_resource type="Texture2D" uid="uid://c7v1oocxlwqhh" path="res://Assest/Crops/caytrong/cucai/cucai1.png" id="1_kudbd"]
+[ext_resource type="Texture2D" uid="uid://cuuyn2js25hlp" path="res://Assest/Crops/hatgiong_trendat.png" id="1_w4utw"]
+[ext_resource type="Texture2D" uid="uid://xxdw3p4n5bls" path="res://Assest/Crops/caytrong/cucai/cucai2.png" id="2_7qnx4"]
+[ext_resource type="Texture2D" uid="uid://bxi6ljur36jwa" path="res://Assest/Crops/caytrong/cucai/cucai3.png" id="3_w4utw"]
+[ext_resource type="Texture2D" uid="uid://cfcxrp8nqunsj" path="res://Assest/Crops/caytrong/cucai/cucai_seed.png" id="4_0sud1"]
+[ext_resource type="Resource" uid="uid://cdc3nnxjn35t2" path="res://scripts/Items/Crops/cucai.tres" id="4_7qnx4"]
+[ext_resource type="Script" uid="uid://crd5bdjovw4hg" path="res://scripts/ItemData.gd" id="5_ot6q2"]
+
+[resource]
+script = ExtResource("5_ot6q2")
+id = "cucai_s"
+name = "Hạt giống củ cải"
+icon = ExtResource("4_0sud1")
+description = "giống củ cải"
+max_stack = 10
+type = 5
+crop_textures = Array[Texture2D]([ExtResource("1_w4utw"), ExtResource("1_kudbd"), ExtResource("2_7qnx4"), ExtResource("3_w4utw")])
+grow_days = Array[int]([5, 3, 3, 2])
+harvest_item = ExtResource("4_7qnx4")
+tags = Array[int]([3])
+metadata/_custom_type_script = "uid://crd5bdjovw4hg"

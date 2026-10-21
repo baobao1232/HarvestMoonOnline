@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://brqvkx3ohe45o"]
+
+[ext_resource type="Texture2D" uid="uid://ctl3dlr358f2x" path="res://Assest/Buildings/house/ThoRen-house/ThoRen-House-Day.png" id="1_v3s8y"]
+[ext_resource type="Texture2D" uid="uid://dooft05eiph5x" path="res://Assest/Buildings/house/ThoRen-house/ThoRen-House-Night.png" id="2_8sq36"]
+[ext_resource type="Script" uid="uid://c1evi4507st0i" path="res://scripts/Teleport.gd" id="3_8sq36"]
+
+[sub_resource type="Gradient" id="Gradient_sue1e"]
+offsets = PackedFloat32Array(0.26092127, 0.9714476)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ivn0j"]
+gradient = SubResource("Gradient_sue1e")
+fill = 1
+fill_from = Vector2(0.49427366, 0.51827586)
+fill_to = Vector2(0.81051296, 0.95646524)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ivn0j"]
+size = Vector2(20, 8)
+
+[node name="ThoRen" type="Node2D" unique_id=2102536894]
+texture_filter = 1
+position = Vector2(74, 61)
+
+[node name="BanNgay" type="Sprite2D" parent="." unique_id=1125097140]
+position = Vector2(-2, -4)
+texture = ExtResource("1_v3s8y")
+
+[node name="BanDem" type="Sprite2D" parent="." unique_id=1732656115]
+position = Vector2(-2, -4)
+texture = ExtResource("2_8sq36")
+
+[node name="Light" type="PointLight2D" parent="." unique_id=419836505]
+position = Vector2(97, 84)
+scale = Vector2(0.63964844, 0.609375)
+shadow_enabled = true
+texture = SubResource("GradientTexture2D_ivn0j")
+
+[node name="Light2" type="PointLight2D" parent="." unique_id=1831551224]
+position = Vector2(121, 84.00001)
+scale = Vector2(0.63964844, 0.609375)
+shadow_enabled = true
+texture = SubResource("GradientTexture2D_ivn0j")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1340886033]
+position = Vector2(-93, -79)
+polygon = PackedVector2Array(41, 86, 41, 35, 53, 21, 135, 22, 134, 96, 78, 98, 78, 65, 51, 64, 52, 97, 43, 94)
+
+[node name="VaoNha" type="Area2D" parent="." unique_id=1629614681]
+script = ExtResource("3_8sq36")
+target_map = "res://scn/House/Interior/Thoren_Int.tscn"
+target_spawn = "NhaThoRen"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="VaoNha" unique_id=1503048418]
+position = Vector2(-28, 14)
+shape = SubResource("RectangleShape2D_ivn0j")

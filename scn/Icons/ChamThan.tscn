@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://cwj04tciy8kx6"]
+
+[ext_resource type="Script" uid="uid://dmnv0db5s61w7" path="res://scripts/Icons/cham_than.gd" id="1_bwjfh"]
+[ext_resource type="Texture2D" uid="uid://e68ec8wf2rmq" path="res://Assest/Icons/chamthan.png" id="2_n7kdp"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_201an"]
+atlas = ExtResource("2_n7kdp")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h463h"]
+atlas = ExtResource("2_n7kdp")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ilqni"]
+atlas = ExtResource("2_n7kdp")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5j2eo"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_201an")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h463h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ilqni")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 6.0
+}]
+
+[node name="ChamThan" type="Node2D" unique_id=941434584]
+texture_filter = 1
+script = ExtResource("1_bwjfh")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=571154619]
+position = Vector2(1, -15)
+sprite_frames = SubResource("SpriteFrames_5j2eo")
+animation = &"idle"
+frame_progress = 0.13172434

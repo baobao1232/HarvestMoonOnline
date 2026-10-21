@@ -1,0 +1,78 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="HVM-Online"
+run/main_scene="uid://dsmul78xyxxvm"
+config/features=PackedStringArray("4.6", "Mobile")
+config/icon="res://icon.svg"
+
+[autoload]
+
+SceneManager="*uid://bhk2i5b8fba7l"
+SaveManager="*uid://bbrp5tib8og2c"
+TimeManager="*uid://b43dh3haohgru"
+NpcManager="*uid://qu2qeykpgssm"
+DialogManager="*uid://c8h0j0idk1wmm"
+WeatherManager="*uid://bb1rkx74t1pso"
+ItemDb="*uid://bcojg15mry1i2"
+InventoryManager="*uid://s2e8rp02gg5x"
+UIManager="*uid://b6tvtd2eqr3r7"
+FarmManager="*uid://bj4jls4v3hgcn"
+Client="*uid://pi477xd15kun"
+Server="*uid://cfla4vc5mf4ss"
+ShadowManager="*uid://dtvosg1y3gdvx"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="viewport"
+window/stretch/aspect="expand"
+
+[input]
+
+interact={
+"deadzone": 0.2,
+"events": []
+}
+interactx={
+"deadzone": 0.2,
+"events": []
+}
+hotbar_select={
+"deadzone": 0.2,
+"events": []
+}
+hotbar_use={
+"deadzone": 0.2,
+"events": []
+}
+hotbar_cancel={
+"deadzone": 0.2,
+"events": []
+}
+
+[input_devices]
+
+pointing/emulate_touch_from_mouse=true
+
+[physics]
+
+3d/physics_engine="Jolt Physics"
+
+[rendering]
+
+rendering_device/driver.windows="d3d12"
+renderer/rendering_method="mobile"
+textures/default_filters/use_nearest_mipmap_filter=true
+2d/snap/snap_2d_transforms_to_pixel=true
+2d/snap/snap_2d_vertices_to_pixel=true

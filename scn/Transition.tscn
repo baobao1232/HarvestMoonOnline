@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://dfwu2pk6w6y32"]
+
+[sub_resource type="GDScript" id="GDScript_0hxqu"]
+script/source = "extends CanvasLayer
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+"
+
+[node name="Transition" type="CanvasLayer" unique_id=1606097695]
+script = SubResource("GDScript_0hxqu")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=350405778]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0.14117648, 1)

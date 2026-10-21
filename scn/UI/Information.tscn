@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://btuvyh7sjhqt5"]
+
+[ext_resource type="Texture2D" uid="uid://lvtq0ualmetc" path="res://Assest/UI/Infomartion_box.png" id="1_kvboq"]
+[ext_resource type="Texture2D" uid="uid://ck4n237cfhnaf" path="res://Assest/UI/bg_stack.png" id="2_hfkx8"]
+
+[node name="Information" type="Control" unique_id=373740583]
+texture_filter = 1
+custom_minimum_size = Vector2(365, 280)
+layout_mode = 3
+anchors_preset = 0
+
+[node name="BG" type="TextureRect" parent="." unique_id=1533962827]
+layout_mode = 0
+offset_right = 365.0
+offset_bottom = 366.0
+texture = ExtResource("1_kvboq")
+
+[node name="ItemNameLabel" type="Label" parent="." unique_id=874972153]
+layout_mode = 0
+offset_left = 49.0
+offset_top = 103.0
+offset_right = 263.0
+offset_bottom = 147.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 23
+metadata/_edit_lock_ = true
+
+[node name="ItemDesLabel" type="Label" parent="." unique_id=1657760848]
+layout_mode = 0
+offset_left = 34.0
+offset_top = 165.0
+offset_right = 329.0
+offset_bottom = 338.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+metadata/_edit_lock_ = true
+
+[node name="ItemStackBG" type="TextureRect" parent="." unique_id=1882666971]
+layout_mode = 0
+offset_left = 277.0
+offset_top = 105.0
+offset_right = 317.0
+offset_bottom = 145.0
+texture = ExtResource("2_hfkx8")
+metadata/_edit_lock_ = true
+
+[node name="ItemStack" type="Label" parent="ItemStackBG" unique_id=1654006936]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true

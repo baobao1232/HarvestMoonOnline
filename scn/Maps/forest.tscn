@@ -1,0 +1,359 @@
+[gd_scene format=3 uid="uid://c1802jrpu7f4x"]
+
+[ext_resource type="Script" uid="uid://bxbgc7gy8efl6" path="res://scripts/Maps/forest.gd" id="1_63u11"]
+[ext_resource type="Texture2D" uid="uid://jrk0t6p0vbay" path="res://Assest/Maps/Forest (Autumn).png" id="1_fpn6g"]
+[ext_resource type="Script" uid="uid://c1evi4507st0i" path="res://scripts/Teleport.gd" id="2_axsn7"]
+[ext_resource type="PackedScene" uid="uid://cv2ln5f80reaw" path="res://scn/props/Tree/Tree02.tscn" id="4_j8u7v"]
+[ext_resource type="Texture2D" uid="uid://d1yg2h6u8dx2w" path="res://Assest/Icons/sign (1).png" id="4_jenhh"]
+[ext_resource type="PackedScene" uid="uid://duodcqcp6vd8t" path="res://scn/Animals/soc.tscn" id="5_j8u7v"]
+[ext_resource type="PackedScene" uid="uid://d25t3vrkqrnq7" path="res://scn/House/ThoMoc_Build.tscn" id="5_lpktr"]
+[ext_resource type="PackedScene" uid="uid://djrh5nd0j6eln" path="res://scn/Icons/Sign.tscn" id="7_jenhh"]
+[ext_resource type="PackedScene" uid="uid://dbw7ixdom7ub5" path="res://scn/props/Tree/Tree.tscn" id="7_lpktr"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_axsn7"]
+size = Vector2(64.125, 15.9375)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_63u11"]
+size = Vector2(16.25, 19.625)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_dxoct"]
+a = Vector2(1048, 0)
+b = Vector2(196, -1)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_j7n6n"]
+a = Vector2(1040, 512)
+b = Vector2(65, 513)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_j8u7v"]
+a = Vector2(1024, 522)
+b = Vector2(1024, -5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_526sn"]
+size = Vector2(75, 17)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rsmsc"]
+size = Vector2(56.5, 11.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xt8nm"]
+size = Vector2(8, 52)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b1t6b"]
+size = Vector2(7, 59)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lpktr"]
+size = Vector2(20, 15)
+
+[node name="Forest" type="Node2D" unique_id=1914504314]
+script = ExtResource("1_63u11")
+metadata/_edit_lock_ = true
+
+[node name="Map" type="Sprite2D" parent="." unique_id=1457148315]
+texture_filter = 1
+texture_repeat = 1
+texture = ExtResource("1_fpn6g")
+centered = false
+metadata/_edit_lock_ = true
+
+[node name="Collision" type="Node2D" parent="." unique_id=461445171]
+metadata/_edit_lock_ = true
+
+[node name="Line" type="StaticBody2D" parent="Collision" unique_id=1435868463]
+metadata/_edit_lock_ = true
+
+[node name="CollisionPolygon2D3" type="CollisionPolygon2D" parent="Collision/Line" unique_id=1063828022]
+polygon = PackedVector2Array(-84, 162, 120, 334, 152, 300, 149, -24, -125, -45)
+metadata/_edit_lock_ = true
+
+[node name="CollisionPolygon2D4" type="CollisionPolygon2D" parent="Collision/Line" unique_id=344840472]
+position = Vector2(37, -2)
+polygon = PackedVector2Array(-49, 254, 63, 347, -15, 427, -66, 422)
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Collision/Line" unique_id=1420971757]
+position = Vector2(736.0625, 168.03125)
+shape = SubResource("RectangleShape2D_axsn7")
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Collision/Line" unique_id=1139167359]
+position = Vector2(736, 192)
+shape = SubResource("RectangleShape2D_axsn7")
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Collision/Line" unique_id=427752090]
+position = Vector2(736.125, 226.8125)
+shape = SubResource("RectangleShape2D_63u11")
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Collision/Line" unique_id=260874637]
+shape = SubResource("SegmentShape2D_dxoct")
+metadata/_edit_lock_ = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Collision/Line" unique_id=410240372]
+polygon = PackedVector2Array(-16, 486, 43, 486, 173, 360, 90, 527, -39, 518, -26, 476)
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D5" type="CollisionShape2D" parent="Collision/Line" unique_id=50562275]
+shape = SubResource("SegmentShape2D_j7n6n")
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D6" type="CollisionShape2D" parent="Collision/Line" unique_id=1402707874]
+shape = SubResource("SegmentShape2D_j8u7v")
+metadata/_edit_lock_ = true
+
+[node name="YSort" type="Node2D" parent="." unique_id=998458157]
+y_sort_enabled = true
+metadata/_edit_lock_ = true
+
+[node name="SpawnFarm" type="Marker2D" parent="YSort" unique_id=1096127737]
+position = Vector2(166, 43)
+metadata/_edit_lock_ = true
+
+[node name="SpawnTown1" type="Marker2D" parent="YSort" unique_id=1557676492]
+position = Vector2(834, 35)
+metadata/_edit_lock_ = true
+
+[node name="SpawnForest1" type="Marker2D" parent="YSort" unique_id=795597748]
+position = Vector2(34, 278)
+metadata/_edit_lock_ = true
+
+[node name="SpawnForest2" type="Marker2D" parent="YSort" unique_id=1666181215]
+position = Vector2(36, 442)
+metadata/_edit_lock_ = true
+
+[node name="SpawnNhaThoMoc" type="Marker2D" parent="YSort" unique_id=290711907]
+position = Vector2(611, 262)
+
+[node name="Sign" parent="YSort" unique_id=405161927 instance=ExtResource("7_jenhh")]
+position = Vector2(633, 246)
+dialog_lines = Array[String](["Cửa hàng thợ mọc", "Mở cửa: 07.00", "Đóng cửa: 18.00 Nghỉ thứ 7 và Chủ nhật"])
+portrait = ExtResource("4_jenhh")
+
+[node name="ThoMoc" parent="YSort" unique_id=145201055 instance=ExtResource("5_lpktr")]
+position = Vector2(621, 203)
+
+[node name="Tree06" parent="YSort" unique_id=1077203504 instance=ExtResource("4_j8u7v")]
+z_index = 1
+position = Vector2(345, 61)
+metadata/_edit_lock_ = true
+
+[node name="Tree23" parent="YSort" unique_id=1327789601 instance=ExtResource("4_j8u7v")]
+z_index = 1
+position = Vector2(409, 94)
+metadata/_edit_lock_ = true
+
+[node name="Tree24" parent="YSort" unique_id=2001180654 instance=ExtResource("4_j8u7v")]
+z_index = 1
+position = Vector2(479, 81)
+metadata/_edit_lock_ = true
+
+[node name="Tree25" parent="YSort" unique_id=583722965 instance=ExtResource("4_j8u7v")]
+z_index = 1
+position = Vector2(547, 62)
+metadata/_edit_lock_ = true
+
+[node name="Tree26" parent="YSort" unique_id=661833415 instance=ExtResource("4_j8u7v")]
+z_index = 1
+position = Vector2(611, 98)
+metadata/_edit_lock_ = true
+
+[node name="Tree32" parent="YSort" unique_id=511842903 instance=ExtResource("4_j8u7v")]
+z_index = 1
+position = Vector2(542, 230)
+metadata/_edit_lock_ = true
+
+[node name="Tree27" parent="YSort" unique_id=125793104 instance=ExtResource("4_j8u7v")]
+z_index = 1
+position = Vector2(681, 72)
+metadata/_edit_lock_ = true
+
+[node name="Tree28" parent="YSort" unique_id=1509667969 instance=ExtResource("4_j8u7v")]
+z_index = 1
+position = Vector2(761, 63)
+metadata/_edit_lock_ = true
+
+[node name="Tree29" parent="YSort" unique_id=975013850 instance=ExtResource("4_j8u7v")]
+z_index = 1
+position = Vector2(734, 128)
+metadata/_edit_lock_ = true
+
+[node name="Tree07" parent="YSort" unique_id=1988746784 instance=ExtResource("4_j8u7v")]
+z_index = 1
+position = Vector2(346, 362)
+metadata/_edit_lock_ = true
+
+[node name="Tree09" parent="YSort" unique_id=1540435803 instance=ExtResource("4_j8u7v")]
+z_index = 1
+position = Vector2(410, 379)
+metadata/_edit_lock_ = true
+
+[node name="Tree10" parent="YSort" unique_id=513706964 instance=ExtResource("4_j8u7v")]
+z_index = 1
+position = Vector2(477, 362)
+metadata/_edit_lock_ = true
+
+[node name="Tree11" parent="YSort" unique_id=561350002 instance=ExtResource("4_j8u7v")]
+z_index = 1
+position = Vector2(542, 366)
+metadata/_edit_lock_ = true
+
+[node name="Tree12" parent="YSort" unique_id=726517201 instance=ExtResource("4_j8u7v")]
+z_index = 1
+position = Vector2(601, 379)
+metadata/_edit_lock_ = true
+
+[node name="Tree13" parent="YSort" unique_id=136366834 instance=ExtResource("4_j8u7v")]
+z_index = 1
+position = Vector2(666, 365)
+metadata/_edit_lock_ = true
+
+[node name="Tree14" parent="YSort" unique_id=1281848246 instance=ExtResource("4_j8u7v")]
+z_index = 1
+position = Vector2(730, 381)
+metadata/_edit_lock_ = true
+
+[node name="Tree15" parent="YSort" unique_id=51050936 instance=ExtResource("4_j8u7v")]
+z_index = 1
+position = Vector2(794, 365)
+metadata/_edit_lock_ = true
+
+[node name="Tree16" parent="YSort" unique_id=1128699598 instance=ExtResource("4_j8u7v")]
+z_index = 1
+position = Vector2(873, 347)
+metadata/_edit_lock_ = true
+
+[node name="Tree17" parent="YSort" unique_id=1084000594 instance=ExtResource("4_j8u7v")]
+z_index = 1
+position = Vector2(957, 396)
+metadata/_edit_lock_ = true
+
+[node name="Tree18" parent="YSort" unique_id=2067327595 instance=ExtResource("4_j8u7v")]
+z_index = 1
+position = Vector2(1003, 307)
+metadata/_edit_lock_ = true
+
+[node name="Tree19" parent="YSort" unique_id=111236422 instance=ExtResource("4_j8u7v")]
+z_index = 1
+position = Vector2(915, 262)
+metadata/_edit_lock_ = true
+
+[node name="Tree20" parent="YSort" unique_id=1244711371 instance=ExtResource("4_j8u7v")]
+z_index = 1
+position = Vector2(970, 217)
+metadata/_edit_lock_ = true
+
+[node name="Tree21" parent="YSort" unique_id=1392667917 instance=ExtResource("4_j8u7v")]
+z_index = 1
+position = Vector2(881, 179)
+metadata/_edit_lock_ = true
+
+[node name="Tree22" parent="YSort" unique_id=1172238433 instance=ExtResource("4_j8u7v")]
+z_index = 1
+position = Vector2(923, 75)
+metadata/_edit_lock_ = true
+
+[node name="Tree02" parent="YSort" unique_id=326423353 instance=ExtResource("7_lpktr")]
+z_index = 1
+position = Vector2(259, 49)
+metadata/_edit_lock_ = true
+
+[node name="Tree30" parent="YSort" unique_id=1469757599 instance=ExtResource("7_lpktr")]
+z_index = 1
+position = Vector2(228, 163)
+metadata/_edit_lock_ = true
+
+[node name="Tree31" parent="YSort" unique_id=2016611333 instance=ExtResource("7_lpktr")]
+z_index = 1
+position = Vector2(311, 229)
+metadata/_edit_lock_ = true
+
+[node name="Tree03" parent="YSort" unique_id=1328338811 instance=ExtResource("7_lpktr")]
+z_index = 1
+position = Vector2(196, 438)
+metadata/_edit_lock_ = true
+
+[node name="Tree08" parent="YSort" unique_id=265086858 instance=ExtResource("7_lpktr")]
+z_index = 1
+position = Vector2(143, 507)
+metadata/_edit_lock_ = true
+
+[node name="Tree04" parent="YSort" unique_id=980683385 instance=ExtResource("7_lpktr")]
+z_index = 1
+position = Vector2(247, 371)
+metadata/_edit_lock_ = true
+
+[node name="Tree05" parent="YSort" unique_id=434715955 instance=ExtResource("7_lpktr")]
+z_index = 1
+position = Vector2(327, 435)
+metadata/_edit_lock_ = true
+
+[node name="AnimalsNode2D" type="Node2D" parent="YSort" unique_id=764909406]
+z_index = 1
+y_sort_enabled = true
+position = Vector2(403, 436)
+
+[node name="Soc" parent="YSort/AnimalsNode2D" unique_id=1324182132 instance=ExtResource("5_j8u7v")]
+position = Vector2(2, 1)
+walk_speed = 20
+run_speed = 90
+
+[node name="ToTown1" type="Area2D" parent="." unique_id=1373726271]
+script = ExtResource("2_axsn7")
+target_map = "res://scn/Maps/town1.tscn"
+target_spawn = "SpawnForest"
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ToTown1" unique_id=483922818]
+position = Vector2(828.5, -2.5)
+shape = SubResource("RectangleShape2D_526sn")
+metadata/_edit_lock_ = true
+
+[node name="ToFarm" type="Area2D" parent="." unique_id=534981035]
+script = ExtResource("2_axsn7")
+target_map = "res://scn/Maps/farm.tscn"
+target_spawn = "SpawnFarm1"
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ToFarm" unique_id=564667245]
+position = Vector2(170, -1)
+shape = SubResource("RectangleShape2D_rsmsc")
+metadata/_edit_lock_ = true
+
+[node name="ToForest1" type="Area2D" parent="." unique_id=514682043]
+position = Vector2(0, 249)
+script = ExtResource("2_axsn7")
+target_map = "res://scn/Maps/MotherHill.tscn"
+target_spawn = "SpawnForest1"
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ToForest1" unique_id=321234553]
+shape = SubResource("RectangleShape2D_xt8nm")
+metadata/_edit_lock_ = true
+
+[node name="ToForest2" type="Area2D" parent="." unique_id=1618878718]
+position = Vector2(1, 448)
+script = ExtResource("2_axsn7")
+target_map = "res://scn/Maps/MotherHill.tscn"
+target_spawn = "SpawnForest2"
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ToForest2" unique_id=2072089660]
+shape = SubResource("RectangleShape2D_b1t6b")
+metadata/_edit_lock_ = true
+
+[node name="ToThoMoc" type="Area2D" parent="." unique_id=1578918664]
+position = Vector2(614, 235)
+script = ExtResource("2_axsn7")
+target_map = "res://scn/House/Interior/ThoMoc_Int.tscn"
+target_spawn = "SpawnForest"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ToThoMoc" unique_id=571553466]
+position = Vector2(0, -2.5)
+shape = SubResource("RectangleShape2D_lpktr")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1299779136]
+
+[connection signal="body_entered" from="ToTown1" to="ToTown1" method="_on_body_entered"]
+[connection signal="body_entered" from="ToFarm" to="ToFarm" method="_on_body_entered"]
+[connection signal="body_entered" from="ToForest1" to="ToForest1" method="_on_body_entered"]
+[connection signal="body_entered" from="ToForest2" to="ToForest2" method="_on_body_entered"]
+[connection signal="body_entered" from="ToThoMoc" to="ToThoMoc" method="_on_body_entered"]

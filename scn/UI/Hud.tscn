@@ -1,0 +1,118 @@
+[gd_scene format=3 uid="uid://bmiv5l0kmu8tp"]
+
+[ext_resource type="Script" uid="uid://djxt3k50pp8o1" path="res://scripts/UI/hud.gd" id="1_oqca6"]
+[ext_resource type="PackedScene" uid="uid://bgifqxd5cad5x" path="res://scn/UI/HotbarSlot.tscn" id="3_0fhak"]
+[ext_resource type="Texture2D" uid="uid://d0ix14l0ep2ng" path="res://Assest/Icons/Selected.png" id="4_oqca6"]
+[ext_resource type="Script" uid="uid://cs7f1ms8nbqu7" path="res://scripts/time_label.gd" id="7_i7f4g"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_bwx5r"]
+load_path = "res://.godot/imported/home_icon.png-748fcd339094508d178b7fa00288dae7.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_nb8xc"]
+load_path = "res://.godot/imported/Selected.png-0fe48c641e75f0aeac44e8239208316c.ctex"
+
+[node name="Hud" type="CanvasLayer" unique_id=352875922]
+script = ExtResource("1_oqca6")
+
+[node name="RightMenu" type="HBoxContainer" parent="." unique_id=821779693]
+texture_filter = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -143.0
+offset_top = -214.0
+offset_right = -43.0
+offset_bottom = -114.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_constants/separation = 13
+alignment = 1
+
+[node name="BtnSystem" type="Button" parent="RightMenu" unique_id=680036093]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+flat = true
+icon_alignment = 1
+expand_icon = true
+metadata/_edit_lock_ = true
+
+[node name="icon" type="TextureRect" parent="RightMenu/BtnSystem" unique_id=1457306019]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("CompressedTexture2D_bwx5r")
+metadata/_edit_lock_ = true
+
+[node name="select" type="TextureRect" parent="RightMenu/BtnSystem" unique_id=1813851210]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("CompressedTexture2D_nb8xc")
+metadata/_edit_lock_ = true
+
+[node name="TimeLabel" type="Label" parent="." unique_id=1199372587]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 23.0
+grow_horizontal = 0
+script = ExtResource("7_i7f4g")
+metadata/_edit_lock_ = true
+
+[node name="BoxHotbar" type="GridContainer" parent="." unique_id=365059744]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -301.0
+offset_top = -75.0
+offset_right = 301.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/h_separation = 86
+theme_override_constants/v_separation = 4
+columns = 8
+
+[node name="HotbarSlot" parent="BoxHotbar" unique_id=1813759039 instance=ExtResource("3_0fhak")]
+layout_mode = 2
+
+[node name="HotbarSlot2" parent="BoxHotbar" unique_id=1757105414 instance=ExtResource("3_0fhak")]
+layout_mode = 2
+
+[node name="HotbarSlot3" parent="BoxHotbar" unique_id=807158247 instance=ExtResource("3_0fhak")]
+layout_mode = 2
+
+[node name="HotbarSlot4" parent="BoxHotbar" unique_id=439511019 instance=ExtResource("3_0fhak")]
+layout_mode = 2
+
+[node name="HotbarSlot5" parent="BoxHotbar" unique_id=1666608237 instance=ExtResource("3_0fhak")]
+layout_mode = 2
+
+[node name="HotbarSlot6" parent="BoxHotbar" unique_id=2140242481 instance=ExtResource("3_0fhak")]
+layout_mode = 2
+
+[node name="HotbarSlot7" parent="BoxHotbar" unique_id=1642266474 instance=ExtResource("3_0fhak")]
+layout_mode = 2
+
+[node name="HotbarSlot8" parent="BoxHotbar" unique_id=556417904 instance=ExtResource("3_0fhak")]
+layout_mode = 2
+
+[node name="Cursor" type="TextureRect" parent="." unique_id=1839746122]
+z_index = 1
+texture_filter = 1
+offset_right = 98.0
+offset_bottom = 98.0
+texture = ExtResource("4_oqca6")
+
+[connection signal="pressed" from="RightMenu/BtnSystem" to="." method="_on_btn_system_pressed"]

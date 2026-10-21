@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://cqwngmjvvlf10"]
+
+[ext_resource type="Script" uid="uid://cy2w5qeda60sj" path="res://scripts/UI/action_item.gd" id="1_kg5g0"]
+[ext_resource type="Texture2D" uid="uid://dg4kc2k2myxdq" path="res://Assest/UI/item_selector_box.png" id="2_4oh4s"]
+
+[node name="ActionItem" type="Control" unique_id=898325194]
+texture_filter = 1
+layout_mode = 3
+anchor_right = 0.19100001
+anchor_bottom = 0.089
+offset_right = 0.519989
+offset_bottom = -0.08000183
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_kg5g0")
+
+[node name="BG" type="TextureRect" parent="." unique_id=1489374111]
+layout_mode = 0
+offset_right = 244.0
+offset_bottom = 64.0
+texture = ExtResource("2_4oh4s")
+
+[node name="Label" type="Label" parent="." unique_id=44060893]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 22.0
+offset_right = 182.0
+offset_bottom = 45.0

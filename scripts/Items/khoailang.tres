@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://brjymvo2hynnb"]
+
+[ext_resource type="Script" uid="uid://crd5bdjovw4hg" path="res://scripts/ItemData.gd" id="1_71nbn"]
+[ext_resource type="Texture2D" uid="uid://ddy3xnphgubjq" path="res://Assest/Items/khoailang.png" id="1_glt0x"]
+
+[resource]
+script = ExtResource("1_71nbn")
+id = "khoailang"
+name = "Khoai Lang"
+icon = ExtResource("1_glt0x")
+description = "Đây là khoai lang"
+price = 15
+tags = Array[int]([0, 1])
+metadata/_custom_type_script = "uid://crd5bdjovw4hg"

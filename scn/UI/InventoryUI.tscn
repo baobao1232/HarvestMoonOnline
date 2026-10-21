@@ -1,0 +1,160 @@
+[gd_scene format=3 uid="uid://dpekq7mse5nnn"]
+
+[ext_resource type="Script" uid="uid://cxoj024ngu44u" path="res://scripts/UI/inventory_ui.gd" id="1_x3dly"]
+[ext_resource type="PackedScene" uid="uid://dte1y0k4f0ick" path="res://scn/UI/Slot.tscn" id="2_5i58c"]
+[ext_resource type="Texture2D" uid="uid://b2uufkc8xnsvm" path="res://Assest/UI/inventoryUI.png" id="2_q656i"]
+[ext_resource type="Texture2D" uid="uid://d0ix14l0ep2ng" path="res://Assest/Icons/Selected.png" id="4_1n1uo"]
+[ext_resource type="PackedScene" uid="uid://btuvyh7sjhqt5" path="res://scn/UI/Information.tscn" id="5_1n1uo"]
+
+[node name="InventoryUi" type="Control" unique_id=58626082]
+layout_mode = 3
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_x3dly")
+metadata/_edit_lock_ = true
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1385664148]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -560.0
+offset_top = -224.0
+offset_right = 560.0
+offset_bottom = 224.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_q656i")
+metadata/_edit_lock_ = true
+
+[node name="Information" parent="TextureRect" unique_id=373740583 instance=ExtResource("5_1n1uo")]
+custom_minimum_size = Vector2(351, 275)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.062000003
+anchor_top = 0.347
+anchor_right = 0.062000003
+anchor_bottom = 0.347
+offset_left = -71.44
+offset_top = -72.45599
+offset_right = 294.56
+offset_bottom = 285.544
+grow_vertical = 2
+
+[node name="Selector" type="TextureRect" parent="TextureRect" unique_id=1589962212]
+z_index = 1
+texture_filter = 1
+layout_mode = 0
+offset_left = 438.0
+offset_top = 132.0
+offset_right = 536.0
+offset_bottom = 230.0
+texture = ExtResource("4_1n1uo")
+
+[node name="ItemNameLabel" type="Label" parent="." unique_id=1580251469]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="SlotsGrid" type="GridContainer" parent="." unique_id=1095566532]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -117.0
+offset_top = -87.0
+offset_right = 510.0
+offset_bottom = 179.0
+grow_horizontal = 2
+grow_vertical = 2
+columns = 7
+metadata/_edit_lock_ = true
+
+[node name="Slot" parent="SlotsGrid" unique_id=1210919552 instance=ExtResource("2_5i58c")]
+custom_minimum_size = Vector2(86, 86)
+layout_mode = 2
+
+[node name="Slot3" parent="SlotsGrid" unique_id=1625078723 instance=ExtResource("2_5i58c")]
+custom_minimum_size = Vector2(86, 86)
+layout_mode = 2
+
+[node name="Slot2" parent="SlotsGrid" unique_id=1136527208 instance=ExtResource("2_5i58c")]
+custom_minimum_size = Vector2(86, 86)
+layout_mode = 2
+
+[node name="Slot4" parent="SlotsGrid" unique_id=1134976236 instance=ExtResource("2_5i58c")]
+custom_minimum_size = Vector2(86, 86)
+layout_mode = 2
+
+[node name="Slot5" parent="SlotsGrid" unique_id=1256195980 instance=ExtResource("2_5i58c")]
+custom_minimum_size = Vector2(86, 86)
+layout_mode = 2
+
+[node name="Slot6" parent="SlotsGrid" unique_id=1433169582 instance=ExtResource("2_5i58c")]
+custom_minimum_size = Vector2(86, 86)
+layout_mode = 2
+
+[node name="Slot7" parent="SlotsGrid" unique_id=977735812 instance=ExtResource("2_5i58c")]
+custom_minimum_size = Vector2(86, 86)
+layout_mode = 2
+
+[node name="Slot8" parent="SlotsGrid" unique_id=896640274 instance=ExtResource("2_5i58c")]
+custom_minimum_size = Vector2(86, 86)
+layout_mode = 2
+
+[node name="Slot9" parent="SlotsGrid" unique_id=108532454 instance=ExtResource("2_5i58c")]
+custom_minimum_size = Vector2(86, 86)
+layout_mode = 2
+
+[node name="Slot10" parent="SlotsGrid" unique_id=1788289802 instance=ExtResource("2_5i58c")]
+custom_minimum_size = Vector2(86, 86)
+layout_mode = 2
+
+[node name="Slot11" parent="SlotsGrid" unique_id=1779345527 instance=ExtResource("2_5i58c")]
+custom_minimum_size = Vector2(86, 86)
+layout_mode = 2
+
+[node name="Slot12" parent="SlotsGrid" unique_id=1174369317 instance=ExtResource("2_5i58c")]
+custom_minimum_size = Vector2(86, 86)
+layout_mode = 2
+
+[node name="Slot13" parent="SlotsGrid" unique_id=1688356634 instance=ExtResource("2_5i58c")]
+custom_minimum_size = Vector2(86, 86)
+layout_mode = 2
+
+[node name="Slot14" parent="SlotsGrid" unique_id=596472852 instance=ExtResource("2_5i58c")]
+custom_minimum_size = Vector2(86, 86)
+layout_mode = 2
+
+[node name="Slot15" parent="SlotsGrid" unique_id=973879486 instance=ExtResource("2_5i58c")]
+custom_minimum_size = Vector2(86, 86)
+layout_mode = 2
+
+[node name="Slot16" parent="SlotsGrid" unique_id=475963349 instance=ExtResource("2_5i58c")]
+custom_minimum_size = Vector2(86, 86)
+layout_mode = 2
+
+[node name="Slot17" parent="SlotsGrid" unique_id=1634822900 instance=ExtResource("2_5i58c")]
+custom_minimum_size = Vector2(86, 86)
+layout_mode = 2
+
+[node name="Slot18" parent="SlotsGrid" unique_id=496610701 instance=ExtResource("2_5i58c")]
+custom_minimum_size = Vector2(86, 86)
+layout_mode = 2
+
+[node name="Slot19" parent="SlotsGrid" unique_id=970436431 instance=ExtResource("2_5i58c")]
+custom_minimum_size = Vector2(86, 86)
+layout_mode = 2
+
+[node name="Slot20" parent="SlotsGrid" unique_id=619182161 instance=ExtResource("2_5i58c")]
+custom_minimum_size = Vector2(86, 86)
+layout_mode = 2

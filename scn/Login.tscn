@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://vdexyjm6cai2"]
+
+[ext_resource type="Script" uid="uid://blbklk63saim2" path="res://scripts/login.gd" id="1_ijor4"]
+
+[node name="Login" type="Control" unique_id=1137498382]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ijor4")
+
+[node name="Username" type="LineEdit" parent="." unique_id=1569950375]
+layout_mode = 0
+offset_left = -277.0
+offset_top = -210.0
+offset_right = 323.0
+offset_bottom = -90.0
+theme_override_font_sizes/font_size = 64
+placeholder_text = "Tên tài khoản"
+
+[node name="Password" type="LineEdit" parent="." unique_id=2131123373]
+layout_mode = 0
+offset_left = -278.0
+offset_top = -61.0
+offset_right = 322.0
+offset_bottom = 59.0
+theme_override_font_sizes/font_size = 64
+placeholder_text = "mật khẩu"
+
+[node name="LoginButton" type="Button" parent="." unique_id=1373309548]
+layout_mode = 0
+offset_left = -240.0
+offset_top = 131.0
+offset_right = -40.0
+offset_bottom = 231.0
+theme_override_font_sizes/font_size = 64
+text = "Login"
+
+[node name="RegisterButton" type="Button" parent="." unique_id=1069148543]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 129.0
+offset_right = 285.0
+offset_bottom = 229.0
+theme_override_font_sizes/font_size = 64
+text = "Register"
+
+[node name="Status" type="Label" parent="." unique_id=982130195]
+layout_mode = 0
+offset_left = -244.0
+offset_top = -333.0
+offset_right = 294.0
+offset_bottom = -224.0
+
+[connection signal="pressed" from="LoginButton" to="." method="_on_login_pressed"]
+[connection signal="pressed" from="RegisterButton" to="." method="_on_register_pressed"]

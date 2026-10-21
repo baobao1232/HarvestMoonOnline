@@ -1,0 +1,68 @@
+[gd_scene format=3 uid="uid://dte1y0k4f0ick"]
+
+[ext_resource type="Texture2D" uid="uid://mxjqdgvekw4s" path="res://Assest/UI/Slot.png" id="1_c8a5e"]
+[ext_resource type="Script" uid="uid://dhfgpsyu7majx" path="res://scripts/UI/slot.gd" id="1_cm056"]
+[ext_resource type="Texture2D" uid="uid://ck4n237cfhnaf" path="res://Assest/UI/bg_stack.png" id="3_po83p"]
+
+[node name="Slot" type="Control" unique_id=309048335]
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1216.0
+offset_bottom = -656.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_cm056")
+metadata/_edit_lock_ = true
+
+[node name="BG" type="TextureRect" parent="." unique_id=396664475]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_c8a5e")
+metadata/_edit_lock_ = true
+
+[node name="Icon" type="TextureRect" parent="." unique_id=923735522]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = -6.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="AmountBG" type="TextureRect" parent="." unique_id=522374857]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -16.0
+offset_top = -5.0
+offset_right = 4.0
+offset_bottom = 15.0
+grow_horizontal = 0
+texture = ExtResource("3_po83p")
+metadata/_edit_lock_ = true
+
+[node name="AmountLabel" type="Label" parent="AmountBG" unique_id=803327627]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 10
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true
