@@ -1,7 +1,7 @@
 extends Control
 
 var direction: Vector2 = Vector2.ZERO
-
+var key_dir := Vector2.ZERO   # hướng từ bàn phím
 @onready var up: TextureButton = $BtnUp
 @onready var down: TextureButton = $BtnDown
 @onready var left: TextureButton = $BtnLeft
@@ -113,6 +113,18 @@ func _release_btn(btn):
 	# 👉 trả về scale ban đầu
 	btn.scale = base_scale[btn]
 
+func _process(_delta):
+
+	var k := Vector2(
+		int(Input.is_physical_key_pressed(KEY_D) or Input.is_physical_key_pressed(KEY_RIGHT))
+		- int(Input.is_physical_key_pressed(KEY_A) or Input.is_physical_key_pressed(KEY_LEFT)),
+		int(Input.is_physical_key_pressed(KEY_S) or Input.is_physical_key_pressed(KEY_DOWN))
+		- int(Input.is_physical_key_pressed(KEY_W) or Input.is_physical_key_pressed(KEY_UP))
+	)
+
+	if k != key_dir:
+		key_dir = k
+		_update_direction()
 
 # ===============================
 # UPDATE DIRECTION
@@ -126,8 +138,14 @@ func _update_direction():
 	for d in touch_map.values():
 		dir += d
 
+	dir += key_dir
+
 	dir.x = clamp(dir.x, -1, 1)
 	dir.y = clamp(dir.y, -1, 1)
+
+	# đi chéo không bị nhanh hơn
+	if dir.length() > 1.0:
+		dir = dir.normalized()
 
 	# ===============================
 	# 🔥 KHÔNG ĐỔI → KHÔNG LÀM GÌ

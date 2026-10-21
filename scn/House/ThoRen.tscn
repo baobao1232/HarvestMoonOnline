@@ -17,7 +17,7 @@ fill_to = Vector2(0.81051296, 0.95646524)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ivn0j"]
 size = Vector2(20, 8)
 
-[node name="ThoRen" type="Node2D" unique_id=2102536894]
+[node name="ThoRen" type="StaticBody2D" unique_id=1663411217]
 texture_filter = 1
 position = Vector2(74, 61)
 
@@ -30,18 +30,18 @@ position = Vector2(-2, -4)
 texture = ExtResource("2_8sq36")
 
 [node name="Light" type="PointLight2D" parent="." unique_id=419836505]
-position = Vector2(97, 84)
+position = Vector2(6.46875, 2.5)
 scale = Vector2(0.63964844, 0.609375)
 shadow_enabled = true
 texture = SubResource("GradientTexture2D_ivn0j")
 
 [node name="Light2" type="PointLight2D" parent="." unique_id=1831551224]
-position = Vector2(121, 84.00001)
+position = Vector2(30.46875, 2.5000076)
 scale = Vector2(0.63964844, 0.609375)
 shadow_enabled = true
 texture = SubResource("GradientTexture2D_ivn0j")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1340886033]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1320253898]
 position = Vector2(-93, -79)
 polygon = PackedVector2Array(41, 86, 41, 35, 53, 21, 135, 22, 134, 96, 78, 98, 78, 65, 51, 64, 52, 97, 43, 94)
 

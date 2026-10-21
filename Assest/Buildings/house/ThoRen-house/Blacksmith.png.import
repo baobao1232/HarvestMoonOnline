@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bmswko7fbgl8y"
-path="res://.godot/imported/blacksmith_table.png-8347cf108b1c8b7dfa717d7034194277.ctex"
+uid="uid://c7pxmphx4h0s1"
+path="res://.godot/imported/Blacksmith.png-64374be1afda4628a0f9728ab39c7af3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assest/Buildings/house/blacksmith_table.png"
-dest_files=["res://.godot/imported/blacksmith_table.png-8347cf108b1c8b7dfa717d7034194277.ctex"]
+source_file="res://Assest/Buildings/house/ThoRen-house/Blacksmith.png"
+dest_files=["res://.godot/imported/Blacksmith.png-64374be1afda4628a0f9728ab39c7af3.ctex"]
 
 [params]
 

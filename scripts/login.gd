@@ -95,6 +95,7 @@ func _on_login_result(success, msg, player_data):
 	# =========================
 	# UI GAME
 	# =========================
+	SceneManager.set_player_data(SaveManager.player)
 	UIManager.setup_game_ui()
 
 	# =========================
@@ -107,7 +108,7 @@ func _on_login_result(success, msg, player_data):
 
 	print("📍 LOAD MAP:", map_path)
 	print("📍 LOAD POS:", SaveManager.player.pos)
-
+	Net.join(Net.server_ip, SaveManager.player.name)
 	Server.request_change_map(map_path, "")
 
 	queue_free()

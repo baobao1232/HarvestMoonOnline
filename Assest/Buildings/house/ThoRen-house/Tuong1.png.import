@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://f5mdy0ji0cey"
-path="res://.godot/imported/Blacksmith.png-ee70360888faea5e23e4e3043e390f2b.ctex"
+uid="uid://dfy47oqdl48om"
+path="res://.godot/imported/Tuong1.png-0c5b2a5bd6aedb53d0e54e1ff7999f47.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assest/Interior_House/Blacksmith.png"
-dest_files=["res://.godot/imported/Blacksmith.png-ee70360888faea5e23e4e3043e390f2b.ctex"]
+source_file="res://Assest/Buildings/house/ThoRen-house/Tuong1.png"
+dest_files=["res://.godot/imported/Tuong1.png-0c5b2a5bd6aedb53d0e54e1ff7999f47.ctex"]
 
 [params]
 

@@ -68,22 +68,29 @@ func _load_accounts():
 # SAVE ACCOUNTS
 # =========================
 func _save_accounts():
-	print("save account")
 
+	# đọc lại file để KHÔNG ghi đè tài khoản do instance khác tạo
 	var data = {}
 
-	for username in accounts.keys():
+	if FileAccess.file_exists(SAVE_PATH):
+		var f = FileAccess.open(SAVE_PATH, FileAccess.READ)
+		var parsed = JSON.parse_string(f.get_as_text())
+		f.close()
+		if typeof(parsed) == TYPE_DICTIONARY:
+			data = parsed
 
-		data[username] = {
-			"password": accounts[username].password,
-			"data": accounts[username].data.to_dict()
-		}
+	# chỉ ghi đè tài khoản đang đăng nhập + tài khoản mới tạo
+	for username in accounts.keys():
+		if username == current_id or not data.has(username):
+			data[username] = {
+				"password": accounts[username].password,
+				"data": accounts[username].data.to_dict()
+			}
 
 	var file = FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	file.store_string(JSON.stringify(data))
 	file.close()
 
-	print("💾 ACCOUNTS SAVED")
 
 
 # =========================
@@ -113,6 +120,8 @@ func request_register(username, password):
 # =========================
 func request_login(username, password):
 
+	_load_accounts()   # nạp lại file, thấy cả tài khoản tạo bởi instance khác
+
 	if not accounts.has(username):
 		emit_signal("login_result", false, "User not found", null)
 		return
@@ -130,12 +139,7 @@ func request_login(username, password):
 	}
 
 	emit_signal("login_result", true, "Login success", player_data)
-
-	# ❌ XOÁ DÒNG NÀY
-	# emit_signal("player_joined", current_id, players[current_id])
-
 	print("✅ LOGIN:", username)
-
 
 # =========================
 # MOVE
@@ -177,7 +181,7 @@ func request_change_map(path, spawn):
 		final_spawn = ""
 
 	player_data.map = path
-
+	Net.send_map(path)
 	emit_signal("map_changed", path, final_spawn)
 
 

@@ -4,6 +4,8 @@ extends Node
 
 
 func _ready():
+	if Net.is_server:
+		return
 	open_login()
 
 

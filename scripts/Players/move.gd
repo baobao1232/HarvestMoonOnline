@@ -27,8 +27,7 @@ func _ready():
 	add_to_group("player")
 	print("ANIMS:", anim.sprite_frames.get_animation_names())
 
-	if is_multiplayer_authority():
-		add_to_group("local_player")
+	add_to_group("local_player")
 
 	if is_instance_valid(SaveManager) and is_instance_valid(SaveManager.player):
 		UIManager.update_player_name(SaveManager.player.name)
@@ -143,7 +142,7 @@ func _physics_process(delta):
 	sync_timer -= delta
 	if sync_timer <= 0:
 		sync_timer = 0.1
-		Server.request_move(global_position)
+		Net.send_state(global_position, anim.animation)
 
 # ===============================
 # ANIMATION
