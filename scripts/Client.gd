@@ -43,7 +43,7 @@ func _on_remote_joined(id, data):
 	_sync_remote(id)
 
 
-func _on_remote_state(id, pos, anim):
+func _on_remote_state(id, pos, anim, ts, item):
 	if not remote_data.has(id):
 		return
 
@@ -54,11 +54,10 @@ func _on_remote_state(id, pos, anim):
 	var p = other_players.get(id)
 
 	if p != null and is_instance_valid(p):
-		p.set_target(pos, anim)
+		p.push_state(pos, anim, ts, item)
 	else:
 		d.has_pos = true
 		_sync_remote(id)
-
 
 func _on_remote_map(id, map):
 	if not remote_data.has(id):
@@ -180,7 +179,7 @@ func change_map_local(path, spawn):
 
 		if spawn_node:
 			player.global_position = spawn_node.global_position
-			SaveManager.save(player_data)
+			Server._save_remote(true)
 		else:
 			player.global_position = Vector2.ZERO
 

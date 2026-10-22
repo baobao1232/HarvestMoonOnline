@@ -52,7 +52,7 @@ func _on_create_pressed():
 		InventoryManager.add_item(item, 10)
 
 	# ===== SAVE =====
-	SaveManager.save(player)
+	Server._save_remote(true)
 
 	print("Created player:", player.name)
 

@@ -14,9 +14,12 @@ var hud = null
 # READY
 # =========================
 func _ready():
-
 	if not Server.login_result.is_connected(_on_login_result):
 		Server.login_result.connect(_on_login_result)
+	if not Server.register_result.is_connected(_on_register_result):
+		Server.register_result.connect(_on_register_result)
+
+	password_input.secret = true
 
 	if UIManager:
 		UIManager.remove_game_ui()
@@ -41,14 +44,18 @@ func _on_register_pressed():
 
 	var username = username_input.text.strip_edges()
 	var password = password_input.text.strip_edges()
+	print("U=[", username, "] P=[", password, "]")   # debug, xong thì xoá
 
 	if username == "" or password == "":
 		_set_status("Missing input")
 		return
 
+	_set_status("Đang đăng ký...")
 	Server.request_register(username, password)
-	_set_status("Register success")
 
+
+func _on_register_result(success, msg):
+	_set_status(msg)
 
 # =========================
 # SERVER RESPONSE
@@ -73,14 +80,6 @@ func _on_login_result(success, msg, player_data):
 	# 🔥 ƯU TIÊN SERVER (FIX CHÍNH)
 	# =========================
 	SaveManager.player = player_data
-
-	# 👉 OPTIONAL: merge local nếu có
-	var saved = SaveManager.load()
-
-	if saved != null:
-		# chỉ lấy inventory / hotbar thôi
-		SaveManager.player.inventory = saved.inventory
-		SaveManager.player.hotbar = saved.hotbar
 
 	# =========================
 	# CLIENT SYNC

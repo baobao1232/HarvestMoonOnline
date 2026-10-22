@@ -7,6 +7,7 @@ var last_dir := "down"
 var show_timer := 0.0
 var is_showing_item := false
 var block_anim_timer := 0.0
+var current_item_id := ""
 
 @onready var cam: Camera2D = $Camera2D
 @onready var anim = $AnimatedSprite2D
@@ -69,6 +70,8 @@ func _physics_process(delta):
 	if not is_instance_valid(SaveManager) or not is_instance_valid(SaveManager.player):
 		return
 
+	_sync_net(delta)
+	
 	var is_locked := false
 
 	if is_instance_valid(UIManager):
@@ -141,7 +144,7 @@ func _physics_process(delta):
 	# ===============================
 	sync_timer -= delta
 	if sync_timer <= 0:
-		sync_timer = 0.1
+		sync_timer = 0.05
 		Net.send_state(global_position, anim.animation)
 
 # ===============================
@@ -206,10 +209,12 @@ func show_hotbar_item(item):
 		return
 
 	if item == null:
+		current_item_id = ""
 		item_show.visible = false
 		return
 
-	# 🔥 LUÔN bật khi có item
+	current_item_id = item.id
+
 	item_show.visible = true
 	item_show.modulate.a = 1.0
 
@@ -217,6 +222,17 @@ func show_hotbar_item(item):
 		item_show.set_item(item)
 	elif item_show is TextureRect:
 		item_show.texture = item.icon
+		
+func get_shown_item_id() -> String:
+	if item_show and item_show.visible:
+		return current_item_id
+	return ""
+
+func _sync_net(delta):
+	sync_timer -= delta
+	if sync_timer <= 0:
+		sync_timer = 0.05
+		Net.send_state(global_position, anim.animation, get_shown_item_id())
 
 # ===============================
 # SHOW ITEM ANIM (VISUAL ONLY)

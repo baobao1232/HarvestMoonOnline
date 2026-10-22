@@ -136,7 +136,7 @@ func logout():
 	print("=== LOGOUT START ===")
 
 	if is_instance_valid(SaveManager) and is_instance_valid(SaveManager.player):
-		SaveManager.save(SaveManager.player)
+		Server.logout()
 
 	SaveManager.player = null
 	SaveManager.current_user = ""

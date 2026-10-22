@@ -40,7 +40,7 @@ metadata/_edit_lock_ = true
 [node name="Area2D" type="StaticBody2D" parent="Colli" unique_id=1285690351]
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Colli/Area2D" unique_id=1363023057]
-polygon = PackedVector2Array(231, 199, 231, 55, 144, 55, 143, 96, 232, 97, 230, 151, 191, 150, 191, 141, 170, 141, 168, 151, 135, 151, 134, 56, 127, 56, 127, 64, 113, 64, 103, 71, 96, 71, 91, 68, 88, 63, 80, 56, 79, 72, 47, 71, 47, 57, 10, 57, 9, 204, -36, 198, -53, 18, -5, -52, 250, -40, 275, 97, 256, 218)
+polygon = PackedVector2Array(231, 199, 231, 55, 144, 55, 143, 96, 232, 97, 230, 151, 191, 150, 191, 141, 170, 141, 168, 151, 135, 151, 134, 56, 80, 56, 79, 72, 47, 71, 47, 57, 10, 57, 9, 204, -36, 198, -53, 18, -5, -52, 250, -40, 275, 97, 256, 218)
 
 [node name="CollisionShape2D3" type="CollisionShape2D" parent="Colli/Area2D" unique_id=256428406]
 position = Vector2(81, 112.5)

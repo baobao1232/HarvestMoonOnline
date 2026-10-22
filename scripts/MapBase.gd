@@ -143,7 +143,8 @@ func _notification(what):
 
 		Server.request_save_position(
 			player.global_position.round(),
-			get_tree().current_scene.scene_file_path
+			get_tree().current_scene.scene_file_path,
+			true
 		)
 
 

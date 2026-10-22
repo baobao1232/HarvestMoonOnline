@@ -4,6 +4,7 @@ extends Node
 # SIGNAL
 # =========================
 signal login_result(success, msg, player_data)
+signal register_result(success, msg)
 
 signal player_joined(id, data)
 signal player_moved(id, pos)
@@ -13,139 +14,155 @@ signal map_changed(path, spawn)
 signal drop_spawned(data)
 
 # =========================
+# CONFIG
+# =========================
+# PC: 127.0.0.1 | Emulator: 10.0.2.2 | Điện thoại thật: IP LAN máy chạy XAMPP
+const API_URL := "http://127.0.0.1/hvm/api"
+const SAVE_INTERVAL := 5.0
+
+# =========================
 # DATA
 # =========================
-var accounts = {}
 var players = {}
 var player_data = null
 var current_id = ""
+var token := ""
 
-const SAVE_PATH = "user://accounts.json"
-
-
-# =========================
-# READY
-# =========================
-func _ready():
-	_load_accounts()
+var _last_save := 0.0
+var _saving := false
+var _dirty_again := false
 
 
 # =========================
-# LOAD ACCOUNTS
+# HTTP
 # =========================
-func _load_accounts():
+func _post(endpoint: String, body: Dictionary, cb: Callable):
+	var req := HTTPRequest.new()
+	req.timeout = 10.0
+	add_child(req)
 
-	if not FileAccess.file_exists(SAVE_PATH):
-		print("📂 No accounts file")
-		return
+	req.request_completed.connect(func(result, code, headers, bytes):
+		req.queue_free()
+		var json = JSON.parse_string(bytes.get_string_from_utf8())
+		if result != HTTPRequest.RESULT_SUCCESS or typeof(json) != TYPE_DICTIONARY:
+			cb.call({"ok": false, "msg": "Không kết nối được server"})
+			return
+		cb.call(json)
+	)
 
-	var file = FileAccess.open(SAVE_PATH, FileAccess.READ)
-	var text = file.get_as_text()
-	file.close()
+	var err = req.request(
+		API_URL + "/" + endpoint,
+		["Content-Type: application/json"],
+		HTTPClient.METHOD_POST,
+		JSON.stringify(body)
+	)
 
-	var json = JSON.parse_string(text)
-
-	if typeof(json) != TYPE_DICTIONARY:
-		print("❌ accounts.json corrupted")
-		return
-
-	for username in json.keys():
-
-		var acc = json[username]
-
-		var data = PlayerData.new()
-		data.from_dict(acc["data"])
-
-		accounts[username] = {
-			"password": acc["password"],
-			"data": data
-		}
-
-	print("📂 ACCOUNTS LOADED:", accounts.size())
+	if err != OK:
+		req.queue_free()
+		cb.call({"ok": false, "msg": "Request lỗi: %d" % err})
 
 
 # =========================
-# SAVE ACCOUNTS
-# =========================
-func _save_accounts():
-
-	# đọc lại file để KHÔNG ghi đè tài khoản do instance khác tạo
-	var data = {}
-
-	if FileAccess.file_exists(SAVE_PATH):
-		var f = FileAccess.open(SAVE_PATH, FileAccess.READ)
-		var parsed = JSON.parse_string(f.get_as_text())
-		f.close()
-		if typeof(parsed) == TYPE_DICTIONARY:
-			data = parsed
-
-	# chỉ ghi đè tài khoản đang đăng nhập + tài khoản mới tạo
-	for username in accounts.keys():
-		if username == current_id or not data.has(username):
-			data[username] = {
-				"password": accounts[username].password,
-				"data": accounts[username].data.to_dict()
-			}
-
-	var file = FileAccess.open(SAVE_PATH, FileAccess.WRITE)
-	file.store_string(JSON.stringify(data))
-	file.close()
-
-
-
-# =========================
-# REGISTER
+# REGISTER / LOGIN
 # =========================
 func request_register(username, password):
-
-	if accounts.has(username):
-		emit_signal("login_result", false, "Username exists", null)
-		return
-
-	var data = PlayerData.new()
-	data.name = username
-
-	accounts[username] = {
-		"password": password,
-		"data": data
-	}
-
-	_save_accounts()
-
-	print("✅ REGISTER:", username)
+	_post("register.php", {"username": username, "password": password}, func(r):
+		register_result.emit(r.get("ok", false), r.get("msg", ""))
+	)
 
 
-# =========================
-# LOGIN
-# =========================
 func request_login(username, password):
+	_post("login.php", {"username": username, "password": password}, func(r):
+		if not r.get("ok", false):
+			login_result.emit(false, r.get("msg", "Lỗi"), null)
+			return
 
-	_load_accounts()   # nạp lại file, thấy cả tài khoản tạo bởi instance khác
+		var data = PlayerData.new()
+		data.from_dict(r["data"])
 
-	if not accounts.has(username):
-		emit_signal("login_result", false, "User not found", null)
+		token = r.get("token", "")
+		current_id = username
+		player_data = data
+		players[current_id] = {"pos": data.pos, "map": data.map}
+
+		login_result.emit(true, "Login success", data)
+	)
+
+
+func logout():
+	_save_remote(true)
+	token = ""
+	current_id = ""
+	player_data = null
+	players.clear()
+
+
+# =========================
+# SAVE → DB
+# =========================
+func _save_remote(force := false):
+
+	if player_data == null or token == "":
 		return
 
-	if accounts[username].password != password:
-		emit_signal("login_result", false, "Wrong password", null)
+	var now := Time.get_ticks_msec() / 1000.0
+	if not force and now - _last_save < SAVE_INTERVAL:
 		return
 
-	current_id = username
-	player_data = accounts[username].data
+	# đang có request lưu chạy dở thì đánh dấu, lưu lại sau khi xong
+	if _saving:
+		_dirty_again = true
+		return
 
-	players[current_id] = {
-		"pos": player_data.pos,
-		"map": player_data.map
+	_last_save = now
+	_saving = true
+
+	_post("save.php", {
+		"token": token,
+		"data": player_data.to_dict()
+	}, func(r):
+		_saving = false
+		if not r.get("ok", false):
+			print("❌ DB SAVE:", r.get("msg"))
+		else:
+			print("💾 DB SAVED")
+
+		if _dirty_again:
+			_dirty_again = false
+			_save_remote(true)
+	)
+
+
+func request_save_position(pos: Vector2, map_path: String, force := false):
+
+	if player_data == null:
+		return
+
+	player_data.pos = pos
+	player_data.map = map_path
+
+	_save_remote(force)
+
+
+func request_save_hotbar(index: int, item, amount: int):
+
+	if player_data == null:
+		print("❌ HOTBAR SAVE FAIL: player_data null")
+		return
+
+	if player_data.hotbar.size() < 8:
+		player_data.hotbar.resize(8)
+
+	player_data.hotbar[index] = {
+		"item": item,
+		"amount": amount
 	}
 
-	emit_signal("login_result", true, "Login success", player_data)
-	print("✅ LOGIN:", username)
+	_save_remote(true)
+
 
 # =========================
 # MOVE
-# =========================
-# =========================
-# MOVE (REALTIME)
 # =========================
 func request_move(pos: Vector2):
 
@@ -156,9 +173,8 @@ func request_move(pos: Vector2):
 		return
 
 	players[current_id].pos = pos
-
-	# 🔥 broadcast cho tất cả client
 	emit_signal("player_moved", current_id, pos)
+
 
 # =========================
 # MAP
@@ -177,8 +193,6 @@ func request_change_map(path, spawn):
 		final_spawn = spawn
 	elif player_data.map == "":
 		final_spawn = "spawn"
-	else:
-		final_spawn = ""
 
 	player_data.map = path
 	Net.send_map(path)
@@ -193,108 +207,60 @@ func spawn_drop(item: ItemData, amount: int, pos: Vector2):
 	if item == null or amount <= 0:
 		return
 
-	var drop_data = {
+	emit_signal("drop_spawned", {"item": item, "amount": amount, "pos": pos})
+
+
+func request_drop_item(item, amount):
+
+	if current_id == "" or not players.has(current_id):
+		return
+
+	emit_signal("drop_spawned", {
 		"item": item,
 		"amount": amount,
-		"pos": pos
-	}
+		"pos": players[current_id].pos
+	})
 
-	print("🔥 SERVER SPAWN DROP:", drop_data)
+	_save_remote(true)   # đồ trong túi vừa giảm
 
-	# 👉 CHỈ EMIT SIGNAL
-	emit_signal("drop_spawned", drop_data)
-	
-# =========================
-# SAVE POSITION
-# =========================
-func request_save_position(pos: Vector2, map_path: String):
-	print("request save pos")
-
-	if player_data == null:
-		return
-
-	player_data.pos = pos
-	player_data.map = map_path
-
-	# 🔥 save player riêng
-	if SaveManager:
-		SaveManager.save(player_data)
-
-	# 🔥 save accounts (QUAN TRỌNG)
-	_save_accounts()
 
 # =========================
-# HOTBAR SAVE
+# EXIT
 # =========================
-func request_save_hotbar(index: int, item, amount: int):
+var _quitting := false
 
-	if player_data == null:
-		print("❌ HOTBAR SAVE FAIL: player_data null")
-		return
-
-	# đảm bảo size
-	if player_data.hotbar.size() < 8:
-		player_data.hotbar.resize(8)
-
-	player_data.hotbar[index] = {
-		"item": item,
-		"amount": amount
-	}
-
-	print("💾 HOTBAR SAVE:", index, item, amount)
-
-	# 🔥 lưu local (tạm thời)
-	if SaveManager:
-		SaveManager.save(player_data)
-
-func _enter_tree():
-	print("🚨 ENTER TREE:", get_path())
 
 func _notification(what):
-
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		_on_player_exit()
 
-	if what == NOTIFICATION_PREDELETE:
-		_on_player_exit()
-		
+
 func _on_player_exit():
 
-	if current_id == "":
+	if _quitting:
+		return
+	_quitting = true
+
+	if current_id == "" or player_data == null or token == "":
+		get_tree().quit()
 		return
 
 	print("🚪 PLAYER EXIT:", current_id)
 
-	# 🔥 SAVE
-	if player_data:
-		request_save_position(player_data.pos, player_data.map)
+	var p = SceneManager.player
+	if p != null and is_instance_valid(p):
+		player_data.pos = p.global_position.round()
+		player_data.map = get_tree().current_scene.scene_file_path
 
 	emit_signal("player_left", current_id)
 
-	if players.has(current_id):
-		players.erase(current_id)
+	# lưu xong (hoặc quá 3 giây) mới thoát
+	get_tree().create_timer(3.0).timeout.connect(func(): get_tree().quit())
 
-	current_id = ""
-	player_data = null
-
-func request_drop_item(item, amount):
-
-	if current_id == "":
-		return
-
-	if not players.has(current_id):
-		return
-
-	var player = players[current_id]
-
-	var pos = player.pos
-
-	var data = {
-		"item": item,
-		"amount": amount,
-		"pos": pos
-	}
-
-	print("🔥 SERVER DROP:", data)
-
-	emit_signal("drop_spawned", data)
+	_post("save.php", {
+		"token": token,
+		"data": player_data.to_dict()
+	}, func(r):
+		print("💾 EXIT SAVE:", r.get("ok", false))
+		get_tree().quit()
+	)

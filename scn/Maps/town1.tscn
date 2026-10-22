@@ -38,6 +38,9 @@ size = Vector2(92, 18.5)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_74n2k"]
 size = Vector2(61, 11)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_102ug"]
+size = Vector2(95, 16)
+
 [node name="Town1" type="Node2D" unique_id=1887984561]
 script = ExtResource("1_hsw2w")
 metadata/_edit_lock_ = true
@@ -178,6 +181,15 @@ metadata/_edit_lock_ = true
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ToForest" unique_id=1592555726]
 position = Vector2(65, 113)
 shape = SubResource("RectangleShape2D_74n2k")
+
+[node name="ToFarm" type="Area2D" parent="." unique_id=552564207]
+script = ExtResource("3_asqsy")
+target_map = "res://scn/Maps/farm.tscn"
+target_spawn = "SpawnTown1"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ToFarm" unique_id=1318247104]
+position = Vector2(120, 510)
+shape = SubResource("RectangleShape2D_102ug")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=233638958]
 

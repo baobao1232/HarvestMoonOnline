@@ -5,7 +5,7 @@ extends Node
 # Client: gọi Net.join(ip, ten_nhan_vat) sau khi login
 
 signal remote_joined(id, data)          # data: name, map, pos, has_pos, anim
-signal remote_state(id, pos, anim)
+signal remote_state(id, pos, anim, ts, item)
 signal remote_map(id, map)
 signal remote_left(id)
 signal server_lost
@@ -94,10 +94,10 @@ func _on_server_disconnected():
 	server_lost.emit()
 
 
-# ---- API cho game gọi ----
-func send_state(pos: Vector2, anim: String):
+func send_state(pos: Vector2, anim: String, item: String = ""):
 	if online:
-		srv_state.rpc_id(1, pos, anim)
+		var ts := Engine.get_physics_frames() * 1000.0 / Engine.physics_ticks_per_second
+		srv_state.rpc_id(1, pos, anim, ts, item)
 
 
 func send_map(map: String):
@@ -136,7 +136,7 @@ func srv_register(pname: String, map: String):
 
 
 @rpc("any_peer", "call_remote", "unreliable_ordered")
-func srv_state(pos: Vector2, anim: String):
+func srv_state(pos: Vector2, anim: String, ts: float, item: String):
 	if not is_server:
 		return
 	var id := multiplayer.get_remote_sender_id()
@@ -150,7 +150,7 @@ func srv_state(pos: Vector2, anim: String):
 
 	for pid in players:
 		if pid != id:
-			cl_state.rpc_id(pid, id, pos, anim)
+			cl_state.rpc_id(pid, id, pos, anim, ts, item)
 
 
 @rpc("any_peer", "call_remote", "reliable")
@@ -176,10 +176,9 @@ func srv_map(map: String):
 func cl_joined(id: int, data: Dictionary):
 	remote_joined.emit(id, data)
 
-
 @rpc("authority", "call_remote", "unreliable_ordered")
-func cl_state(id: int, pos: Vector2, anim: String):
-	remote_state.emit(id, pos, anim)
+func cl_state(id: int, pos: Vector2, anim: String, ts: float, item: String):
+	remote_state.emit(id, pos, anim, ts, item)
 
 
 @rpc("authority", "call_remote", "reliable")
