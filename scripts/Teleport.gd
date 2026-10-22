@@ -7,7 +7,8 @@ var triggered := false
 
 
 func _ready() -> void:
-	pass
+	if not body_entered.is_connected(_on_body_entered):
+		body_entered.connect(_on_body_entered)
 
 
 func _on_body_entered(body: Node2D) -> void:

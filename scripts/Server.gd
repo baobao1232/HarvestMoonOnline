@@ -31,8 +31,11 @@ var token := ""
 var _last_save := 0.0
 var _saving := false
 var _dirty_again := false
+var _timer_pending := false
 
-
+func _ready():
+	if not Net.is_server:
+		get_tree().auto_accept_quit = false
 # =========================
 # HTTP
 # =========================
@@ -106,7 +109,16 @@ func _save_remote(force := false):
 		return
 
 	var now := Time.get_ticks_msec() / 1000.0
+
 	if not force and now - _last_save < SAVE_INTERVAL:
+		# không bỏ, hẹn lưu lại khi hết thời gian chờ
+		if not _timer_pending:
+			_timer_pending = true
+			var wait := SAVE_INTERVAL - (now - _last_save) + 0.1
+			get_tree().create_timer(wait).timeout.connect(func():
+				_timer_pending = false
+				_save_remote(true)
+			)
 		return
 
 	# đang có request lưu chạy dở thì đánh dấu, lưu lại sau khi xong
@@ -215,10 +227,13 @@ func request_drop_item(item, amount):
 	if current_id == "" or not players.has(current_id):
 		return
 
+	var p = SceneManager.player
+	var drop_pos = p.global_position if p != null and is_instance_valid(p) else players[current_id].pos
+
 	emit_signal("drop_spawned", {
 		"item": item,
 		"amount": amount,
-		"pos": players[current_id].pos
+		"pos": drop_pos
 	})
 
 	_save_remote(true)   # đồ trong túi vừa giảm

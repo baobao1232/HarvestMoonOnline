@@ -43,7 +43,7 @@ texture = SubResource("GradientTexture2D_ivn0j")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1320253898]
 position = Vector2(-93, -79)
-polygon = PackedVector2Array(41, 86, 41, 35, 53, 21, 135, 22, 134, 96, 78, 98, 78, 65, 51, 64, 52, 97, 43, 94)
+polygon = PackedVector2Array(41, 86, 41, 35, 53, 21, 135, 22, 134, 96, 78, 98, 78, 85, 52, 84, 52, 97, 43, 94)
 
 [node name="VaoNha" type="Area2D" parent="." unique_id=1629614681]
 script = ExtResource("3_8sq36")
@@ -53,3 +53,5 @@ target_spawn = "NhaThoRen"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="VaoNha" unique_id=1503048418]
 position = Vector2(-28, 14)
 shape = SubResource("RectangleShape2D_ivn0j")
+
+[connection signal="body_entered" from="VaoNha" to="VaoNha" method="_on_body_entered"]
