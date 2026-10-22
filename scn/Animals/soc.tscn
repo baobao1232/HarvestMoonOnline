@@ -151,7 +151,7 @@ position = Vector2(30, 35)
 script = ExtResource("1_gjfde")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1924493303]
-position = Vector2(0, -15)
+position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_8iedq")
 animation = &"right"
 frame_progress = 0.9373866
@@ -162,10 +162,11 @@ shape = SubResource("RectangleShape2D_ck8f3")
 
 [node name="NameLabel" type="Label" parent="." unique_id=127191092]
 offset_left = -5.0
-offset_top = -20.0
-offset_right = 5.0
-offset_bottom = -11.0
-theme_override_font_sizes/font_size = 6
+offset_top = -24.000002
+offset_right = 48.0
+offset_bottom = 20.999998
+scale = Vector2(0.2, 0.2)
+theme_override_font_sizes/font_size = 32
 text = "Sóc"
 metadata/_edit_use_anchors_ = true
 

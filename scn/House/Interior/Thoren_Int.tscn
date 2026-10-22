@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://chlxlqsml0akh" path="res://scripts/Maps/Houses/thoren.gd" id="1_448xx"]
 [ext_resource type="Texture2D" uid="uid://c7pxmphx4h0s1" path="res://Assest/Buildings/house/ThoRen-house/Blacksmith.png" id="2_f5qei"]
 [ext_resource type="Script" uid="uid://c1evi4507st0i" path="res://scripts/Teleport.gd" id="3_3vakn"]
-[ext_resource type="Texture2D" path="res://Assest/Buildings/house/blacksmith_table.png" id="3_m5tn7"]
+[ext_resource type="Texture2D" uid="uid://ixm7au6ffttw" path="res://Assest/Buildings/house/ThoRen-house/blacksmith_table.png" id="3_tgcpo"]
 [ext_resource type="Texture2D" uid="uid://dfy47oqdl48om" path="res://Assest/Buildings/house/ThoRen-house/Tuong1.png" id="3_xggag"]
 [ext_resource type="Texture2D" uid="uid://d3fgvrv6jraep" path="res://Assest/Buildings/house/ThoRen-house/Tuong2.png" id="4_tgcpo"]
 
@@ -47,6 +47,7 @@ position = Vector2(81, 112.5)
 shape = SubResource("RectangleShape2D_d8ekv")
 
 [node name="YSort" type="Node2D" parent="." unique_id=1977226792]
+z_index = 1
 y_sort_enabled = true
 
 [node name="NhaThoRen" type="Marker2D" parent="YSort" unique_id=1228176165]
@@ -54,17 +55,14 @@ position = Vector2(121, 191)
 metadata/_edit_lock_ = true
 
 [node name="Table" type="StaticBody2D" parent="YSort" unique_id=94722793]
-z_index = 10
 position = Vector2(119, 133)
 constant_linear_velocity = Vector2(0, 0.055)
 
 [node name="Sprite2D" type="Sprite2D" parent="YSort/Table" unique_id=1892067521]
-z_index = 10
-y_sort_enabled = true
 texture_filter = 1
 position = Vector2(-15, -20.999998)
 scale = Vector2(1.0312502, 1.0000002)
-texture = ExtResource("3_m5tn7")
+texture = ExtResource("3_tgcpo")
 centered = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="YSort/Table" unique_id=1751882665]
