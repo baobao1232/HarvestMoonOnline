@@ -12,7 +12,7 @@ signal player_left(id)
 
 signal map_changed(path, spawn)
 signal drop_spawned(data)
-
+signal state_applied
 # =========================
 # CONFIG
 # =========================
@@ -32,6 +32,8 @@ var _last_save := 0.0
 var _saving := false
 var _dirty_again := false
 var _timer_pending := false
+var _queue: Array = []
+var _action_busy := false
 
 func _ready():
 	if not Net.is_server:
@@ -98,7 +100,7 @@ func logout():
 	current_id = ""
 	player_data = null
 	players.clear()
-
+	_queue.clear()
 
 # =========================
 # SAVE → DB
@@ -155,24 +157,6 @@ func request_save_position(pos: Vector2, map_path: String, force := false):
 
 	_save_remote(force)
 
-
-func request_save_hotbar(index: int, item, amount: int):
-
-	if player_data == null:
-		Dbg.p("❌ HOTBAR SAVE FAIL: player_data null")
-		return
-
-	if player_data.hotbar.size() < 8:
-		player_data.hotbar.resize(8)
-
-	player_data.hotbar[index] = {
-		"item": item,
-		"amount": amount
-	}
-
-	_save_remote(true)
-
-
 # =========================
 # MOVE
 # =========================
@@ -209,34 +193,6 @@ func request_change_map(path, spawn):
 	player_data.map = path
 	Net.send_map(path)
 	emit_signal("map_changed", path, final_spawn)
-
-
-# =========================
-# DROP
-# =========================
-func spawn_drop(item: ItemData, amount: int, pos: Vector2):
-
-	if item == null or amount <= 0:
-		return
-
-	emit_signal("drop_spawned", {"item": item, "amount": amount, "pos": pos})
-
-
-func request_drop_item(item, amount):
-
-	if current_id == "" or not players.has(current_id):
-		return
-
-	var p = SceneManager.player
-	var drop_pos = p.global_position if p != null and is_instance_valid(p) else players[current_id].pos
-
-	emit_signal("drop_spawned", {
-		"item": item,
-		"amount": amount,
-		"pos": drop_pos
-	})
-
-	_save_remote(true)   # đồ trong túi vừa giảm
 
 
 # =========================
@@ -279,3 +235,69 @@ func _on_player_exit():
 		Dbg.p("💾 EXIT SAVE:", r.get("ok", false))
 		get_tree().quit()
 	)
+
+func request_action(action: String, params := {}, on_done := Callable()):
+	if token == "" or player_data == null:
+		return
+	if _queue.size() >= 8:      # chống spam
+		return
+	_queue.append({"action": action, "params": params, "cb": on_done})
+	_pump()
+
+
+func _pump():
+	if _action_busy or _queue.is_empty():
+		return
+	_action_busy = true
+
+	var job = _queue.pop_front()
+	var body: Dictionary = job.params.duplicate()
+	body["token"] = token
+	body["action"] = job.action
+
+	_post("action.php", body, func(r):
+		_action_busy = false
+		if r.get("ok", false):
+			_apply_state(r)
+		else:
+			print("❌ ACTION ", job.action, ": ", r.get("msg"))
+		if job.cb.is_valid():
+			job.cb.call(r)
+		_pump()
+	)
+
+
+func _apply_state(r: Dictionary):
+	if player_data == null:
+		return
+
+	if r.has("inventory") and r.has("hotbar"):
+		var tmp := PlayerData.new()
+		tmp.from_dict({"inventory": r["inventory"], "hotbar": r["hotbar"]})
+		# sửa tại chỗ vì InventoryManager.slots trỏ cùng mảng này
+		for i in PlayerData.MAX_SLOT:
+			player_data.inventory[i] = tmp.inventory[i]
+		for i in PlayerData.HOTBAR_SIZE:
+			player_data.hotbar[i] = tmp.hotbar[i]
+		state_applied.emit()
+
+	if r.has("tiles"):
+		FarmManager.apply_tiles(r["tiles"])
+
+	if r.has("drop"):
+		_emit_drop(r["drop"])
+	for d in r.get("drops", []):
+		_emit_drop(d)
+
+
+func _emit_drop(d: Dictionary):
+	var it = ItemDb.items.get(str(d["item"]), null)
+	if it == null:
+		return
+	drop_spawned.emit({
+		"id": int(d["id"]),
+		"map": str(d["map"]),
+		"item": it,
+		"amount": int(d["amount"]),
+		"pos": Vector2(float(d["x"]), float(d["y"]))
+	})

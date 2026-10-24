@@ -3,6 +3,8 @@ extends Node
 
 const PLAYER_SCENE = preload("res://scn/Player/Player.tscn")
 const REMOTE_SCRIPT = preload("res://scripts/Players/remote_player.gd")
+# map riêng tư: không hiện người chơi khác (mỗi người 1 farm riêng)
+const PRIVATE_MAPS := ["res://scn/Maps/farm.tscn"]
 
 var player = null
 var player_data : PlayerData = null
@@ -86,7 +88,8 @@ func _sync_remote(id):
 		return
 
 	var d = remote_data[id]
-	var same_map = (d.map == _current_map_path())
+	var cur = _current_map_path()
+	var same_map = (d.map == cur) and not (cur in PRIVATE_MAPS)
 
 	var p = other_players.get(id)
 	if p != null and not is_instance_valid(p):
@@ -97,7 +100,6 @@ func _sync_remote(id):
 		_spawn_remote(id, d)
 	elif not same_map and p != null:
 		_despawn_remote(id)
-
 
 func _spawn_remote(id, d):
 
