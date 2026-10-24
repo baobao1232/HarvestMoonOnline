@@ -19,28 +19,28 @@ func _ready():
 # ===============================
 func _on_create_pressed():
 
-	print("CLICKED")
+	Dbg.p("CLICKED")
 
 	if name_input == null:
 		push_error("name_input NULL")
 		return
 
 	var raw_name = name_input.text
-	print("RAW:", "[" + raw_name + "]")
+	Dbg.p("RAW:", "[" + raw_name + "]")
 
 	var player = PlayerData.new()
 
 	player.name = raw_name.strip_edges()
 
-	print("FINAL NAME:", player.name)
+	Dbg.p("FINAL NAME:", player.name)
 
 	# ===== VALIDATE =====
 	if player.name == "":
-		print("Name is empty")
+		Dbg.p("Name is empty")
 		return
 
 	if player.name.length() < 3:
-		print("Name too short")
+		Dbg.p("Name too short")
 		return
 
 	# ===== SET PLAYER =====
@@ -54,7 +54,7 @@ func _on_create_pressed():
 	# ===== SAVE =====
 	Server._save_remote(true)
 
-	print("Created player:", player.name)
+	Dbg.p("Created player:", player.name)
 
 	# ===== RESET INPUT =====
 	name_input.text = ""

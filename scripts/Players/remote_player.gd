@@ -80,8 +80,6 @@ func _play(anim_name: String):
 
 
 func _process(_delta):
-	if Engine.get_frames_drawn() % 60 == 0:
-		print("FPS=", Engine.get_frames_per_second(), " buf=", buf.size())
 		
 	if buf.is_empty():
 		return

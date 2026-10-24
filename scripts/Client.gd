@@ -70,7 +70,7 @@ func _on_remote_map(id, map):
 func _on_remote_left(id):
 	remote_data.erase(id)
 	_despawn_remote(id)
-	print("❌ PLAYER LEFT:", id)
+	Dbg.p("❌ PLAYER LEFT:", id)
 
 
 func _on_server_lost():
@@ -113,7 +113,7 @@ func _spawn_remote(id, d):
 	p.setup(d.name, d.pos, d.anim)
 
 	other_players[id] = p
-	print("👤 SPAWN REMOTE:", id, d.name)
+	Dbg.p("👤 SPAWN REMOTE:", id, d.name)
 
 
 func _despawn_remote(id):
@@ -176,6 +176,12 @@ func change_map_local(path, spawn):
 		spawn_node = new_map.find_child("Spawn", true, false)
 
 	if player_data != null and player_data.is_newbie:
+		# 🎁 đồ khởi đầu (chỉ 1 lần)
+		InventoryManager.set_player(player_data)
+		for id in {"khoailang": 10, "cuoc_normal": 1, "cucai_s": 1}:
+			var it = ItemDb.items.get(id)
+			if it:
+				InventoryManager.add_item(it, {"khoailang": 10, "cuoc_normal": 1, "cucai_s": 1}[id])
 
 		if spawn_node:
 			player.global_position = spawn_node.global_position

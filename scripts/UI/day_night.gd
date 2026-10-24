@@ -5,7 +5,7 @@ var is_indoor := false
 
 
 func _ready():
-	print("🌙 DayNight READY:", self)
+	Dbg.p("🌙 DayNight READY:", self)
 
 	TimeManager.time_changed.connect(update_target)
 	update_target(TimeManager.hour, TimeManager.minute)
@@ -16,7 +16,7 @@ func _process(delta):
 	# 🔥 INDOOR → trắng NGAY, không lerp
 	if is_indoor:
 		if color != Color(1,1,1):
-			print("🏠 FORCE WHITE (INDOOR)")
+			Dbg.p("🏠 FORCE WHITE (INDOOR)")
 		color = Color(1, 1, 1)
 		return
 
@@ -30,7 +30,7 @@ func _process(delta):
 func set_indoor(value: bool):
 	is_indoor = value
 
-	print("🌙 set_indoor:", value)
+	Dbg.p("🌙 set_indoor:", value)
 
 	if is_indoor:
 		color = Color(1,1,1) # reset ngay
@@ -100,4 +100,4 @@ func update_target(hour, minute):
 	else:
 		target_color = night
 
-	#print("🌙 TARGET:", target_color)
+	#Dbg.p("🌙 TARGET:", target_color)

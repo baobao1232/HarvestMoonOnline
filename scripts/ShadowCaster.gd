@@ -27,9 +27,6 @@ func _ready():
 	trunk = get_node_or_null(trunk_path)
 	foot = get_node_or_null(foot_path)
 
-	print("TARGET:", target)
-	print("TRUNK:", trunk)
-	print("FOOT:", foot)
 	# auto tìm sprite nếu target sai
 	if target and not (target is Sprite2D or target is AnimatedSprite2D):
 		var found = target.find_child("*", true, false)

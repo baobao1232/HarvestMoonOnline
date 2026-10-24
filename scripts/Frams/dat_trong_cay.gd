@@ -52,8 +52,8 @@ func _process(delta):
 	var my_tile = get_grid_pos()
 
 	# 🔥 DEBUG ĐẶT NGAY ĐÂY
-	#print("PLAYER:", player_tile)
-	#print("TILE:", my_tile)
+	#Dbg.p("PLAYER:", player_tile)
+	#Dbg.p("TILE:", my_tile)
 
 	if player_tile == my_tile:
 		update_grow_label()
@@ -75,9 +75,10 @@ func till():
 
 	FarmManager.update_neighbors(get_grid_pos())
 
-	print("🪓 Đã cuốc")
+	Dbg.p("🪓 Đã cuốc")
 
 	update_visual()
+	FarmManager.save_farm()
 	
 func water():
 	if not is_tilled:
@@ -87,8 +88,9 @@ func water():
 		return
 	
 	is_watered = true
-	print("💧 Đã tưới")
+	Dbg.p("💧 Đã tưới")
 	update_visual()
+	FarmManager.save_farm()
 
 
 func plant_seed(item):
@@ -100,7 +102,7 @@ func plant_seed(item):
 		return
 
 	if item.crop_textures.size() == 0:
-		print("❌ Seed không có data")
+		Dbg.p("❌ Seed không có data")
 		return
 
 	has_seed = true
@@ -109,9 +111,10 @@ func plant_seed(item):
 	growth_stage = 0
 	current_day = 0
 
-	print("🌱 Plant seed → stage 0")
+	Dbg.p("🌱 Plant seed → stage 0")
 
 	update_visual()
+	FarmManager.save_farm()
 
 
 # ===============================
@@ -123,7 +126,7 @@ func grow():
 		return
 
 	if crop_data.need_water and not is_watered:
-		print("❌ Thiếu nước")
+		Dbg.p("❌ Thiếu nước")
 		return
 
 	current_day += 1
@@ -139,13 +142,57 @@ func grow():
 			current_day = 0
 			growth_stage += 1
 
-			print("🌿 Stage:", growth_stage)
+			Dbg.p("🌿 Stage:", growth_stage)
 
 	update_visual()
 
 	# reset nước mỗi ngày
 	is_watered = false
 
+# ===============================
+# 🌾 HARVEST
+# ===============================
+func can_harvest() -> bool:
+
+	if not has_seed or crop_data == null:
+		return false
+
+	return growth_stage >= crop_data.crop_textures.size() - 1
+
+
+func harvest() -> bool:
+
+	if not can_harvest():
+		return false
+
+	var item : ItemData = crop_data.harvest_item
+
+	if item == null:
+		return false
+
+	# túi đầy thì không thu (tránh mất đồ)
+	if not InventoryManager.can_add_item(item, 1):
+		Dbg.p("Túi đầy")
+		return false
+
+	InventoryManager.add_item(item, 1)
+
+	if crop_data.regrow:
+		# cây ra quả nhiều lần: lùi về giai đoạn trước cuối
+		growth_stage = max(crop_data.crop_textures.size() - 2, 0)
+		current_day = 0
+	else:
+		has_seed = false
+		crop_data = null
+		growth_stage = 0
+		current_day = 0
+
+	grow_label.visible = false
+	update_visual()
+
+	FarmManager.save_farm()
+
+	return true
 
 # ===============================
 # 🎨 VISUAL
@@ -255,3 +302,34 @@ func get_grid_pos():
 		floor((global_position.x - 8) / tile_size) * tile_size,
 		floor((global_position.y - 8) / tile_size) * tile_size
 	)
+
+func to_data() -> Dictionary:
+
+	var p = get_grid_pos()
+
+	return {
+		"x": p.x,
+		"y": p.y,
+		"watered": is_watered,
+		"seed": crop_data.id if crop_data != null else "",
+		"stage": growth_stage,
+		"day": current_day
+	}
+
+
+func apply_data(d: Dictionary):
+
+	is_tilled = true
+	is_watered = d.get("watered", false)
+
+	var sid = d.get("seed", "")
+	if sid != "":
+		var it = ItemDb.items.get(sid, null)
+		if it != null:
+			has_seed = true
+			crop_data = it
+			growth_stage = int(d.get("stage", 0))
+			current_day = int(d.get("day", 0))
+
+	FarmManager.add_tile(get_grid_pos(), self)
+	update_visual()

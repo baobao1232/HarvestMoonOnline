@@ -5,7 +5,7 @@ func _ready():
 
 	super()
 
-	print("Town1 loaded")
+	Dbg.p("Town1 loaded")
 
 
 func _on_to_farm_body_entered(body: Node2D) -> void:

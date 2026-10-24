@@ -10,33 +10,22 @@ var amount := 0
 
 
 func _ready():
-	
-	print("BG clip:", bg.clip_contents)
-	
+
 	# SET Z_INDEX
 	bg.z_index = 0
 	icon.z_index = 10
 	amount_bg.z_index = 20
 	amount_label.z_index = 30
-	
+
 	# TẮT RELATIVE
 	bg.z_as_relative = false
 	icon.z_as_relative = false
-	
+
 	# ĐẢM BẢO ICON KHÔNG BỊ CHE
 	icon.show_behind_parent = false
-	
-	# ĐẢM BẢO THỨ TỰ CON
+
 	_ensure_child_order()
-	
 	_clear()
-	
-	print("===== CHILD ORDER =====")
-	for i in range(get_child_count()):
-		var c = get_child(i)
-		print(i, ":", c.name, "| z:", c.z_index, "| visible:", c.visible)
-
-
 # ===============================
 
 # ===============================
@@ -79,7 +68,6 @@ func set_item(new_item, new_amount := 1):
 # CLEAR SLOT
 # ===============================
 func _clear():
-	print("💀 CLEAR CALLED FROM:", get_stack())
 	
 	item = null
 	amount = 0

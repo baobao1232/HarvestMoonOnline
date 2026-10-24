@@ -131,10 +131,10 @@ var dialog = {
 
 
 # ======================
-# FALL
+# autumn
 # ======================
 
-"fall":[
+"autumn":[
 
 { "text":"Mùa thu có nhiều nguyên liệu nấu ăn.", "face":"happy" },
 { "text":"Tôi muốn thử nhiều món mới.", "face":"happy" },

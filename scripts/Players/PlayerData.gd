@@ -67,7 +67,7 @@ func to_dict():
 			item = ItemDb.items.get(item, null)
 
 		if item == null:
-			print("❌ SAVE FAIL SLOT:", slot)
+			Dbg.p("❌ SAVE FAIL SLOT:", slot)
 			inv_save.append(null)
 			continue
 
@@ -167,7 +167,7 @@ func from_dict(data: Dictionary):
 				var item = ItemDb.items.get(item_id, null)
 
 				if item == null:
-					print("❌ LOAD FAIL (ID):", item_id)
+					Dbg.p("❌ LOAD FAIL (ID):", item_id)
 					inventory.append(null)
 					continue
 
@@ -194,7 +194,7 @@ func from_dict(data: Dictionary):
 					item = raw
 
 				if item == null:
-					print("❌ LOAD FAIL (ITEM):", raw)
+					Dbg.p("❌ LOAD FAIL (ITEM):", raw)
 					inventory.append(null)
 					continue
 
@@ -206,7 +206,7 @@ func from_dict(data: Dictionary):
 
 
 			# ===== CASE 3: data rác
-			print("⚠ INVALID SLOT:", slot)
+			Dbg.p("⚠ INVALID SLOT:", slot)
 			inventory.append(null)
 
 	else:
@@ -238,7 +238,7 @@ func from_dict(data: Dictionary):
 				var item = ItemDb.items.get(slot["id"], null)
 
 				if item == null:
-					print("❌ HOTBAR FAIL:", slot["id"])
+					Dbg.p("❌ HOTBAR FAIL:", slot["id"])
 					hotbar.append(null)
 					continue
 
@@ -266,5 +266,5 @@ func from_dict(data: Dictionary):
 	quests = data.get("quests", {})
 
 
-	print("✔ LOAD DONE | INV:", inventory)
-	print("✔ LOAD DONE | HOTBAR:", hotbar)
+	Dbg.p("✔ LOAD DONE | INV:", inventory)
+	Dbg.p("✔ LOAD DONE | HOTBAR:", hotbar)

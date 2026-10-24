@@ -56,8 +56,8 @@ func get_slot(index):
 func _ready():
 
 	scale = Vector2.ONE
-	print("INVENTORY SCALE:", scale)
-	print("PARENT:", get_parent())
+	Dbg.p("INVENTORY SCALE:", scale)
+	Dbg.p("PARENT:", get_parent())
 	await get_tree().process_frame
 	await get_tree().process_frame
 
@@ -67,17 +67,6 @@ func _ready():
 
 	# 🔥 KHÔNG dùng menu cũ nữa
 	action_menu = null
-
-	var items_to_add = {
-		"khoailang": 10,
-		"cuoc_normal": 1,
-		"cucai_s": 1
-	}
-
-	for id in items_to_add:
-		var item = ItemDb.items.get(id)
-		if item:
-			InventoryManager.add_item(item, items_to_add[id])
 
 	setup_slots()
 	refresh()
@@ -225,7 +214,7 @@ func hide_action_menu():
 		return
 
 	if not is_instance_valid(action_menu):
-		print("💀 action_menu đã bị free → reset")
+		Dbg.p("💀 action_menu đã bị free → reset")
 		action_menu = null
 		return
 
@@ -245,7 +234,7 @@ func hide_action_menu():
 	# 🔥 CHECK LẠI SAU AWAIT
 	# ===============================
 	if not is_instance_valid(action_menu):
-		print("💀 action_menu chết sau tween")
+		Dbg.p("💀 action_menu chết sau tween")
 		action_menu = null
 		return
 
@@ -270,7 +259,7 @@ func handle_action():
 	# ===============================
 	if Input.is_action_just_pressed("interact"):
 
-		print("A TAP → INVENTORY | mode:", mode)
+		Dbg.p("A TAP → INVENTORY | mode:", mode)
 
 		# ===== SELECT → MỞ MENU =====
 		if mode == "select":
@@ -299,7 +288,7 @@ func handle_action():
 				# USE
 				# ===============================
 				0:
-					print("👉 USE ITEM")
+					Dbg.p("👉 USE ITEM")
 					InventoryManager.use_item(last_slot_index)
 
 
@@ -307,7 +296,7 @@ func handle_action():
 				# DROP (FIX CHUẨN)
 				# ===============================
 				1:
-					print("👉 DROP ITEM")
+					Dbg.p("👉 DROP ITEM")
 
 					var result = InventoryManager.drop_item(last_slot_index, 1)
 
@@ -324,7 +313,7 @@ func handle_action():
 				# HOTBAR
 				# ===============================
 				2:
-					print("👉 HOTBAR MODE")
+					Dbg.p("👉 HOTBAR MODE")
 					enter_hotbar_mode()
 					return
 
@@ -447,9 +436,9 @@ func move_action(dir: Vector2):
 
 	# ===== DEBUG =====
 	if Input.is_action_just_pressed("ui_down"):
-		print("JUST DOWN FRAME")
+		Dbg.p("JUST DOWN FRAME")
 	if Input.is_action_just_pressed("ui_up"):
-		print("JUST UP FRAME")
+		Dbg.p("JUST UP FRAME")
 
 	# ===============================
 	var is_press := false
@@ -466,12 +455,12 @@ func move_action(dir: Vector2):
 	if not is_press:
 		return
 
-	print("MOVE TRIGGER:", move_dir, " | BEFORE:", action_index)
+	Dbg.p("MOVE TRIGGER:", move_dir, " | BEFORE:", action_index)
 
 	action_index += move_dir
 	action_index = clamp(action_index, 0, 2)
 
-	print("AFTER:", action_index)
+	Dbg.p("AFTER:", action_index)
 
 	if action_menu.has_method("set_index"):
 		action_menu.set_index(action_index)
@@ -525,7 +514,7 @@ func enter_hotbar_mode():
 	if hud and is_instance_valid(hud):
 		hud.enter_hotbar_select(self)
 	else:
-		print("❌ Hud NULL (không tìm thấy)")
+		Dbg.p("❌ Hud NULL (không tìm thấy)")
 		mode = "select"
 
 	ignore_input = false

@@ -52,37 +52,6 @@ func on_new_day():
 
 	update_visual()
 
-
-# ===============================
-# HARVEST CHECK
-# ===============================
-func can_harvest() -> bool:
-	if crop == null:
-		return false
-
-	return growth_stage >= crop.grow_days.size() - 1
-
-
-# ===============================
-# HARVEST
-# ===============================
-func harvest():
-
-	if not can_harvest():
-		return null
-
-	var item = crop.harvest_item
-
-	# 🌱 regrow
-	if crop.regrow:
-		planted_day = TimeManager.day
-		growth_stage = crop.grow_days.size() - 2   # quay lại stage trước cuối
-	else:
-		queue_free() # xoá cây
-
-	return item
-
-
 # ===============================
 # WITHER
 # ===============================

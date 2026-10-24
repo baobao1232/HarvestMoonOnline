@@ -46,7 +46,7 @@ func _on_player_left(id):
 	other_players[id].queue_free()
 	other_players.erase(id)
 
-	print("❌ PLAYER LEFT:", id)
+	Dbg.p("❌ PLAYER LEFT:", id)
 
 
 # ===============================
@@ -61,7 +61,7 @@ func set_player_data(data: PlayerData):
 	player_data = data
 	InventoryManager.set_player(player_data)
 
-	print("📦 PLAYER DATA SET:", player_data.name)
+	Dbg.p("📦 PLAYER DATA SET:", player_data.name)
 
 
 # ===============================

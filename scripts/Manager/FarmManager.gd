@@ -91,10 +91,68 @@ func update_neighbors(pos: Vector2):
 # ===============================
 func on_new_day(day, season, year):
 
-	print("🌅 NEW DAY:", day)
+	Dbg.p("🌅 NEW DAY:", day)
 
 	for pos in tiles:
 		var tile = tiles[pos]
 
 		if tile != null and tile.has_method("grow"):
 			tile.grow()
+	save_farm()
+
+var active := false   # true khi đang ở map farm (tránh ghi đè dữ liệu bằng danh sách rỗng)
+
+const FARM_MAP := "res://scn/Maps/farm.tscn"
+const DAT_SCENE := preload("res://scn/Farms/DatTrongCay.tscn")
+
+
+func clear_tiles():
+	tiles.clear()
+	active = false
+
+
+func serialize() -> Dictionary:
+
+	var list := []
+
+	for pos in tiles:
+		var t = tiles[pos]
+		if t != null and is_instance_valid(t):
+			list.append(t.to_data())
+
+	return {"tiles": list, "day": TimeManager.total_days}
+
+
+# gọi mỗi khi cuốc / tưới / trồng / thu hoạch
+func save_farm():
+
+	if not active:
+		return
+	if Server.player_data == null:
+		return
+
+	Server.player_data.farm = serialize()
+	Server._save_remote()   # đã có throttle 5 giây
+
+
+func load_farm(data: Dictionary, parent: Node):
+
+	clear_tiles()
+	active = true
+
+	var list = data.get("tiles", [])
+	var passed := clampi(TimeManager.total_days - int(data.get("day", TimeManager.total_days)), 0, 200)
+
+	for d in list:
+		var dat = DAT_SCENE.instantiate()
+		parent.add_child(dat)
+		dat.global_position = Vector2(float(d.x), float(d.y)) + Vector2(8, 8)
+		dat.apply_data(d)
+
+	# cho cây lớn bù những ngày offline (cây cần nước mà không được tưới thì không lớn)
+	for i in passed:
+		for pos in tiles:
+			tiles[pos].grow()
+
+	for pos in tiles:
+		tiles[pos].update_visual()

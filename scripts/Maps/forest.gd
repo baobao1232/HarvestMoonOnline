@@ -3,8 +3,8 @@ extends "res://scripts/MapBase.gd"
 func _ready():
 	super()
 
-	print("Forest loaded")
-	print("Map name:", name)
+	Dbg.p("Forest loaded")
+	Dbg.p("Map name:", name)
 
 	NpcManager.spawn_npcs(name, $YSort)
 
@@ -20,14 +20,14 @@ func _process(delta):
 	if tree == null:
 		return
 
-	#print("-----")
-	#print("Player pos:", player.position.y)
-	#print("Player global:", player.global_position.y)
-	#print("Player z:", player.z_index)
+	#Dbg.p("-----")
+	#Dbg.p("Player pos:", player.position.y)
+	#Dbg.p("Player global:", player.global_position.y)
+	#Dbg.p("Player z:", player.z_index)
 
-	#print("Tree pos:", tree.position.y)
-	#print("Tree global:", tree.global_position.y)
-	#print("Tree z:", tree.z_index)
+	#Dbg.p("Tree pos:", tree.position.y)
+	#Dbg.p("Tree global:", tree.global_position.y)
+	#Dbg.p("Tree z:", tree.z_index)
 
 func _on_to_farm_body_entered(body: Node2D) -> void:
 	pass

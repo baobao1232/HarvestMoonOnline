@@ -27,7 +27,7 @@ func check_character():
 func _on_char1_pressed():
 
 	if has_char:
-		print("Selected:", player_data.name)
+		Dbg.p("Selected:", player_data.name)
 	else:
 		get_node("/root/Main").open_create_char()
 
@@ -35,7 +35,7 @@ func _on_char1_pressed():
 func _on_create_pressed():
 
 	if has_char:
-		print("Character already exists")
+		Dbg.p("Character already exists")
 		return
 
 	get_node("/root/Main").open_create_char()
@@ -43,22 +43,22 @@ func _on_create_pressed():
 func _on_enter_pressed():
 
 	if !has_char:
-		print("No character")
+		Dbg.p("No character")
 		return
 		
-	print(player_data)
-	print(player_data.map)
+	Dbg.p(player_data)
+	Dbg.p(player_data.map)
 
 	SaveManager.player = player_data
 
-	print("ENTER GAME:", player_data.name)
+	Dbg.p("ENTER GAME:", player_data.name)
 
 	var map_path = player_data.map
 
 	# 🔥 FIX: check path tồn tại
 	if map_path == "" or map_path == null or !ResourceLoader.exists(map_path):
 
-		print("❌ MAP INVALID → RESET TO FARM")
+		Dbg.p("❌ MAP INVALID → RESET TO FARM")
 
 		map_path = "res://scn/Maps/farm.tscn"
 

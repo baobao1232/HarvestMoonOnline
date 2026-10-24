@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://ctl3dlr358f2x" path="res://Assest/Buildings/house/ThoRen-house/ThoRen-House-Day.png" id="1_v3s8y"]
 [ext_resource type="Texture2D" uid="uid://dooft05eiph5x" path="res://Assest/Buildings/house/ThoRen-house/ThoRen-House-Night.png" id="2_8sq36"]
 [ext_resource type="Script" uid="uid://c1evi4507st0i" path="res://scripts/Teleport.gd" id="3_8sq36"]
+[ext_resource type="PackedScene" uid="uid://djrh5nd0j6eln" path="res://scn/Icons/Sign.tscn" id="4_ivn0j"]
 
 [sub_resource type="Gradient" id="Gradient_sue1e"]
 offsets = PackedFloat32Array(0.26092127, 0.9714476)
@@ -53,5 +54,9 @@ target_spawn = "NhaThoRen"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="VaoNha" unique_id=1503048418]
 position = Vector2(-28, 14)
 shape = SubResource("RectangleShape2D_ivn0j")
+
+[node name="Sign" parent="." unique_id=1521790615 instance=ExtResource("4_ivn0j")]
+position = Vector2(-3, 23)
+dialog_lines = Array[String](["Xin chao", "Day la dialog"])
 
 [connection signal="body_entered" from="VaoNha" to="VaoNha" method="_on_body_entered"]

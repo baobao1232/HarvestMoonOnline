@@ -135,9 +135,9 @@ func _save_remote(force := false):
 	}, func(r):
 		_saving = false
 		if not r.get("ok", false):
-			print("❌ DB SAVE:", r.get("msg"))
+			Dbg.p("❌ DB SAVE:", r.get("msg"))
 		else:
-			print("💾 DB SAVED")
+			Dbg.p("💾 DB SAVED")
 
 		if _dirty_again:
 			_dirty_again = false
@@ -159,7 +159,7 @@ func request_save_position(pos: Vector2, map_path: String, force := false):
 func request_save_hotbar(index: int, item, amount: int):
 
 	if player_data == null:
-		print("❌ HOTBAR SAVE FAIL: player_data null")
+		Dbg.p("❌ HOTBAR SAVE FAIL: player_data null")
 		return
 
 	if player_data.hotbar.size() < 8:
@@ -260,7 +260,7 @@ func _on_player_exit():
 		get_tree().quit()
 		return
 
-	print("🚪 PLAYER EXIT:", current_id)
+	Dbg.p("🚪 PLAYER EXIT:", current_id)
 
 	var p = SceneManager.player
 	if p != null and is_instance_valid(p):
@@ -276,6 +276,6 @@ func _on_player_exit():
 		"token": token,
 		"data": player_data.to_dict()
 	}, func(r):
-		print("💾 EXIT SAVE:", r.get("ok", false))
+		Dbg.p("💾 EXIT SAVE:", r.get("ok", false))
 		get_tree().quit()
 	)

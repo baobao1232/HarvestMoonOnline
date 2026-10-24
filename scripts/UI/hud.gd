@@ -37,7 +37,7 @@ func _ready():
 
 	if UIManager:
 		UIManager.hud = self
-		print("🔥 HUD REGISTER:", self)
+		Dbg.p("🔥 HUD REGISTER:", self)
 
 	layer = 1
 
@@ -65,7 +65,7 @@ func _ready():
 	if not btn_inv.pressed.is_connected(_on_btn_system_pressed):
 		btn_inv.pressed.connect(_on_btn_system_pressed)
 
-	print("✅ HUD READY:", self)
+	Dbg.p("✅ HUD READY:", self)
 
 
 # ===============================
@@ -105,7 +105,7 @@ func _process(delta):
 
 		# ❌ đang move hoặc select thì bỏ
 		if not using_hotbar and not selecting_hotbar:
-			print("🟡 USE ITEM")
+			Dbg.p("🟡 USE ITEM")
 			_use_current_item()
 
 	# ===============================
@@ -121,7 +121,7 @@ func _process(delta):
 
 			if hold_time > 0.15 and not using_hotbar:
 
-				print("🔥 ENTER HOTBAR MOVE")
+				Dbg.p("🔥 ENTER HOTBAR MOVE")
 
 				using_hotbar = true
 				UIManager.input_mode = "hotbar_move"
@@ -146,7 +146,7 @@ func _process(delta):
 		else:
 
 			if using_hotbar:
-				print("🔚 EXIT HOTBAR MOVE")
+				Dbg.p("🔚 EXIT HOTBAR MOVE")
 
 				using_hotbar = false
 				UIManager.input_mode = "player"
@@ -177,7 +177,7 @@ func _process(delta):
 					hotbar_index -= 1
 
 				hotbar_index = wrapi(hotbar_index, 0, hotbar_slots.size())
-				print("🎯 SWITCH SLOT:", hotbar_index)
+				Dbg.p("🎯 SWITCH SLOT:", hotbar_index)
 
 				if selecting_hotbar:
 					update_temp_cursor()
@@ -219,7 +219,7 @@ func _process(delta):
 # ===============================
 func enter_hotbar_select(inv):
 
-	print("🟢 ENTER HOTBAR SELECT")
+	Dbg.p("🟢 ENTER HOTBAR SELECT")
 
 	inventory_ref = inv
 	selecting_hotbar = true
@@ -293,7 +293,7 @@ func confirm_hotbar_assign():
 		var success = InventoryManager.add_item(old_item, old_amount)
 
 		if not success:
-			print("❌ Inventory full → không swap")
+			Dbg.p("❌ Inventory full → không swap")
 			return
 
 	# ===============================
@@ -315,7 +315,7 @@ func confirm_hotbar_assign():
 	if Server.has_method("request_save_hotbar"):
 		Server.request_save_hotbar(hotbar_index, new_item, new_amount)
 
-	print("🔥 SWAP:", new_item.name, "<->", old_item if old_item else "empty")
+	Dbg.p("🔥 SWAP:", new_item.name, "<->", old_item if old_item else "empty")
 
 	# ===============================
 	# 🔥 EXIT
@@ -388,7 +388,7 @@ func _update_player_item(play_anim := false):
 	var player = get_tree().get_first_node_in_group("local_player")
 
 	if player == null:
-		print("❌ NO LOCAL PLAYER")
+		Dbg.p("❌ NO LOCAL PLAYER")
 		return
 
 	# 🔥 UPDATE VISUAL
@@ -397,7 +397,7 @@ func _update_player_item(play_anim := false):
 
 	# 🔥 PLAY ANIM
 	if play_anim and player.has_method("play_show_item_anim"):
-		print("🔥 PLAY SHOW ITEM")
+		Dbg.p("🔥 PLAY SHOW ITEM")
 		player.play_show_item_anim()
 # ===============================
 # LOAD HOTBAR
@@ -437,7 +437,7 @@ func load_hotbar_ui():
 # ===============================
 func _on_btn_system_pressed():
 
-	print("🔥 BTN SYSTEM CLICKED")
+	Dbg.p("🔥 BTN SYSTEM CLICKED")
 
 	if DialogManager.is_showing:
 		DialogManager.force_close()
@@ -458,16 +458,19 @@ func _use_current_item():
 	var item = slot.get_item()
 
 	if item == null:
-		print("❌ NO ITEM TO USE")
+		Dbg.p("❌ NO ITEM TO USE")
 		return
 
 	var player = get_tree().get_first_node_in_group("local_player")
 
 	if player == null:
-		print("❌ NO LOCAL PLAYER")
+		Dbg.p("❌ NO LOCAL PLAYER")
 		return
-
+	
+	if player.has_method("get_interact_target") and player.get_interact_target() != null:
+		return
+		
 	# 🔥 FIX: gọi manager thay vì player
 	ItemUseManager.use_item(player, item, slot)
 
-	print("🔥 USED ITEM:", item.name)
+	Dbg.p("🔥 USED ITEM:", item.name)

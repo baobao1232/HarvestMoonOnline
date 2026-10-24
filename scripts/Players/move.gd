@@ -26,7 +26,7 @@ var prev_anim := ""
 func _ready():
 
 	add_to_group("player")
-	print("ANIMS:", anim.sprite_frames.get_animation_names())
+	Dbg.p("ANIMS:", anim.sprite_frames.get_animation_names())
 
 	add_to_group("local_player")
 
@@ -72,10 +72,10 @@ func _physics_process(delta):
 
 	_sync_net(delta)
 	
-	var is_locked := false
+	var is_locked := DialogManager.is_showing
 
 	if is_instance_valid(UIManager):
-		is_locked = UIManager.input_mode in [
+		is_locked = is_locked or UIManager.input_mode in [
 			"menu",
 			"inventory",
 			"inventory_action",
@@ -103,14 +103,10 @@ func _physics_process(delta):
 
 		show_timer -= delta
 
-		# ❗ nếu di chuyển → hủy ngay
 		if show_timer <= 0:
 			is_showing_item = false
 
-		elif show_timer <= 0:
-			is_showing_item = false
-
-		# ❗ CHẶN TOÀN BỘ animation khác
+		# vẫn đang show → chặn animation khác
 		if is_showing_item:
 			move_and_slide()
 			return
@@ -124,8 +120,9 @@ func _physics_process(delta):
 	# ===============================
 	if is_locked:
 		velocity = Vector2.ZERO
-		move_and_slide()   # 🔥 vẫn gọi để stop ngay
-		return             # 🔥 CHẶN hết phía dưới (quan trọng)
+		move_and_slide()
+		update_animation(Vector2.ZERO)   # 🔥 thêm dòng này
+		return
 
 	velocity = dir * speed
 
@@ -138,14 +135,6 @@ func _physics_process(delta):
 		update_animation(Vector2.ZERO)
 	else:
 		update_animation(dir)
-
-	# ===============================
-	# SYNC
-	# ===============================
-	sync_timer -= delta
-	if sync_timer <= 0:
-		sync_timer = 0.05
-		Net.send_state(global_position, anim.animation)
 
 # ===============================
 # ANIMATION
@@ -180,9 +169,9 @@ func update_raycast():
 
 	match last_dir:
 		"down":
-			ray.target_position = Vector2(0, 32)
+			ray.target_position = Vector2(0, 16)
 		"up":
-			ray.target_position = Vector2(0, -32)
+			ray.target_position = Vector2(0, -16)
 		"left":
 			ray.target_position = Vector2(-32, 0)
 		"right":
@@ -240,7 +229,7 @@ func _sync_net(delta):
 func play_show_item_anim():
 
 	if not anim.sprite_frames or not anim.sprite_frames.has_animation("showitem"):
-		print("❌ NO SHOWITEM ANIM")
+		Dbg.p("❌ NO SHOWITEM ANIM")
 		return
 
 	is_showing_item = true
@@ -254,14 +243,14 @@ func play_show_item_anim():
 	if item_show:
 		item_show.visible = true
 
-	print("🎬 PLAY SHOWITEM FORCED")
+	Dbg.p("🎬 PLAY SHOWITEM FORCED")
 
 func cancel_show_item():
 
 	if not is_showing_item:
 		return
 
-	print("🛑 CANCEL SHOW ITEM")
+	Dbg.p("🛑 CANCEL SHOW ITEM")
 
 	is_showing_item = false
 	show_timer = 0
@@ -275,7 +264,7 @@ func play_raihat_anim():
 		return
 
 	if not anim.sprite_frames or not anim.sprite_frames.has_animation("raihat"):
-		print("❌ Không có anim raihat")
+		Dbg.p("❌ Không có anim raihat")
 		return
 
 	is_showing_item = true
@@ -295,3 +284,51 @@ func _on_raihat_finished():
 
 	# quay về idle
 	anim.play("idle_" + last_dir)
+
+# ===============================
+# INTERACT (nút A)
+# ===============================
+func _process(_delta):
+
+	if not Input.is_action_just_pressed("interact"):
+		return
+
+	# đang mở menu / inventory / hotbar thì không interact
+	if UIManager.input_mode != "player":
+		return
+
+	# đang có hội thoại → A = sang trang / hiện đủ chữ
+	if DialogManager.is_showing:
+		DialogManager.next()
+		return
+
+	if is_showing_item:
+		return
+
+	var target = get_interact_target()
+	if target != null:
+		target.interact()
+
+
+func get_interact_target():
+
+	if ray == null:
+		return null
+
+	ray.force_raycast_update()
+
+	if not ray.is_colliding():
+		return null
+
+	# Sign là Area2D, còn ray chạm vào StaticBody2D con của nó
+	# → kiểm tra collider rồi tới cha của collider
+	var node = ray.get_collider()
+
+	for i in 2:
+		if node == null:
+			break
+		if node.has_method("interact"):
+			return node
+		node = node.get_parent()
+
+	return null

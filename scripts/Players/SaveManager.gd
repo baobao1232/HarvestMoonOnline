@@ -19,7 +19,7 @@ func get_save_path():
 func save(data:PlayerData):
 
 	if current_user == "":
-		print("Save failed: no user logged in")
+		Dbg.p("Save failed: no user logged in")
 		return
 
 	player = data
@@ -40,7 +40,7 @@ func save(data:PlayerData):
 	file.flush() # 🔥 BẮT BUỘC
 	file.close()
 
-	print("GAME SAVED:", path)
+	Dbg.p("GAME SAVED:", path)
 
 
 # ===============================
@@ -49,19 +49,19 @@ func save(data:PlayerData):
 func load() -> PlayerData:
 
 	if current_user == "":
-		print("Load failed: no user logged in")
+		Dbg.p("Load failed: no user logged in")
 		return null
 
 	var path = get_save_path()
 
 	if !FileAccess.file_exists(path):
-		print("No save file:", path)
+		Dbg.p("No save file:", path)
 		return null
 
 	var file = FileAccess.open(path, FileAccess.READ)
 
 	if file == null:
-		print("Load failed: cannot open file")
+		Dbg.p("Load failed: cannot open file")
 		return null
 
 	var text = file.get_as_text()
@@ -71,7 +71,7 @@ func load() -> PlayerData:
 	var json = JSON.parse_string(text)
 
 	if typeof(json) != TYPE_DICTIONARY:
-		print("❌ Save corrupted:", path)
+		Dbg.p("❌ Save corrupted:", path)
 		return null
 
 	var data = PlayerData.new()
@@ -79,6 +79,6 @@ func load() -> PlayerData:
 
 	player = data
 
-	print("GAME LOADED:", path)
+	Dbg.p("GAME LOADED:", path)
 
 	return data

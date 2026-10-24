@@ -17,3 +17,4 @@ func _on_day_changed(day, season, year):
 
 func update_time():
 	text = TimeManager.get_time_string() + "\n" + TimeManager.get_date_string()
+	

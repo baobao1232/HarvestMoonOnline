@@ -12,21 +12,21 @@ func _ready() -> void:
 
 
 func _on_body_entered(body: Node2D) -> void:
-	print("[TELEPORT] Body entered: ", body.name)
+	Dbg.p("[TELEPORT] Body entered: ", body.name)
 
 	if not body.is_in_group("player"):
-		print("[TELEPORT] BLOCK: Not player group")
+		Dbg.p("[TELEPORT] BLOCK: Not player group")
 		return
 
 	if triggered:
 		return
 
 	if SceneManager.player_data == null:
-		print("[TELEPORT] BLOCK: player_data NULL")
+		Dbg.p("[TELEPORT] BLOCK: player_data NULL")
 		return
 
 	if SceneManager.teleport_lock:
-		print("[TELEPORT] BLOCK: teleport_lock = true")
+		Dbg.p("[TELEPORT] BLOCK: teleport_lock = true")
 		return
 
 	triggered = true
@@ -37,17 +37,17 @@ func _teleport() -> void:
 	var player = SceneManager.player
 
 	if player == null:
-		print("[TELEPORT] ERROR: SceneManager.player NULL")
+		Dbg.p("[TELEPORT] ERROR: SceneManager.player NULL")
 		triggered = false
 		return
 
 	if target_map.is_empty() or target_spawn.is_empty():
-		print("[TELEPORT] ERROR: target_map hoặc target_spawn chưa được thiết lập")
+		Dbg.p("[TELEPORT] ERROR: target_map hoặc target_spawn chưa được thiết lập")
 		triggered = false
 		return
 
-	print("[TELEPORT] REQUEST → SERVER")
-	print("MAP: ", target_map)
-	print("SPAWN: ", target_spawn)
+	Dbg.p("[TELEPORT] REQUEST → SERVER")
+	Dbg.p("MAP: ", target_map)
+	Dbg.p("SPAWN: ", target_spawn)
 
 	SceneManager.request_change_map(target_map, target_spawn)

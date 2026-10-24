@@ -113,16 +113,16 @@ func confirm():
 			UIManager.open(scene, null, "inventory")
 
 		1:
-			print("QUEST")
+			Dbg.p("QUEST")
 
 		2:
-			print("CROPS")
+			Dbg.p("CROPS")
 
 		3:
-			print("HOME")
+			Dbg.p("HOME")
 
 		4:
-			print("SHOP")
+			Dbg.p("SHOP")
 
 		5:
 			logout()
@@ -133,8 +133,8 @@ func confirm():
 # LOGOUT - XÓA SẠCH + CHUYỂN LOGIN
 # ===============================
 func logout():
-	print("=== LOGOUT START ===")
-
+	Dbg.p("=== LOGOUT START ===")
+	Net.leave()
 	if is_instance_valid(SaveManager) and is_instance_valid(SaveManager.player):
 		Server.logout()
 
@@ -143,10 +143,7 @@ func logout():
 
 	InventoryManager.current_player = null
 	InventoryManager.slots = []
-
-	if is_instance_valid(SceneManager):
-		SceneManager.player = null
-		SceneManager.next_spawn = ""
+	SceneManager.player_data = null
 
 	UIManager.reset_all()
 
@@ -163,13 +160,13 @@ func logout():
 	# 🔥 KHÔNG await nữa
 	get_tree().change_scene_to_file("res://scn/Login.tscn")
 
-	print("✅ LOGOUT DONE")
+	Dbg.p("✅ LOGOUT DONE")
 	
 # ===== HELPER: TÌM FILE LOGIN =====
 func find_login_scene(dir: DirAccess, path: String):
 	for file in dir.get_files():
 		if file == "Login.tscn" or file == "login.tscn":
-			print("🔍 Found login scene at: res://" + path + file)
+			Dbg.p("🔍 Found login scene at: res://" + path + file)
 	for folder in dir.get_directories():
 		var sub_dir = DirAccess.open("res://" + path + folder + "/")
 		if sub_dir:

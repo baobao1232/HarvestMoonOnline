@@ -35,7 +35,7 @@ func _ready():
 
 	set_process_input(true)
 
-	print("DPAD READY (MULTI TOUCH + VISUAL FIX)")
+	Dbg.p("DPAD READY (MULTI TOUCH + VISUAL FIX)")
 
 
 # ===============================
@@ -51,22 +51,22 @@ func _input(event):
 		if up.get_global_rect().has_point(pos):
 			touch_map[event.index] = Vector2(0, -1)
 			_press_btn(up)
-			print("UP PRESS")
+			Dbg.p("UP PRESS")
 
 		elif down.get_global_rect().has_point(pos):
 			touch_map[event.index] = Vector2(0, 1)
 			_press_btn(down)
-			print("DOWN PRESS")
+			Dbg.p("DOWN PRESS")
 
 		elif left.get_global_rect().has_point(pos):
 			touch_map[event.index] = Vector2(-1, 0)
 			_press_btn(left)
-			print("LEFT PRESS")
+			Dbg.p("LEFT PRESS")
 
 		elif right.get_global_rect().has_point(pos):
 			touch_map[event.index] = Vector2(1, 0)
 			_press_btn(right)
-			print("RIGHT PRESS")
+			Dbg.p("RIGHT PRESS")
 
 		_update_direction()
 		return
@@ -89,7 +89,7 @@ func _input(event):
 				_release_btn(right)
 
 			touch_map.erase(event.index)
-			print("RELEASE")
+			Dbg.p("RELEASE")
 
 		_update_direction()
 		return
@@ -177,4 +177,4 @@ func _update_direction():
 		Input.action_press("ui_right")
 
 	if dir != Vector2.ZERO:
-		print("DIR:", dir)
+		Dbg.p("DIR:", dir)

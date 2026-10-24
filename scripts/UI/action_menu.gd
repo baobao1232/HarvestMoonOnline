@@ -21,7 +21,7 @@ func setup(i, s):
 	item = i
 	slot = s
 
-	print("📦 ACTION MENU OPEN:", item)
+	Dbg.p("📦 ACTION MENU OPEN:", item)
 
 	# reset index
 	index = 0
@@ -115,24 +115,24 @@ func confirm():
 	match index:
 
 		0: # USE
-			print("👉 USE ITEM")
+			Dbg.p("👉 USE ITEM")
 
 			if SceneManager.player and SceneManager.player.has_method("use_item"):
 				SceneManager.player.use_item(item, slot)
 
 		1: # DROP
-			print("👉 DROP ITEM")
+			Dbg.p("👉 DROP ITEM")
 
 			if slot and slot.has_method("remove_amount"):
 				slot.remove_amount(1)
 
 		2: # HOTBAR
-			print("👉 HOTBAR ASSIGN")
+			Dbg.p("👉 HOTBAR ASSIGN")
 
 			var hud = UIManager.get_hud()
 
 			if hud and hud.has_method("enter_hotbar_select"):
 				hud.enter_hotbar_select_from_item(item, slot)
 			else:
-				print("❌ Hud NULL (không tìm thấy)")
+				Dbg.p("❌ Hud NULL (không tìm thấy)")
 	queue_free()

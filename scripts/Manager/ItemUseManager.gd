@@ -6,68 +6,68 @@ class_name ItemUseManager
 # ===============================
 static func use_item(player, item, slot = null):
 
-	print("================================")
-	print("SLOT:", slot)
+	Dbg.p("================================")
+	Dbg.p("SLOT:", slot)
 
 	if item == null:
-		print("❌ No item")
+		Dbg.p("❌ No item")
 		return
 
-	print("PLAYER USE:", item.name)
-	print("IS TOOL:", item.is_tool())
-	print("TOOL TYPE:", item.tool_type)
-	print("EXPECTED HOE:", ItemData.ToolType.HOE)
+	Dbg.p("PLAYER USE:", item.name)
+	Dbg.p("IS TOOL:", item.is_tool())
+	Dbg.p("TOOL TYPE:", item.tool_type)
+	Dbg.p("EXPECTED HOE:", ItemData.ToolType.HOE)
 
 	# ===============================
 	# 🪓 TOOL
 	# ===============================
 	if item.is_tool():
 
-		print("🔧 ENTER TOOL LOGIC")
+		Dbg.p("🔧 ENTER TOOL LOGIC")
 
 		# 🔥 FIX: KHÔNG DÙNG MATCH
 		if item.tool_type == ItemData.ToolType.HOE:
 
-			print("🪓 HOE DETECTED")
+			Dbg.p("🪓 HOE DETECTED")
 
 			if player.dat_scene == null:
-				print("❌ dat_scene NULL")
+				Dbg.p("❌ dat_scene NULL")
 				return
 
 			var pos = get_front_position(player)
-			print("📍 FRONT POS:", pos)
+			Dbg.p("📍 FRONT POS:", pos)
 
 			if not can_farm_at(player, pos):
-				print("❌ Không phải đất trồng")
+				Dbg.p("❌ Không phải đất trồng")
 				return
 			else:
-				print("✅ Có thể trồng")
+				Dbg.p("✅ Có thể trồng")
 
 			if has_dat_at(player, pos):
-				print("⚠ Đã có đất rồi")
+				Dbg.p("⚠ Đã có đất rồi")
 				return
 			else:
-				print("✅ Chưa có đất")
+				Dbg.p("✅ Chưa có đất")
 
-			print("🚀 SPAWN DAT")
+			Dbg.p("🚀 SPAWN DAT")
 			spawn_dat(player)
 			return
 
 
 		elif item.tool_type == ItemData.ToolType.WATERING_CAN:
-			print("💧 WATER CAN")
+			Dbg.p("💧 WATER CAN")
 			use_water(player)
 			return
 
 
 		elif item.tool_type == ItemData.ToolType.SICKLE:
-			print("🌿 SICKLE")
+			Dbg.p("🌿 SICKLE")
 			use_sickle(player)
 			return
 
 
 		else:
-			print("❌ UNKNOWN TOOL TYPE:", item.tool_type)
+			Dbg.p("❌ UNKNOWN TOOL TYPE:", item.tool_type)
 			return
 
 
@@ -76,33 +76,33 @@ static func use_item(player, item, slot = null):
 	# ===============================
 	if item.is_seed() or item.is_food():
 
-		print("🍽 / 🌱 USE:", item.name)
+		Dbg.p("🍽 / 🌱 USE:", item.name)
 
 		var used := false
 
 		if item.is_seed():
 
-			print("🌱 TRY PLANT")
+			Dbg.p("🌱 TRY PLANT")
 
 			var planted = plant_seed_around(player, item)
-			print("🌱 planted:", planted)
+			Dbg.p("🌱 planted:", planted)
 
 			if planted > 0:
 				used = true
 				player.play_raihat_anim()
 			else:
-				print("❌ Không trồng được")
+				Dbg.p("❌ Không trồng được")
 
 		if item.is_food():
-			print("🍖 Ăn đồ")
+			Dbg.p("🍖 Ăn đồ")
 			used = true
 
 		if used and slot != null:
 
-			print("👉 TRỪ ITEM | BEFORE:", slot.amount)
+			Dbg.p("👉 TRỪ ITEM | BEFORE:", slot.amount)
 
 			if slot.amount <= 0:
-				print("❌ Hết item")
+				Dbg.p("❌ Hết item")
 				return
 
 			slot.amount -= 1
@@ -112,12 +112,12 @@ static func use_item(player, item, slot = null):
 			else:
 				slot._update_amount()
 
-			print("👉 AFTER:", slot.amount)
+			Dbg.p("👉 AFTER:", slot.amount)
 
 		return
 
-	print("❌ ITEM KHÔNG DÙNG ĐƯỢC")
-	print("================================")
+	Dbg.p("❌ ITEM KHÔNG DÙNG ĐƯỢC")
+	Dbg.p("================================")
 # ===============================
 # FRONT POSITION
 # ===============================
@@ -157,11 +157,11 @@ static func spawn_dat(player):
 	if dat.has_method("till"):
 		dat.till()
 
-	print("====== SPAWN DEBUG ======")
-	print("PLAYER:", player.global_position)
-	print("FRONT:", pos)
-	print("FINAL:", dat.global_position)
-	print("=========================")
+	Dbg.p("====== SPAWN DEBUG ======")
+	Dbg.p("PLAYER:", player.global_position)
+	Dbg.p("FRONT:", pos)
+	Dbg.p("FINAL:", dat.global_position)
+	Dbg.p("=========================")
 
 
 # ===============================
@@ -179,7 +179,7 @@ static func use_water(player):
 	elif obj.get_parent() and obj.get_parent().has_method("water"):
 		obj.get_parent().water()
 
-	print("💧 Tưới")
+	Dbg.p("💧 Tưới")
 
 
 # ===============================
@@ -187,21 +187,14 @@ static func use_water(player):
 # ===============================
 static func use_sickle(player):
 
-	if not player.ray.is_colliding():
+	var dat = get_dat_at(player, get_front_position(player))
+
+	if dat == null:
+		print("Không có đất ở phía trước")
 		return
 
-	var obj = player.ray.get_collider()
-
-	if obj.has_method("harvest"):
-		obj.harvest()
-		return
-
-	if obj.get_parent() and obj.get_parent().has_method("harvest"):
-		obj.get_parent().harvest()
-		return
-
-	print("❌ Không có gì để cắt")
-
+	if not dat.harvest():
+		print("Chưa thu hoạch được")
 
 # ===============================
 # FARM CHECK
@@ -282,10 +275,10 @@ static func plant_seed_around(player, item):
 
 		if dat.has_method("plant_seed"):
 			dat.plant_seed(item)
-			print("🌱 TRỒNG:", pos)
+			Dbg.p("🌱 TRỒNG:", pos)
 			planted += 1
 
-	print("🌱 TOTAL:", planted)
+	Dbg.p("🌱 TOTAL:", planted)
 	return planted
 
 

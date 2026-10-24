@@ -45,14 +45,14 @@ func start_server():
 		return
 	multiplayer.multiplayer_peer = peer
 	is_server = true
-	print("🖥️ SERVER LISTENING ON UDP ", PORT)
+	Dbg.p("🖥️ SERVER LISTENING ON UDP ", PORT)
 
 
 func _on_peer_disconnected(id: int):
 	if not is_server:
 		return
 	if players.has(id):
-		print("🚪 PEER LEFT:", id, players[id].name)
+		Dbg.p("🚪 PEER LEFT:", id, players[id].name)
 		players.erase(id)
 		cl_left.rpc(id)
 
@@ -73,22 +73,22 @@ func join(ip: String = "", pname: String = ""):
 		push_error("NET: create_client lỗi %d" % err)
 		return
 	multiplayer.multiplayer_peer = peer
-	print("🌐 CONNECTING TO ", server_ip, ":", PORT)
+	Dbg.p("🌐 CONNECTING TO ", server_ip, ":", PORT)
 
 
 func _on_connected():
 	online = true
-	print("✅ CONNECTED, id =", multiplayer.get_unique_id())
+	Dbg.p("✅ CONNECTED, id =", multiplayer.get_unique_id())
 	srv_register.rpc_id(1, my_name, my_map)
 
 
 func _on_connect_failed():
-	print("❌ NET: kết nối thất bại")
+	Dbg.p("❌ NET: kết nối thất bại")
 	multiplayer.multiplayer_peer = null
 
 
 func _on_server_disconnected():
-	print("❌ NET: mất kết nối server")
+	Dbg.p("❌ NET: mất kết nối server")
 	online = false
 	multiplayer.multiplayer_peer = null
 	server_lost.emit()
@@ -132,7 +132,7 @@ func srv_register(pname: String, map: String):
 		if pid != id:
 			cl_joined.rpc_id(pid, id, players[id])
 
-	print("👤 REGISTER:", id, pname, "| online:", players.size())
+	Dbg.p("👤 REGISTER:", id, pname, "| online:", players.size())
 
 
 @rpc("any_peer", "call_remote", "unreliable_ordered")
@@ -189,3 +189,9 @@ func cl_map(id: int, map: String):
 @rpc("authority", "call_remote", "reliable")
 func cl_left(id: int):
 	remote_left.emit(id)
+
+func leave():
+	if is_server:
+		return
+	online = false
+	multiplayer.multiplayer_peer = null

@@ -13,7 +13,7 @@ func _ready():
 func load_items():
 	items.clear()
 	_scan_folder(item_folder)
-	print("Total items loaded:", items.size())
+	Dbg.p("Total items loaded:", items.size())
 
 
 # ===== RECURSIVE SCAN =====
@@ -66,7 +66,7 @@ func _scan_folder(path: String):
 				continue
 
 			items[item.id] = item
-			print("Loaded item:", item.id)
+			Dbg.p("Loaded item:", item.id)
 
 		file = dir.get_next()
 

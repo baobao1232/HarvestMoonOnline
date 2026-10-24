@@ -37,7 +37,7 @@ func _ready():
 
 	set_process_input(true)
 
-	print("BUTTON READY (MULTI TOUCH + VISUAL)")
+	Dbg.p("BUTTON READY (MULTI TOUCH + VISUAL)")
 
 
 # ===============================
@@ -105,7 +105,7 @@ func _on_a_down():
 
 	Input.action_press("hotbar_select")
 
-	print("A DOWN")
+	Dbg.p("A DOWN")
 
 
 func _on_a_up():
@@ -119,7 +119,7 @@ func _on_a_up():
 
 	if a_hold_time < a_hold_threshold:
 
-		print("A TAP → USE")
+		Dbg.p("A TAP → USE")
 
 		Input.action_press("interact")
 		Input.action_release("interact")
@@ -128,7 +128,7 @@ func _on_a_up():
 		Input.action_release("hotbar_use")
 
 	else:
-		print("A HOLD END")
+		Dbg.p("A HOLD END")
 
 		# 🔥🔥🔥 FIX Ở ĐÂY
 		var player = get_tree().get_first_node_in_group("local_player")
@@ -142,7 +142,7 @@ func _on_a_up():
 # ===============================
 func _on_x_down():
 
-	print("X DOWN")
+	Dbg.p("X DOWN")
 
 	Input.action_press("interactx")
 	Input.action_press("hotbar_cancel")

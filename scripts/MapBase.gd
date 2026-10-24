@@ -20,8 +20,6 @@ func _ready():
 
 	_attach_player()
 
-	_setup_ui()
-
 	_apply_daynight()
 
 	_setup_camera()
@@ -35,7 +33,7 @@ func _attach_player():
 	var player = get_tree().get_first_node_in_group("local_player")
 
 	if player == null or not is_instance_valid(player):
-		print("❌ NO LOCAL PLAYER (ATTACH)")
+		Dbg.p("❌ NO LOCAL PLAYER (ATTACH)")
 		return
 
 	if player.get_parent() != ysort:
@@ -44,20 +42,6 @@ func _attach_player():
 
 		ysort.add_child(player)
 
-
-# ===============================
-# UI
-# ===============================
-func _setup_ui():
-
-	var root = get_tree().root
-
-	if root.get_node_or_null("DayNight") == null:
-		var dn = preload("res://scn/UI/DayNight.tscn").instantiate()
-		dn.name = "DayNight"
-		root.call_deferred("add_child", dn)
-
-
 # ===============================
 # CAMERA
 # ===============================
@@ -65,7 +49,7 @@ func _setup_camera():
 
 	var player = get_tree().get_first_node_in_group("local_player")
 	if player == null:
-		print("❌ NO LOCAL PLAYER (CAMERA)")
+		Dbg.p("❌ NO LOCAL PLAYER (CAMERA)")
 		return
 
 	var cam: Camera2D = player.get_node_or_null("Camera2D")
@@ -90,35 +74,35 @@ func _setup_camera():
 func _process(delta):
 
 	var player = get_tree().get_first_node_in_group("local_player")
-	#print("1")
+	#Dbg.p("1")
 
 	if player == null:
-		print("❌ NO LOCAL PLAYER (SAVE)")
+		Dbg.p("❌ NO LOCAL PLAYER (SAVE)")
 		return
-	#print("2")
+	#Dbg.p("2")
 
 	if SaveManager.player == null:
 		return
-	#print("3")
+	#Dbg.p("3")
 	
 
 	save_delay -= delta
-	#print("DELAY:", save_delay)
+	#Dbg.p("DELAY:", save_delay)
 
 	if save_delay > 0:
 		return
-	#print("4")
-	#print("CUR:", player.global_position, "| LAST:", last_saved_pos)
+	#Dbg.p("4")
+	#Dbg.p("CUR:", player.global_position, "| LAST:", last_saved_pos)
 	var current_pos = player.global_position.round()
 
 	if current_pos == last_saved_pos:
 		return
-	#print("5")
+	#Dbg.p("5")
 
 	last_saved_pos = current_pos
 	save_delay = 1.0
 
-	print("💾 SAVE POS:", current_pos)
+	Dbg.p("💾 SAVE POS:", current_pos)
 
 	Server.request_save_position(
 		current_pos,

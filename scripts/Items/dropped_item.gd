@@ -21,7 +21,7 @@ func setup(new_item, new_amount):
 func _process(delta):
 
 	# 🔥 CHỈ CHẶN KHI CÓ UI
-	if UIManager.current_ui != null:
+	if UIManager.current_ui != null or DialogManager.is_showing:
 		return
 
 	if is_picking:
@@ -40,7 +40,7 @@ func _process(delta):
 # PICK ANIMATION
 # ===============================
 func start_pick_animation(target_pos: Vector2):
-	print("MODE:", UIManager.input_mode)
+	Dbg.p("MODE:", UIManager.input_mode)
 
 	if is_picking:
 		return

@@ -27,11 +27,11 @@ var breath_mat : ShaderMaterial
 
 func _ready():
 
-	print("NPC parent:", get_parent())
+	Dbg.p("NPC parent:", get_parent())
 
 	load_npc_data()
 
-	print("Current map:", get_tree().current_scene.name)
+	Dbg.p("Current map:", get_tree().current_scene.name)
 
 	check_schedule(TimeManager.hour, TimeManager.minute)
 
@@ -70,7 +70,7 @@ func load_npc_data():
 	var path = "res://scripts/NPCS/%s/%s.gd" % [npc_id, npc_id]
 
 	if not ResourceLoader.exists(path):
-		print("NPC data missing:", path)
+		Dbg.p("NPC data missing:", path)
 		return
 
 	var script = load(path)
@@ -85,7 +85,7 @@ func load_npc_data():
 	if "portraits" in data:
 		portraits = data.portraits
 
-	print("Loaded schedule:", schedule)
+	Dbg.p("Loaded schedule:", schedule)
 
 
 
@@ -226,7 +226,7 @@ func face_player():
 
 func interact():
 
-	print("Talk to NPC:", npc_id)
+	Dbg.p("Talk to NPC:", npc_id)
 
 	face_player()
 
@@ -251,11 +251,9 @@ func choose_dialog():
 	var hour = TimeManager.hour
 	var season_name = TimeManager.SEASONS[TimeManager.season].to_lower()
 
-	# ===== weather =====
-	if Engine.has_singleton("WeatherManager"):
-		if WeatherManager.is_raining():
-			if "rain" in dialog_data:
-				return dialog_data["rain"]
+		# ===== weather =====
+	if WeatherManager.is_raining() and "rain" in dialog_data:
+		return dialog_data["rain"]
 
 	# ===== evening =====
 	if hour >= 18 and "evening" in dialog_data:

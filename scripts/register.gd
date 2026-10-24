@@ -22,7 +22,7 @@ func _on_confirm_pressed():
 	var pwd = password_input.text.strip_edges()
 
 	if user == "" or pwd == "":
-		print("❌ Empty username or password")
+		Dbg.p("❌ Empty username or password")
 		return
 
 	# 🔥 gọi server
@@ -34,12 +34,12 @@ func _on_confirm_pressed():
 # =========================
 func _on_register_result(success, msg):
 
-	print(msg)
+	Dbg.p(msg)
 
 	if not success:
 		return
 
-	print("✅ REGISTER OK")
+	Dbg.p("✅ REGISTER OK")
 
 	# =========================
 	# 🔥 CLEAR INPUT

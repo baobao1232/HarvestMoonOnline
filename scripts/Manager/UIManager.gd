@@ -51,7 +51,7 @@ func close():
 	current_ui = null
 	input_mode = "player"
 
-	print("🔴 CLOSE UI")
+	Dbg.p("🔴 CLOSE UI")
 
 
 # ===============================
@@ -59,7 +59,7 @@ func close():
 # ===============================
 func setup_game_ui():
 
-	print("🔥 setup_game_ui CALLED FROM:", get_stack())
+	Dbg.p("🔥 setup_game_ui CALLED FROM:", get_stack())
 
 	close()
 
@@ -69,7 +69,7 @@ func setup_game_ui():
 
 	input_mode = "player"
 
-	print("🎮 GAME UI READY")
+	Dbg.p("🎮 GAME UI READY")
 
 func _ensure_dpad():
 
@@ -77,19 +77,19 @@ func _ensure_dpad():
 
 	var exist = root.get_node_or_null("Dpad")
 	if exist != null:
-		print("✔ DPAD EXISTS")
+		Dbg.p("✔ DPAD EXISTS")
 		return
 
 	var scene = load("res://scn/Dpad.tscn")
 
 	if scene == null:
-		print("❌ LOAD DPAD FAIL")
+		Dbg.p("❌ LOAD DPAD FAIL")
 		return
 
 	var dpad = scene.instantiate()
 
 	if dpad == null:
-		print("❌ INSTANTIATE DPAD FAIL")
+		Dbg.p("❌ INSTANTIATE DPAD FAIL")
 		return
 
 	dpad.name = "Dpad"
@@ -100,7 +100,7 @@ func _ensure_dpad():
 
 	root.call_deferred("add_child", dpad)
 
-	print("🎮 DPAD READY:", dpad)
+	Dbg.p("🎮 DPAD READY:", dpad)
 	
 # ===============================
 # ENSURE HUD (FIX NULL CRASH)
@@ -113,19 +113,19 @@ func _ensure_hud():
 	var exist = root.get_node_or_null("Hud")
 	if exist != null:
 		hud = exist
-		print("✔ HUD EXISTS")
+		Dbg.p("✔ HUD EXISTS")
 		return
 
 	var scene = load("res://scn/UI/Hud.tscn")
 
 	if scene == null:
-		print("❌ LOAD HUD FAIL")
+		Dbg.p("❌ LOAD HUD FAIL")
 		return
 
 	var inst = scene.instantiate()
 
 	if inst == null:
-		print("❌ INSTANTIATE HUD FAIL")
+		Dbg.p("❌ INSTANTIATE HUD FAIL")
 		return
 
 	inst.name = "Hud"
@@ -134,7 +134,7 @@ func _ensure_hud():
 
 	hud = inst
 
-	print("✅ HUD CREATED")
+	Dbg.p("✅ HUD CREATED")
 
 
 # ===============================
@@ -150,20 +150,20 @@ func _ensure_daynight():
 	var scene = load("res://scn/UI/DayNight.tscn")
 
 	if scene == null:
-		print("❌ LOAD DAYNIGHT FAIL")
+		Dbg.p("❌ LOAD DAYNIGHT FAIL")
 		return
 
 	var dn = scene.instantiate()
 
 	if dn == null:
-		print("❌ INSTANTIATE DAYNIGHT FAIL")
+		Dbg.p("❌ INSTANTIATE DAYNIGHT FAIL")
 		return
 
 	dn.name = "DayNight"
 
 	root.call_deferred("add_child", dn)
 
-	print("🌙 DayNight READY:", dn)
+	Dbg.p("🌙 DayNight READY:", dn)
 
 
 # ===============================
@@ -182,7 +182,7 @@ func update_player_name(name):
 # ===============================
 func remove_game_ui():
 
-	print("🧹 REMOVE GAME UI")
+	Dbg.p("🧹 REMOVE GAME UI")
 
 	# xoá UI đang mở
 	close()

@@ -42,7 +42,7 @@ func set_player(player: PlayerData):
 				var item = ItemDb.items.get(slot["item"], null)
 
 				if item == null:
-					print("❌ ITEM NOT FOUND (STRING):", slot["item"])
+					Dbg.p("❌ ITEM NOT FOUND (STRING):", slot["item"])
 					player.inventory[i] = null
 					continue
 
@@ -58,7 +58,7 @@ func set_player(player: PlayerData):
 			var item = ItemDb.items.get(item_id, null)
 
 			if item == null:
-				print("❌ ITEM NOT FOUND:", item_id)
+				Dbg.p("❌ ITEM NOT FOUND:", item_id)
 				player.inventory[i] = null
 				continue
 
@@ -69,13 +69,13 @@ func set_player(player: PlayerData):
 
 		else:
 			# 🔥 dữ liệu rác → xoá
-			print("⚠ INVALID SLOT:", slot)
+			Dbg.p("⚠ INVALID SLOT:", slot)
 			player.inventory[i] = null
 
 
 	slots = player.inventory
 
-	print("✔ INVENTORY LOADED:", slots)
+	Dbg.p("✔ INVENTORY LOADED:", slots)
 
 # ===============================
 # ADD ITEM (STACK + SAFE)

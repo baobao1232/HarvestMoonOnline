@@ -2,64 +2,57 @@ extends Node
 
 signal weather_changed(weather)
 
-const WEATHER_TYPES = [
-	"SUNNY",
-	"RAIN",
-	"SNOW"
-]
-
 var current_weather := "SUNNY"
 
 
 func _ready():
-	TimeManager.day_changed.connect(on_new_day)
+	TimeManager.time_synced.connect(_refresh)
+	TimeManager.day_changed.connect(func(_d, _s, _y): _refresh())
+	_refresh()
 
 
-func on_new_day(day, season, year):
+func _refresh():
 
-	generate_weather(season)
+	var w := weather_for_day(TimeManager.total_days)
 
-	emit_signal("weather_changed", current_weather)
-
-	print("Weather today:", current_weather)
-
-
-
-func generate_weather(season):
-
-	var roll = randi() % 100
-
-	# WINTER có snow
-	if season == 3:
-
-		if roll < 60:
-			current_weather = "SNOW"
-		else:
-			current_weather = "SUNNY"
-
+	if w == current_weather:
 		return
 
-	# mùa khác
+	current_weather = w
+	weather_changed.emit(w)
+	Dbg.p("Weather today:", w)
 
-	if roll < 70:
-		current_weather = "SUNNY"
-	elif roll < 90:
-		current_weather = "RAIN"
-	else:
-		current_weather = "SUNNY"
 
+# Cùng day_index → luôn ra cùng kết quả (mọi client giống nhau)
+func weather_for_day(day_index: int) -> String:
+
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash("hvm_weather_%d" % day_index)
+
+	var roll := rng.randi() % 100
+	var s := (day_index / TimeManager.DAYS_PER_SEASON) % 4
+
+	match s:
+		0: # xuân
+			return "RAIN" if roll < 30 else "SUNNY"
+		1: # hè
+			return "RAIN" if roll < 20 else "SUNNY"
+		2: # thu
+			return "RAIN" if roll < 25 else "SUNNY"
+		_: # đông
+			return "SNOW" if roll < 40 else "SUNNY"
+
+
+# xem trước ngày mai (dùng cho dự báo thời tiết sau này)
+func forecast_tomorrow() -> String:
+	return weather_for_day(TimeManager.total_days + 1)
 
 
 func is_raining():
-
 	return current_weather == "RAIN"
 
-
 func is_snowing():
-
 	return current_weather == "SNOW"
 
-
 func is_sunny():
-
 	return current_weather == "SUNNY"

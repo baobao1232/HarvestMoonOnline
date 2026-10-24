@@ -44,7 +44,7 @@ func _on_register_pressed():
 
 	var username = username_input.text.strip_edges()
 	var password = password_input.text.strip_edges()
-	print("U=[", username, "] P=[", password, "]")   # debug, xong thì xoá
+	Dbg.p("U=[", username, "] P=[", password, "]")   # debug, xong thì xoá
 
 	if username == "" or password == "":
 		_set_status("Missing input")
@@ -67,7 +67,7 @@ func _on_login_result(success, msg, player_data):
 	if not success:
 		return
 
-	print("✅ LOGIN OK")
+	Dbg.p("✅ LOGIN OK")
 
 	var username = username_input.text.strip_edges()
 
@@ -105,8 +105,12 @@ func _on_login_result(success, msg, player_data):
 	if map_path == "" or map_path == null:
 		map_path = "res://scn/Maps/farm.tscn"
 
-	print("📍 LOAD MAP:", map_path)
-	print("📍 LOAD POS:", SaveManager.player.pos)
+	Dbg.p("📍 LOAD MAP:", map_path)
+	Dbg.p("📍 LOAD POS:", SaveManager.player.pos)
+	if not TimeManager.synced:
+		_set_status("Đang đồng bộ thời gian...")
+		await TimeManager.time_synced
+		
 	Net.join(Net.server_ip, SaveManager.player.name)
 	Server.request_change_map(map_path, "")
 
@@ -120,6 +124,6 @@ func _set_status(text):
 	if status_label:
 		status_label.text = text
 	else:
-		print(text)
+		Dbg.p(text)
 		
 	

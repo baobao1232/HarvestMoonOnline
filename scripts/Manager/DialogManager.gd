@@ -56,8 +56,8 @@ func type_text(t):
 	var portrait = null
 
 	# lấy portrait đúng theo dòng dialog
-	if portraits.size() > index:
-		portrait = portraits[index]
+	if portraits.size() > 0:
+		portrait = portraits[min(index, portraits.size() - 1)]
 
 	dialog.show_dialog("", portrait)
 
@@ -80,7 +80,17 @@ func next():
 	else:
 		show_page()
 
+func force_close():
 
+	typing = false
+	is_showing = false
+	index = 0
+	lines = []
+	portraits = []
+
+	if dialog != null and is_instance_valid(dialog):
+		dialog.hide_dialog()
+		
 func _process(delta):
 
 	if typing:
