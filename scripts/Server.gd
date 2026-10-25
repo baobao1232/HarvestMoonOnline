@@ -12,7 +12,6 @@ signal player_left(id)
 
 signal map_changed(path, spawn)
 signal drop_spawned(data)
-signal state_applied
 # =========================
 # CONFIG
 # =========================
@@ -32,8 +31,8 @@ var _last_save := 0.0
 var _saving := false
 var _dirty_again := false
 var _timer_pending := false
-var _queue: Array = []
-var _action_busy := false
+var _api_queue: Array = []
+var _api_busy := false
 
 func _ready():
 	if not Net.is_server:
@@ -100,8 +99,8 @@ func logout():
 	current_id = ""
 	player_data = null
 	players.clear()
-	_queue.clear()
-
+	_api_queue.clear()
+	
 # =========================
 # SAVE → DB
 # =========================
@@ -146,6 +145,23 @@ func _save_remote(force := false):
 			_save_remote(true)
 	)
 
+func request_drop_item(slot: int, amount: int):
+
+	api("drop", {"slot": slot, "amount": amount}, func(r):
+		if not r.get("ok", false):
+			return
+
+		var item = ItemDb.items.get(r.get("item", ""), null)
+		if item == null:
+			return
+
+		emit_signal("drop_spawned", {
+			"item": item,
+			"amount": int(r["amount"]),
+			"pos": Vector2(r["x"], r["y"]),
+			"id": int(r["drop_id"])
+		})
+	)
 
 func request_save_position(pos: Vector2, map_path: String, force := false):
 
@@ -236,68 +252,65 @@ func _on_player_exit():
 		get_tree().quit()
 	)
 
-func request_action(action: String, params := {}, on_done := Callable()):
+func api(action: String, params := {}, cb := Callable()):
+
 	if token == "" or player_data == null:
+		Dbg.p("⛔ API BỊ CHẶN:", action, "| token:", token != "", "| pd:", player_data != null)
 		return
-	if _queue.size() >= 8:      # chống spam
-		return
-	_queue.append({"action": action, "params": params, "cb": on_done})
-	_pump()
 
-
-func _pump():
-	if _action_busy or _queue.is_empty():
-		return
-	_action_busy = true
-
-	var job = _queue.pop_front()
-	var body: Dictionary = job.params.duplicate()
+	var body := params.duplicate()
 	body["token"] = token
-	body["action"] = job.action
+	body["action"] = action
 
-	_post("action.php", body, func(r):
-		_action_busy = false
+	var p = SceneManager.player
+	if p != null and is_instance_valid(p):
+		body["px"] = p.global_position.x
+		body["py"] = p.global_position.y
+
+	Dbg.p("📤 GỬI:", action, params)
+	_api_queue.append({"body": body, "cb": cb, "action": action})
+	_api_next()
+
+
+func _api_next():
+
+	if _api_busy or _api_queue.is_empty():
+		return
+
+	_api_busy = true
+	var job = _api_queue.pop_front()
+
+	_post("action.php", job.body, func(r):
+		_api_busy = false
+
 		if r.get("ok", false):
+			Dbg.p("✅", job.action, "| tiles:", r.get("farm", {}).get("tiles", []).size())
 			_apply_state(r)
 		else:
-			print("❌ ACTION ", job.action, ": ", r.get("msg"))
+			Dbg.p("❌", job.action, ":", r.get("msg", ""))
+
 		if job.cb.is_valid():
 			job.cb.call(r)
-		_pump()
+
+		_api_next()
 	)
 
-
 func _apply_state(r: Dictionary):
+
 	if player_data == null:
 		return
 
-	if r.has("inventory") and r.has("hotbar"):
-		var tmp := PlayerData.new()
-		tmp.from_dict({"inventory": r["inventory"], "hotbar": r["hotbar"]})
-		# sửa tại chỗ vì InventoryManager.slots trỏ cùng mảng này
-		for i in PlayerData.MAX_SLOT:
-			player_data.inventory[i] = tmp.inventory[i]
-		for i in PlayerData.HOTBAR_SIZE:
-			player_data.hotbar[i] = tmp.hotbar[i]
-		state_applied.emit()
+	player_data.apply_server_slots(r.get("inventory", []), r.get("hotbar", []))
+	InventoryManager.slots = player_data.inventory
 
-	if r.has("tiles"):
-		FarmManager.apply_tiles(r["tiles"])
+	if r.has("farm"):
+		player_data.farm = r["farm"]
+		FarmManager.sync_farm(r["farm"])
 
-	if r.has("drop"):
-		_emit_drop(r["drop"])
-	for d in r.get("drops", []):
-		_emit_drop(d)
+	var hud = UIManager.hud
+	if hud != null and is_instance_valid(hud):
+		hud.refresh_hotbar()
 
-
-func _emit_drop(d: Dictionary):
-	var it = ItemDb.items.get(str(d["item"]), null)
-	if it == null:
-		return
-	drop_spawned.emit({
-		"id": int(d["id"]),
-		"map": str(d["map"]),
-		"item": it,
-		"amount": int(d["amount"]),
-		"pos": Vector2(float(d["x"]), float(d["y"]))
-	})
+	var ui = UIManager.current_ui
+	if ui != null and is_instance_valid(ui) and ui.has_method("refresh"):
+		ui.refresh()

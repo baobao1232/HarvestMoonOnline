@@ -11,6 +11,7 @@ var move_delay := 0.15
 var using_hotbar := false
 var move_timer := 0.0
 var temp_cursor = null
+var assigning := false
 
 @onready var hotbar_slots = [
 	$BoxHotbar/HotbarSlot,
@@ -259,77 +260,34 @@ func enter_hotbar_select(inv):
 # ===============================
 func confirm_hotbar_assign():
 
-	if inventory_ref == null:
+	if inventory_ref == null or assigning:
 		return
 
-	var index = inventory_ref.last_slot_index
-	var data = inventory_ref.get_slot(index)
+	var inv = inventory_ref
+	var index = inv.last_slot_index
 
-	if data == null:
+	if inv.get_slot(index) == null:
 		return
 
-	var new_item = data["item"]
-	var new_amount = data["amount"]
+	assigning = true
 
-	var slot = hotbar_slots[hotbar_index]
+	Server.api("hotbar_assign", {"inv_slot": index, "hot_slot": hotbar_index}, func(r):
+		assigning = false
 
-	# ===============================
-	# 🔥 LẤY ITEM CŨ TRONG HOTBAR
-	# ===============================
-	var old_item = null
-	var old_amount = 0
-
-	if slot.has_method("get_item"):
-		old_item = slot.get_item()
-
-	if slot.has_method("get_amount"):
-		old_amount = slot.get_amount()
-
-	# ===============================
-	# 🔥 TRẢ ITEM CŨ VỀ INVENTORY
-	# ===============================
-	if old_item != null:
-
-		var success = InventoryManager.add_item(old_item, old_amount)
-
-		if not success:
-			Dbg.p("❌ Inventory full → không swap")
+		if not r.get("ok", false):
 			return
 
-	# ===============================
-	# 🔥 GÁN ITEM MỚI
-	# ===============================
-	slot.set_item(new_item, new_amount)
+		selecting_hotbar = false
+		UIManager.input_mode = "inventory"
 
-	# ===============================
-	# 🔥 XOÁ SLOT INVENTORY CŨ
-	# ===============================
-	InventoryManager.slots[index] = null
+		if is_instance_valid(inv):
+			inv.visible = true
+			inv.return_from_hotbar(true)
 
-	if inventory_ref.has_method("refresh"):
-		inventory_ref.refresh()
-
-	# ===============================
-	# 🔥 SAVE
-	# ===============================
-	if Server.has_method("request_save_hotbar"):
-		Server.request_save_hotbar(hotbar_index, new_item, new_amount)
-
-	Dbg.p("🔥 SWAP:", new_item.name, "<->", old_item if old_item else "empty")
-
-	# ===============================
-	# 🔥 EXIT
-	# ===============================
-	selecting_hotbar = false
-	UIManager.input_mode = "inventory"
-
-	inventory_ref.visible = true
-	inventory_ref.return_from_hotbar(true)
-
-	_clear_temp_cursor()
-
-	hotbar_cursor.visible = true
-	update_hotbar_cursor()
+		_clear_temp_cursor()
+		hotbar_cursor.visible = true
+		update_hotbar_cursor()
+	)
 # ===============================
 # TEMP CURSOR
 # ===============================
@@ -471,6 +429,21 @@ func _use_current_item():
 		return
 		
 	# 🔥 FIX: gọi manager thay vì player
-	ItemUseManager.use_item(player, item, slot)
+		ItemUseManager.use_item(player, item, hotbar_index)
 
 	Dbg.p("🔥 USED ITEM:", item.name)
+
+func refresh_hotbar():
+
+	var data = []
+	if SaveManager.player != null:
+		data = SaveManager.player.hotbar
+
+	for i in range(hotbar_slots.size()):
+		var sd = data[i] if i < data.size() else null
+		if sd == null:
+			hotbar_slots[i].reset_slot()
+		else:
+			hotbar_slots[i].set_item(sd["item"], sd["amount"])
+
+	_update_player_item()

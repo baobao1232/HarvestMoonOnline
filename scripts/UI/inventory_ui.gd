@@ -107,6 +107,10 @@ func refresh():
 				ui_slot.set_item(data["item"], data["amount"])
 			else:
 				ui_slot.set_item(null, 0)
+		if mode == "action" and get_slot(last_slot_index) == null:
+			mode = "select"
+			hide_action_menu() 
+			#menu tự đống khi ô hết đồ
 
 
 # ===============================
@@ -284,30 +288,13 @@ func handle_action():
 
 			match action_index:
 
-				# ===============================
-				# USE
-				# ===============================
 				0:
 					Dbg.p("👉 USE ITEM")
-					InventoryManager.use_item(last_slot_index)
+					ItemUseManager.use_item(SceneManager.player, data["item"])
 
-
-				# ===============================
-				# DROP (FIX CHUẨN)
-				# ===============================
 				1:
 					Dbg.p("👉 DROP ITEM")
-
-					var result = InventoryManager.drop_item(last_slot_index, 1)
-
-					if result != null:
-						# 🔥 GỬI SERVER (QUAN TRỌNG)
-						if Server.has_method("request_drop_item"):
-							Server.request_drop_item(
-								result["item"],
-								result["amount"]
-							)
-
+					Server.request_drop_item(last_slot_index, 1)
 
 				# ===============================
 				# HOTBAR

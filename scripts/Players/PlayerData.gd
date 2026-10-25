@@ -268,3 +268,21 @@ func from_dict(data: Dictionary):
 
 	Dbg.p("✔ LOAD DONE | INV:", inventory)
 	Dbg.p("✔ LOAD DONE | HOTBAR:", hotbar)
+
+func _parse_slots(src, size: int) -> Array:
+	var res := []
+	if src is Array:
+		for s in src:
+			if s is Dictionary and s.has("id"):
+				var item = ItemDb.items.get(s["id"], null)
+				if item != null:
+					res.append({"item": item, "amount": int(s.get("amount", 1))})
+					continue
+			res.append(null)
+	res.resize(size)
+	return res
+
+
+func apply_server_slots(inv, hb):
+	inventory = _parse_slots(inv, MAX_SLOT)
+	hotbar = _parse_slots(hb, HOTBAR_SIZE)

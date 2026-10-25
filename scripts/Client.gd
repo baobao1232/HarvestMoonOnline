@@ -141,10 +141,6 @@ func change_map_local(path, spawn):
 	var old_map = tree.current_scene
 	var new_map = load(path).instantiate()
 
-	# remote players của map cũ sẽ được spawn lại ở map mới
-	for id in other_players.keys():
-		_despawn_remote(id)
-
 	root.add_child(new_map)
 	tree.current_scene = new_map
 
@@ -217,22 +213,16 @@ func change_map_local(path, spawn):
 # DROP
 # =========================
 func _on_drop_spawned(data):
-	_spawn_drop_local(data.item, data.amount, data.pos)
+	_spawn_drop_local(data.item, data.amount, data.pos, data.get("id", 0))
 
 
-func _spawn_drop_local(item: ItemData, amount: int, pos: Vector2):
+func _spawn_drop_local(item: ItemData, amount: int, pos: Vector2, id := 0):
 
-	if item == null or amount <= 0:
+	if item == null or amount <= 0 or player == null:
 		return
 
-	if player == null:
-		return
-
-	var scene = preload("res://scn/Items/DroppedItem.tscn")
-	var drop = scene.instantiate()
-
-	var map = player.get_parent()
-	map.add_child(drop)
+	var drop = preload("res://scn/Items/DroppedItem.tscn").instantiate()
+	player.get_parent().add_child(drop)
 
 	drop.global_position = pos
-	drop.setup(item, amount)
+	drop.setup(item, amount, id)

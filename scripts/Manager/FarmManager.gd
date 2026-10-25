@@ -1,109 +1,27 @@
 extends Node
 
-# ===============================
-# DATA
-# ===============================
-var tiles = {}  # Dictionary: Vector2 -> tile
-var tile_size := 16   # 🔥 dùng 16
+const FARM_PATH := "res://scn/Maps/farm.tscn"
+const DAT_SCENE := preload("res://scn/Farms/DatTrongCay.tscn")
+
+var tiles = {}   # Vector2 -> node DatTrongCay
+var tile_size := 16
+var farm_parent: Node = null
+var active := false   # true khi đang ở map farm
 
 
-# ===============================
-# INIT
-# ===============================
 func _ready():
-
 	if TimeManager:
 		TimeManager.day_changed.connect(on_new_day)
 
 
-# ===============================
-# ADD TILE
-# ===============================
-func add_tile(pos: Vector2, tile):
-
-	pos = snap(pos)
-
-	tiles[pos] = tile
-
-	update_neighbors(pos)
+# qua ngày: hỏi server, server tính cây lớn rồi trả farm mới về
+func on_new_day(_day, _season, _year):
+	if active:
+		Server.api("sync")
 
 
-# ===============================
-# REMOVE TILE (optional)
-# ===============================
-func remove_tile(pos: Vector2):
-
-	pos = snap(pos)
-
-	if tiles.has(pos):
-		tiles.erase(pos)
-
-	update_neighbors(pos)
-
-
-# ===============================
-# GET TILE
-# ===============================
-func get_tile(pos: Vector2):
-
-	pos = snap(pos)
-
-	return tiles.get(pos, null)
-
-
-# ===============================
-# SNAP GRID (🔥 QUAN TRỌNG)
-# ===============================
-func snap(pos: Vector2):
-
-	return Vector2(
-		floor(pos.x / tile_size) * tile_size,
-		floor(pos.y / tile_size) * tile_size
-	)
-
-
-# ===============================
-# 🔗 UPDATE NEIGHBOR (AUTO TILE)
-# ===============================
-func update_neighbors(pos: Vector2):
-
-	var dirs = [
-		Vector2(0, -tile_size),
-		Vector2(0, tile_size),
-		Vector2(-tile_size, 0),
-		Vector2(tile_size, 0)
-	]
-
-	# update xung quanh
-	for d in dirs:
-		var t = get_tile(pos + d)
-		if t != null and t.has_method("update_visual"):
-			t.update_visual()
-
-	# update chính nó
-	var center = get_tile(pos)
-	if center != null and center.has_method("update_visual"):
-		center.update_visual()
-
-
-# ===============================
-# 🌿 GROW ALL (CALL MỖI NGÀY)
-# ===============================
-func on_new_day(day, season, year):
-
-	Dbg.p("🌅 NEW DAY:", day)
-
-	for pos in tiles:
-		var tile = tiles[pos]
-
-		if tile != null and tile.has_method("grow"):
-			tile.grow()
-	save_farm()
-
-var active := false   # true khi đang ở map farm (tránh ghi đè dữ liệu bằng danh sách rỗng)
-
-const FARM_MAP := "res://scn/Maps/farm.tscn"
-const DAT_SCENE := preload("res://scn/Farms/DatTrongCay.tscn")
+func save_farm():
+	pass   # server giữ farm, client không lưu nữa
 
 
 func clear_tiles():
@@ -111,48 +29,80 @@ func clear_tiles():
 	active = false
 
 
-func serialize() -> Dictionary:
-
-	var list := []
-
-	for pos in tiles:
-		var t = tiles[pos]
-		if t != null and is_instance_valid(t):
-			list.append(t.to_data())
-
-	return {"tiles": list, "day": TimeManager.total_days}
-
-
-# gọi mỗi khi cuốc / tưới / trồng / thu hoạch
-func save_farm():
-
-	if not active:
-		return
-	if Server.player_data == null:
-		return
-
-	Server.player_data.farm = serialize()
-	Server._save_remote()   # đã có throttle 5 giây
-
-
 func load_farm(data: Dictionary, parent: Node):
-
 	clear_tiles()
+	farm_parent = parent
 	active = true
+	sync_farm(data)
 
-	var list = data.get("tiles", [])
-	var passed := clampi(TimeManager.total_days - int(data.get("day", TimeManager.total_days)), 0, 200)
 
-	for d in list:
-		var dat = DAT_SCENE.instantiate()
-		parent.add_child(dat)
-		dat.global_position = Vector2(float(d.x), float(d.y)) + Vector2(8, 8)
-		dat.apply_data(d)
+# so khớp các ô đang có với dữ liệu server: thêm / cập nhật / xoá
+func sync_farm(data: Dictionary):
 
-	# cho cây lớn bù những ngày offline (cây cần nước mà không được tưới thì không lớn)
-	for i in passed:
-		for pos in tiles:
-			tiles[pos].grow()
+	if not active or farm_parent == null or not is_instance_valid(farm_parent):
+		return
+
+	var want := {}
+	for d in data.get("tiles", []):
+		want[snap(Vector2(float(d.x), float(d.y)))] = d
+
+	for pos in tiles.keys():
+		if not want.has(pos):
+			var old = tiles[pos]
+			tiles.erase(pos)
+			if is_instance_valid(old):
+				old.queue_free()
+
+	for pos in want:
+		var t = tiles.get(pos, null)
+		if t == null or not is_instance_valid(t):
+			t = DAT_SCENE.instantiate()
+			farm_parent.add_child(t)
+			t.global_position = pos + Vector2(8, 8)
+			tiles[pos] = t          # <-- thêm dòng này
+		t.apply_data(want[pos])
 
 	for pos in tiles:
 		tiles[pos].update_visual()
+
+
+func add_tile(pos: Vector2, tile):
+	pos = snap(pos)
+	tiles[pos] = tile
+	update_neighbors(pos)
+
+
+func remove_tile(pos: Vector2):
+	pos = snap(pos)
+	tiles.erase(pos)
+	update_neighbors(pos)
+
+
+func get_tile(pos: Vector2):
+	var key = snap(pos)
+	var t = tiles.get(key, null)
+	if t != null and not is_instance_valid(t):
+		tiles.erase(key)
+		return null
+	return t
+
+
+func snap(pos: Vector2):
+	return Vector2(
+		floor(pos.x / tile_size) * tile_size,
+		floor(pos.y / tile_size) * tile_size
+	)
+
+
+# autotile: cập nhật ô xung quanh và chính nó
+func update_neighbors(pos: Vector2):
+
+	var dirs = [
+		Vector2(0, -tile_size), Vector2(0, tile_size),
+		Vector2(-tile_size, 0), Vector2(tile_size, 0), Vector2.ZERO
+	]
+
+	for d in dirs:
+		var t = get_tile(pos + d)
+		if t != null and t.has_method("update_visual"):
+			t.update_visual()
