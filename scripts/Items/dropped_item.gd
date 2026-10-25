@@ -48,22 +48,32 @@ func _process(_delta):
 # ===============================
 # PICK ANIMATION
 # ===============================
-func start_pick_animation(target_pos: Vector2):
+func start_pick_animation(_target_pos: Vector2):
 
 	if is_picking:
 		return
 
 	is_picking = true
+	$Area2D.set_deferred("monitoring", false)
 
-	$Area2D.monitoring = false
+	# giữ player lại, vì can_pick/exited sẽ set player = null
+	var target = player
+	var start_pos := global_position
+	var lift_pos := start_pos + Vector2(0, -8)
 
 	var tween = create_tween()
 
 	# nhảy nhẹ lên
-	tween.tween_property(self, "global_position", global_position + Vector2(0, -8), 0.08)
+	tween.tween_property(self, "global_position", lift_pos, 0.08)
 
-	# bay vào người chơi
-	tween.tween_property(self, "global_position", target_pos, 0.18)
+	# bay theo player: đích cập nhật mỗi frame
+	tween.tween_method(func(t: float):
+		if target == null or not is_instance_valid(target):
+			return
+		# đích lấy phần thân người chơi, không phải chân
+		var dest = target.global_position + Vector2(0, -8)
+		global_position = lift_pos.lerp(dest, t)
+	, 0.0, 1.0, 0.18)
 
 	# nhỏ dần + mờ dần
 	tween.parallel().tween_property(self, "scale", Vector2(0.2, 0.2), 0.25)
@@ -72,8 +82,6 @@ func start_pick_animation(target_pos: Vector2):
 	await tween.finished
 
 	queue_free()
-
-
 # ===============================
 # AREA DETECT
 # ===============================

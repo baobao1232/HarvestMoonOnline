@@ -335,6 +335,11 @@ func update_hotbar_cursor():
 # ===============================
 func _update_player_item(play_anim := false):
 
+	# chỉ hiện item khi người chơi chủ động đổi slot
+	# (refresh từ server gọi không có play_anim → bỏ qua)
+	if not play_anim:
+		return
+
 	var slot = hotbar_slots[hotbar_index]
 
 	if not slot.has_method("get_item"):
@@ -342,19 +347,16 @@ func _update_player_item(play_anim := false):
 
 	var item = slot.get_item()
 
-	# 🔥 LẤY PLAYER CHUẨN
 	var player = get_tree().get_first_node_in_group("local_player")
 
 	if player == null:
 		Dbg.p("❌ NO LOCAL PLAYER")
 		return
 
-	# 🔥 UPDATE VISUAL
 	if player.has_method("show_hotbar_item"):
 		player.show_hotbar_item(item)
 
-	# 🔥 PLAY ANIM
-	if play_anim and player.has_method("play_show_item_anim"):
+	if player.has_method("play_show_item_anim"):
 		Dbg.p("🔥 PLAY SHOW ITEM")
 		player.play_show_item_anim()
 # ===============================
@@ -424,12 +426,12 @@ func _use_current_item():
 	if player == null:
 		Dbg.p("❌ NO LOCAL PLAYER")
 		return
-	
+
 	if player.has_method("get_interact_target") and player.get_interact_target() != null:
 		return
-		
-	# 🔥 FIX: gọi manager thay vì player
-		ItemUseManager.use_item(player, item, hotbar_index)
+
+	# gọi ra ngoài khối if
+	ItemUseManager.use_item(player, item, hotbar_index)
 
 	Dbg.p("🔥 USED ITEM:", item.name)
 

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://cene2jfleeka3"]
+
+[ext_resource type="Texture2D" uid="uid://bcgg74u4bv07r" path="res://Assest/Items/tools/liem_normal.png" id="1_1ov6v"]
+[ext_resource type="Script" uid="uid://crd5bdjovw4hg" path="res://scripts/ItemData.gd" id="1_bd6l5"]
+
+[resource]
+script = ExtResource("1_bd6l5")
+id = "liem_normal"
+name = "Liềm cấp 1"
+icon = ExtResource("1_1ov6v")
+description = "123"
+max_stack = 1
+type = 4
+tool_type = 5
+metadata/_custom_type_script = "uid://crd5bdjovw4hg"

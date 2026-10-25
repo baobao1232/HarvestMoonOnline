@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://fntml6mmjqt"]
+
+[ext_resource type="Texture2D" uid="uid://mwpnrys2ghol" path="res://Assest/Items/tools/binhtuoi_normal.png" id="1_ndmol"]
+[ext_resource type="Script" uid="uid://crd5bdjovw4hg" path="res://scripts/ItemData.gd" id="2_2d1il"]
+
+[resource]
+script = ExtResource("2_2d1il")
+id = "binhtuoi_normal"
+name = "Bình tưới cây cấp 1"
+icon = ExtResource("1_ndmol")
+max_stack = 1
+type = 4
+tool_type = 4
+metadata/_custom_type_script = "uid://crd5bdjovw4hg"

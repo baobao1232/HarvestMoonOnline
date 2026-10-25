@@ -57,6 +57,7 @@ func sync_farm(data: Dictionary):
 		var t = tiles.get(pos, null)
 		if t == null or not is_instance_valid(t):
 			t = DAT_SCENE.instantiate()
+			t.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF   # thêm dòng này
 			farm_parent.add_child(t)
 			t.global_position = pos + Vector2(8, 8)
 			tiles[pos] = t          # <-- thêm dòng này

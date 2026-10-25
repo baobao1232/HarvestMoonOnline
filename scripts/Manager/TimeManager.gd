@@ -7,13 +7,14 @@ signal time_synced
 const SEASONS = ["SPRING", "SUMMER", "AUTUMN", "WINTER"]
 
 const DAYS_PER_SEASON := 28
-const REAL_SECONDS_PER_GAME_MINUTE := 15.0   # 1 mùa = 28 ngày = đúng 7 ngày thực
 const START_HOUR := 6
 const RESYNC_INTERVAL := 600.0
-
+const GAME_MINUTES_PER_DAY := 1440.0
+var real_seconds_per_game_minute := 15.0
 # ===== DEV =====
 var dev_mode := 0        # 0 = bình thường | 1 = ép 7h | 2 = ép 20h
 var debug_speed := 1.0   # test: đặt 100 để thời gian chạy nhanh (chỉ local)
+var _dbg := 0.0
 
 # ===== SYNC =====
 var server_epoch := 0.0
@@ -75,6 +76,10 @@ func sync_from_server():
 		var rtt := t1 - t0
 
 		server_epoch = float(json["epoch"])
+		
+		real_seconds_per_game_minute = float(json.get("day_seconds", 21600)) / GAME_MINUTES_PER_DAY
+		Dbg.p("⏰ TIME SYNCED | epoch: %.0f | day_seconds: %.0f" % [server_epoch, float(json.get("day_seconds", 21600))])
+
 		clock_offset = float(json["now"]) + rtt * 0.5 - t1
 
 		var first := not synced
@@ -111,7 +116,14 @@ func _process(_delta):
 		return
 
 	var elapsed := maxf(0.0, server_now() - server_epoch) * debug_speed
-	update_time(int(elapsed / REAL_SECONDS_PER_GAME_MINUTE))
+	update_time(int(elapsed / real_seconds_per_game_minute))	
+	
+	_dbg -= _delta
+	if _dbg <= 0:
+		_dbg = 15.0
+		Dbg.p("⏱ now: %.2f | epoch: %.2f | offset: %.4f | elapsed: %.2f | speed: %s" % [
+	server_now(), server_epoch, clock_offset, elapsed, debug_speed
+])
 
 
 @warning_ignore("integer_division")

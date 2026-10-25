@@ -14,19 +14,19 @@ position = Vector2(13, 10)
 script = ExtResource("1_8s5eg")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=855119000]
+position = Vector2(0, -2)
 collision_layer = 2
 collision_mask = 0
 
 [node name="Dat" type="Sprite2D" parent="StaticBody2D" unique_id=1360366978]
 texture = ExtResource("2_df0n1")
 
-[node name="HatGiong" type="Sprite2D" parent="StaticBody2D" unique_id=141009535]
-visible = false
-texture = ExtResource("4_3mrg6")
-
 [node name="Dat_DaTuoi" type="Sprite2D" parent="StaticBody2D" unique_id=2078063556]
-visible = false
 texture = ExtResource("3_4vjnp")
+
+[node name="HatGiong" type="Sprite2D" parent="StaticBody2D" unique_id=141009535]
+position = Vector2(0, -1)
+texture = ExtResource("4_3mrg6")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=998173544]
 shape = SubResource("RectangleShape2D_8s5eg")
