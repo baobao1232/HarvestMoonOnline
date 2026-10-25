@@ -30,14 +30,30 @@ static func use_item(player, item, _slot = null):
 			Server.api("till", {"x": pos.x, "y": pos.y})
 
 		elif t == ItemData.ToolType.WATERING_CAN:
-			if FarmManager.get_tile(pos) == null:
+			var tile = FarmManager.get_tile(pos)
+			if tile == null:
+				return
+			if tile.has_seed and tile.crop_data != null \
+			and tile.growth_stage >= tile.crop_data.crop_textures.size() - 2:
 				return
 			Server.api("water", {"x": pos.x, "y": pos.y})
 
 		elif t == ItemData.ToolType.SICKLE:
-			if FarmManager.get_tile(pos) == null:
+			var tile = FarmManager.get_tile(pos)
+			if tile == null or not tile.has_seed:
 				return
-			Server.api("harvest", {"x": pos.x, "y": pos.y})
+			Server.api("harvest", {"x": pos.x, "y": pos.y}, func(r):
+				if r.get("ok", false) and r.has("drop_id"):
+					var it = ItemDb.items.get(r.get("item", ""), null)
+					if it != null:
+						Server.emit_signal("drop_spawned", {
+							"item": it,
+							"amount": int(r["amount"]),
+							"pos": Vector2(r["x"], r["y"]),
+							"id": int(r["drop_id"]),
+							"auto": true
+						})
+			)
 
 		return
 

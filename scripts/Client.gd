@@ -213,16 +213,25 @@ func change_map_local(path, spawn):
 # DROP
 # =========================
 func _on_drop_spawned(data):
-	_spawn_drop_local(data.item, data.amount, data.pos, data.get("id", 0))
+	_spawn_drop_local(data.item, data.amount, data.pos, data.get("id", 0), data.get("auto", false))
 
 
-func _spawn_drop_local(item: ItemData, amount: int, pos: Vector2, id := 0):
+func _spawn_drop_local(item: ItemData, amount: int, pos: Vector2, id := 0, auto := false):
 
 	if item == null or amount <= 0 or player == null:
 		return
 
 	var drop = preload("res://scn/Items/DroppedItem.tscn").instantiate()
+
+	# không nội suy từ vị trí mặc định (10,12) → hết bay từ ngoài vào
+	drop.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
+
+	# vẽ trên ô đất
+	drop.z_index = 1
+
 	player.get_parent().add_child(drop)
 
 	drop.global_position = pos
-	drop.setup(item, amount, id)
+	drop.reset_physics_interpolation()
+
+	drop.setup(item, amount, id, auto)

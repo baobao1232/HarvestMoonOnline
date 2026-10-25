@@ -112,14 +112,23 @@ func update_grow_label():
 		grow_label.visible = false
 		return
 
-	var max_stage = crop_data.crop_textures.size() - 1
+	var last_stage = crop_data.crop_textures.size() - 1   # stage cuối = hư
+	var mature_stage = last_stage - 1                     # stage kế cuối = thu hoạch được
 	var crop_name = crop_data.name if "name" in crop_data else "Crop"
 
-	if growth_stage >= max_stage:
-		grow_label.text = crop_name + "\nReady"
+	# 💀 HƯ
+	if growth_stage >= last_stage:
+		grow_label.text = crop_name + "\nĐã hư"
 		grow_label.visible = true
 		return
 
+	# ✅ TRƯỞNG THÀNH → không đếm ngày nữa
+	if growth_stage >= mature_stage:
+		grow_label.text = crop_name + "\nCó thể thu hoạch"
+		grow_label.visible = true
+		return
+
+	# 🌱 ĐANG LỚN → đếm ngày còn lại
 	if growth_stage >= crop_data.grow_days.size():
 		grow_label.visible = false
 		return
@@ -128,7 +137,6 @@ func update_grow_label():
 
 	grow_label.text = crop_name + "\n" + str(days_left) + "d"
 	grow_label.visible = true
-
 
 # ===============================
 # AUTO TILE

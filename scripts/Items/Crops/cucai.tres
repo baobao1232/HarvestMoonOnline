@@ -9,6 +9,7 @@ id = "cucai"
 name = "Củ cải"
 icon = ExtResource("1_cl3n7")
 description = "Củ cải tươi"
+price = 10
 need_water = false
 tags = Array[int]([0])
 metadata/_custom_type_script = "uid://crd5bdjovw4hg"
