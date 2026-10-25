@@ -5,6 +5,7 @@ const PLAYER_SCENE = preload("res://scn/Player/Player.tscn")
 const REMOTE_SCRIPT = preload("res://scripts/Players/remote_player.gd")
 # map riêng tư: không hiện người chơi khác (mỗi người 1 farm riêng)
 const PRIVATE_MAPS := ["res://scn/Maps/farm.tscn"]
+const BUBBLE_SCENE = preload("res://scn/UI/ChatBubble.tscn")
 
 var player = null
 var player_data : PlayerData = null
@@ -26,7 +27,7 @@ func _ready():
 
 	Server.map_changed.connect(_on_map_changed)
 	Server.drop_spawned.connect(_on_drop_spawned)
-
+	Net.remote_chat.connect(_on_chat_bubble)
 
 func set_player_data(data):
 	player_data = data
@@ -235,3 +236,24 @@ func _spawn_drop_local(item: ItemData, amount: int, pos: Vector2, id := 0, auto 
 	drop.reset_physics_interpolation()
 
 	drop.setup(item, amount, id, auto)
+
+func _on_chat_bubble(sender_id, _pname, text):
+
+	var node = null
+
+	if sender_id == 0 or (Net.online and sender_id == multiplayer.get_unique_id()):
+		node = player                       # mình
+	else:
+		node = other_players.get(sender_id) # người cùng map
+
+	if node == null or not is_instance_valid(node):
+		return
+
+	# mỗi người chỉ 1 bong bóng, tin mới thay tin cũ
+	for c in node.get_children():
+		if c.is_in_group("chat_bubble"):
+			c.queue_free()
+
+	var b = BUBBLE_SCENE.instantiate()
+	node.add_child(b)
+	b.setup(text)

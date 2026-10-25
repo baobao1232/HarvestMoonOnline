@@ -44,7 +44,10 @@ func _ready():
 # MULTI TOUCH INPUT
 # ===============================
 func _input(event):
-
+	if UIManager.input_mode == "chat":
+		_cancel_all()
+		return
+		
 	# ===== TOUCH DOWN =====
 	if event is InputEventScreenTouch and event.pressed:
 
@@ -161,3 +164,19 @@ func _process(delta):
 
 	if a_holding:
 		a_hold_time += delta
+
+func _cancel_all():
+
+	if a_touch_id != -1 or a_pressed:
+		a_touch_id = -1
+		a_pressed = false
+		a_holding = false
+		a_hold_time = 0.0
+		Input.action_release("hotbar_select")
+		btn_a.texture_normal = a_tex_normal
+
+	if x_touch_id != -1:
+		x_touch_id = -1
+		Input.action_release("interactx")
+		Input.action_release("hotbar_cancel")
+		btn_x.texture_normal = x_tex_normal

@@ -9,7 +9,7 @@ signal remote_state(id, pos, anim, ts, item)
 signal remote_map(id, map)
 signal remote_left(id)
 signal server_lost
-
+signal remote_chat(sender_id, sender_name, text)
 const PORT := 7777
 const MAX_CLIENTS := 32
 
@@ -18,6 +18,7 @@ var is_server := false
 var online := false            # client: đã kết nối xong tới server
 
 var players := {}              # CHỈ server dùng: peer_id -> {name,map,pos,has_pos,anim}
+var _last_chat := {}    # CHỈ server: peer_id -> msec (chống spam)
 
 var my_name := ""
 var my_map := ""
@@ -195,3 +196,36 @@ func leave():
 		return
 	online = false
 	multiplayer.multiplayer_peer = null
+
+func send_chat(text: String):
+	if online:
+		srv_chat.rpc_id(1, text)
+	else:
+		remote_chat.emit(0, my_name if my_name != "" else "Bạn", text)   # offline: id 0 = bản thân
+
+
+@rpc("any_peer", "call_remote", "reliable")
+func srv_chat(text: String):
+	if not is_server:
+		return
+	var id := multiplayer.get_remote_sender_id()
+	if not players.has(id):
+		return
+
+	var now := Time.get_ticks_msec()
+	if now - int(_last_chat.get(id, -10000)) < 500:
+		return
+	_last_chat[id] = now
+
+	text = text.strip_edges().substr(0, 120)
+	if text == "":
+		return
+
+	var pname: String = players[id].name
+	for pid in players:
+		cl_chat.rpc_id(pid, id, pname, text)
+
+
+@rpc("authority", "call_remote", "reliable")
+func cl_chat(sender_id: int, pname: String, text: String):
+	remote_chat.emit(sender_id, pname, text)

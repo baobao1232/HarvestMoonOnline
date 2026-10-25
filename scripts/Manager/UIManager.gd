@@ -66,7 +66,8 @@ func setup_game_ui():
 	_ensure_hud()
 	_ensure_dpad()
 	_ensure_daynight()
-
+	_ensure_chat()
+	
 	input_mode = "player"
 
 	Dbg.p("🎮 GAME UI READY")
@@ -165,7 +166,29 @@ func _ensure_daynight():
 
 	Dbg.p("🌙 DayNight READY:", dn)
 
+# ===============================
+# ENSURE CHAT
+# ===============================
+func _ensure_chat():
 
+	var root = get_tree().root
+
+	if root.get_node_or_null("Chat") != null:
+		return
+
+	var scene = load("res://scn/UI/Chat.tscn")
+
+	if scene == null:
+		Dbg.p("❌ LOAD CHAT FAIL")
+		return
+
+	var chat = scene.instantiate()
+	chat.name = "Chat"
+
+	root.call_deferred("add_child", chat)
+
+	Dbg.p("💬 CHAT READY")
+	
 # ===============================
 # UPDATE PLAYER NAME (SAFE)
 # ===============================
@@ -198,3 +221,15 @@ func remove_game_ui():
 	var dn = root.get_node_or_null("DayNight")
 	if dn and is_instance_valid(dn):
 		dn.queue_free()
+
+	# xoá Chat
+	var chat = root.get_node_or_null("Chat")
+	if chat and is_instance_valid(chat):
+		chat.queue_free()
+
+# ===============================
+# RESET ALL (dùng khi logout)
+# ===============================
+func reset_all():
+	remove_game_ui()
+	input_mode = "player"

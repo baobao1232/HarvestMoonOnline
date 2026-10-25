@@ -26,6 +26,7 @@ var players = {}
 var player_data = null
 var current_id = ""
 var token := ""
+var is_admin := false
 
 var _last_save := 0.0
 var _saving := false
@@ -85,6 +86,7 @@ func request_login(username, password):
 		data.from_dict(r["data"])
 
 		token = r.get("token", "")
+		is_admin = bool(r.get("is_admin", false))
 		current_id = username
 		player_data = data
 		players[current_id] = {"pos": data.pos, "map": data.map}
@@ -96,6 +98,7 @@ func request_login(username, password):
 func logout():
 	_save_remote(true)
 	token = ""
+	is_admin = false
 	current_id = ""
 	player_data = null
 	players.clear()

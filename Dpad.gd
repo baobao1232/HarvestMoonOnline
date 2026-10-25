@@ -13,7 +13,7 @@ var touch_map := {}   # index -> direction
 # ===== TEXTURE =====
 var tex_normal := {}
 var tex_pressed := {}
-
+var was_chat := false
 # ===== SCALE =====
 var base_scale := {}
 var last_direction := Vector2.ZERO
@@ -42,7 +42,10 @@ func _ready():
 # MULTI TOUCH INPUT
 # ===============================
 func _input(event):
-
+	
+	if UIManager.input_mode == "chat":
+		return
+		
 	# ===== TOUCH DOWN =====
 	if event is InputEventScreenTouch and event.pressed:
 
@@ -114,7 +117,15 @@ func _release_btn(btn):
 	btn.scale = base_scale[btn]
 
 func _process(_delta):
+	
+	if UIManager.input_mode == "chat":
+		if not was_chat:
+			was_chat = true
+			_clear_all()        # đang chạy mà mở chat thì dừng ngay
+		return
 
+	was_chat = false
+	
 	var k := Vector2(
 		int(Input.is_physical_key_pressed(KEY_D) or Input.is_physical_key_pressed(KEY_RIGHT))
 		- int(Input.is_physical_key_pressed(KEY_A) or Input.is_physical_key_pressed(KEY_LEFT)),
@@ -178,3 +189,20 @@ func _update_direction():
 
 	if dir != Vector2.ZERO:
 		Dbg.p("DIR:", dir)
+# nhả hết nút + phím, đưa direction về 0
+func _clear_all():
+
+	for idx in touch_map.keys():
+		var d = touch_map[idx]
+		if d == Vector2(0, -1):
+			_release_btn(up)
+		elif d == Vector2(0, 1):
+			_release_btn(down)
+		elif d == Vector2(-1, 0):
+			_release_btn(left)
+		elif d == Vector2(1, 0):
+			_release_btn(right)
+
+	touch_map.clear()
+	key_dir = Vector2.ZERO
+	_update_direction()

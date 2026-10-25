@@ -55,6 +55,7 @@ position = Vector2(121, 191)
 metadata/_edit_lock_ = true
 
 [node name="Table" type="StaticBody2D" parent="YSort" unique_id=94722793]
+z_index = 1
 position = Vector2(119, 133)
 constant_linear_velocity = Vector2(0, 0.055)
 

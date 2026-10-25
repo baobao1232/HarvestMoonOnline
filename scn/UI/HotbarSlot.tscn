@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://bgifqxd5cad5x"]
 
 [ext_resource type="Script" uid="uid://hgkhl0g8los5" path="res://scripts/UI/hotbar_slot.gd" id="1_55jfy"]
-[ext_resource type="Texture2D" uid="uid://ck4n237cfhnaf" path="res://Assest/UI/bg_stack.png" id="4_xbxau"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_wih5u"]
 load_path = "res://.godot/imported/hotbar_slot.png-20ba6770161bdda1877f20c2a0af248d.ctex"
@@ -31,37 +30,26 @@ grow_vertical = 2
 texture = SubResource("CompressedTexture2D_wih5u")
 metadata/_edit_lock_ = true
 
-[node name="Amount_BG" type="TextureRect" parent="BG" unique_id=868616849]
+[node name="Amount" type="Label" parent="BG" unique_id=1314458730]
+z_index = 10
 layout_mode = 1
-anchors_preset = 1
+anchors_preset = 3
 anchor_left = 1.0
+anchor_top = 1.0
 anchor_right = 1.0
-offset_left = -21.0
-offset_top = 60.0
-offset_right = 3.0
-offset_bottom = 83.0
+anchor_bottom = 1.0
+offset_left = -42.0
+offset_top = -25.0
+offset_right = -2.0
+offset_bottom = 3.0
 grow_horizontal = 0
-texture = ExtResource("4_xbxau")
-
-[node name="Amount" type="Label" parent="BG/Amount_BG" unique_id=1314458730]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -9.000001
-offset_top = -8.5
-offset_right = 86.0
-offset_bottom = 79.5
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(0.2, 0.2)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 64
-text = "5"
-horizontal_alignment = 1
-vertical_alignment = 1
+grow_vertical = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 2
+vertical_alignment = 2
 
 [node name="Icon" type="TextureRect" parent="." unique_id=2002593880]
 layout_mode = 1
