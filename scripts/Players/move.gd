@@ -13,6 +13,7 @@ var current_item_id := ""
 @onready var anim = $AnimatedSprite2D
 @onready var ray = $RayCast2D
 @onready var item_show = $ItemShow
+@onready var tool_overlay = get_node_or_null("ToolOverlay")   # NEW
 
 @export var dat_scene: PackedScene
 
@@ -40,6 +41,10 @@ func _ready():
 	cam.position_smoothing_enabled = false
 
 	_setup_camera_limit()
+
+	# NEW: 1 handler duy nhất cho mọi anim không loop (raihat, use_*)
+	if not anim.animation_finished.is_connected(_on_anim_finished):
+		anim.animation_finished.connect(_on_anim_finished)
 
 
 # ===============================
@@ -71,7 +76,7 @@ func _physics_process(delta):
 		return
 
 	_sync_net(delta)
-	
+
 	var is_locked := DialogManager.is_showing
 
 	if is_instance_valid(UIManager):
@@ -92,26 +97,24 @@ func _physics_process(delta):
 	if not is_locked and dpad:
 		dir = dpad.direction
 
-	# 🔥 giảm timer block animation
 	if block_anim_timer > 0:
 		block_anim_timer -= delta
 
 	# ===============================
-	# 🔥 SHOW ITEM (PRIORITY CAO NHẤT)
+	# SHOW ITEM / USE TOOL (PRIORITY CAO NHẤT)
 	# ===============================
 	if is_showing_item:
 
 		show_timer -= delta
 
 		if show_timer <= 0:
-			is_showing_item = false
+			_end_use()   # FIX: timer chốt an toàn cũng dọn tool overlay
 
-		# vẫn đang show → chặn animation khác
 		if is_showing_item:
+			velocity = Vector2.ZERO   # FIX: không trượt tiếp
 			move_and_slide()
 			return
 
-		# vừa kết thúc
 		if item_show:
 			item_show.visible = false
 
@@ -121,27 +124,21 @@ func _physics_process(delta):
 	if is_locked:
 		velocity = Vector2.ZERO
 		move_and_slide()
-		update_animation(Vector2.ZERO)   # 🔥 thêm dòng này
+		update_animation(Vector2.ZERO)
 		return
 
 	velocity = dir * speed
 
 	move_and_slide()
 
-	# ===============================
-	# ANIMATION
-	# ===============================
-	if is_locked:
-		update_animation(Vector2.ZERO)
-	else:
-		update_animation(dir)
+	update_animation(dir)
+
 
 # ===============================
 # ANIMATION
 # ===============================
 func update_animation(dir: Vector2):
 
-	# 🔥 CHẶN override khi đang show hoặc vừa show xong
 	if is_showing_item or block_anim_timer > 0:
 		return
 
@@ -161,6 +158,7 @@ func update_animation(dir: Vector2):
 		anim.play(target_anim)
 
 	update_raycast()
+
 
 # ===============================
 # RAYCAST
@@ -211,17 +209,23 @@ func show_hotbar_item(item):
 		item_show.set_item(item)
 	elif item_show is TextureRect:
 		item_show.texture = item.icon
-		
+
+
 func get_shown_item_id() -> String:
+	# NEW: đang vung tool thì vẫn báo item cho remote
+	if String(anim.animation).begins_with("use_"):
+		return current_item_id
 	if item_show and item_show.visible:
 		return current_item_id
 	return ""
+
 
 func _sync_net(delta):
 	sync_timer -= delta
 	if sync_timer <= 0:
 		sync_timer = 0.05
 		Net.send_state(global_position, anim.animation, get_shown_item_id())
+
 
 # ===============================
 # SHOW ITEM ANIM (VISUAL ONLY)
@@ -234,9 +238,8 @@ func play_show_item_anim():
 
 	is_showing_item = true
 	show_timer = 1.5
-	block_anim_timer = 0.5   # 🔥 QUAN TRỌNG
+	block_anim_timer = 0.5
 
-	# 🔥 play chuẩn
 	anim.play("showitem")
 	anim.frame = 0
 
@@ -245,6 +248,7 @@ func play_show_item_anim():
 
 	Dbg.p("🎬 PLAY SHOWITEM FORCED")
 
+
 func cancel_show_item():
 
 	if not is_showing_item:
@@ -252,11 +256,11 @@ func cancel_show_item():
 
 	Dbg.p("🛑 CANCEL SHOW ITEM")
 
-	is_showing_item = false
-	show_timer = 0
+	_end_use()   # FIX: dùng chung hàm dọn
 
 	if item_show:
 		item_show.visible = false
+
 
 func play_raihat_anim():
 
@@ -268,22 +272,58 @@ func play_raihat_anim():
 		return
 
 	is_showing_item = true
-
-	# 🔥 FIX CHÍNH
-	block_anim_timer = 0.4   # 👉 giữ anim không bị override
+	show_timer = 5.0   # NEW: chốt an toàn, kết thúc thật ở animation_finished
+	block_anim_timer = 0.4
 
 	anim.play("raihat")
-	anim.frame = 0	
-	
-func _on_raihat_finished():
+	anim.frame = 0
 
-	if anim.animation != "raihat":
+
+# ===============================
+# NEW: USE TOOL
+# ===============================
+func play_use_anim(item):
+
+	if is_showing_item or item == null:
 		return
 
-	is_showing_item = false
+	var an := "use_" + last_dir
+	if not anim.sprite_frames.has_animation(an):
+		Dbg.p("❌ NO ANIM:", an)
+		return
 
-	# quay về idle
-	anim.play("idle_" + last_dir)
+	is_showing_item = true
+	show_timer = 5.0          # chốt an toàn
+	block_anim_timer = 0.3
+	current_item_id = item.id
+	velocity = Vector2.ZERO
+
+	if item_show:
+		item_show.visible = false   # tránh icon ItemShow chồng lên tool overlay
+
+	anim.play(an)
+	anim.frame = 0
+
+	if tool_overlay:
+		tool_overlay.set_tool(item)   # gọi SAU play để _update thấy đúng anim
+
+
+func _end_use():
+	is_showing_item = false
+	show_timer = 0
+	if tool_overlay:
+		tool_overlay.set_tool(null)
+
+
+# thay cho _on_raihat_finished cũ
+func _on_anim_finished():
+
+	var an := String(anim.animation)
+
+	if an == "raihat" or an.begins_with("use_"):
+		_end_use()
+		anim.play("idle_" + last_dir)
+
 
 # ===============================
 # INTERACT (nút A)
@@ -293,11 +333,9 @@ func _process(_delta):
 	if not Input.is_action_just_pressed("interact"):
 		return
 
-	# đang mở menu / inventory / hotbar thì không interact
 	if UIManager.input_mode != "player":
 		return
 
-	# đang có hội thoại → A = sang trang / hiện đủ chữ
 	if DialogManager.is_showing:
 		DialogManager.next()
 		return
@@ -320,8 +358,6 @@ func get_interact_target():
 	if not ray.is_colliding():
 		return null
 
-	# Sign là Area2D, còn ray chạm vào StaticBody2D con của nó
-	# → kiểm tra collider rồi tới cha của collider
 	var node = ray.get_collider()
 
 	for i in 2:

@@ -5,8 +5,7 @@ var amount := 0
 
 @onready var icon: TextureRect = $Icon
 @onready var bg: TextureRect = $BG
-@onready var amount_bg = $BG/Amount_BG
-@onready var amount_label: Label = $BG/Amount_BG/Amount
+@onready var amount_label: Label = $BG/Amount
 
 
 func _ready():
@@ -14,7 +13,6 @@ func _ready():
 	# SET Z_INDEX
 	bg.z_index = 0
 	icon.z_index = 10
-	amount_bg.z_index = 20
 	amount_label.z_index = 30
 
 	# TẮT RELATIVE
@@ -76,8 +74,8 @@ func _clear():
 		icon.texture = null
 		icon.visible = false
 	
-	if amount_bg:
-		amount_bg.visible = false
+	if amount_label:
+		amount_label.visible = false
 	
 	if amount_label:
 		amount_label.text = ""
@@ -88,16 +86,16 @@ func _clear():
 # ===============================
 func _update_amount():
 	if item == null:
-		if amount_bg:
-			amount_bg.visible = false
+		if amount_label:
+			amount_label.visible = false
 		return
 	
 	if amount <= 1:
-		if amount_bg:
-			amount_bg.visible = false
+		if amount_label:
+			amount_label.visible = false
 	else:
-		if amount_bg:
-			amount_bg.visible = true
+		if amount_label:
+			amount_label.visible = true
 		if amount_label:
 			amount_label.text = str(amount)
 

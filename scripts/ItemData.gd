@@ -40,7 +40,10 @@ enum ToolType {
 	SICKLE
 }
 @export var tool_type : ToolType = ToolType.NONE
-
+@export_group("Tool Display")
+@export var grip := Vector2(2, 14)      # pixel tay cầm trong icon (tính từ góc trên-trái)
+@export var icon_angle := -45.0         # hướng icon đang vẽ: chéo lên phải = -45
+@export_group("")
 
 # ===============================
 # 🌱 CROP DATA (GỘP LUÔN Ở ĐÂY)

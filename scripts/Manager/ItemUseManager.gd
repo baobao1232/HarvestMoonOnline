@@ -18,6 +18,10 @@ static func use_item(player, item, _slot = null):
 	# ===== TOOL =====
 	if item.is_tool():
 
+		# đang vung dở thì bỏ qua, tránh spam gửi API khi bấm liên tục
+		if player.is_showing_item:
+			return
+
 		var pos = get_front_position(player)
 		var t: int = int(item.tool_type)
 
@@ -27,6 +31,7 @@ static func use_item(player, item, _slot = null):
 			Dbg.p("HOE | pos:", pos, "| can_farm:", ok, "| đã có đất:", existed != null)
 			if not ok or existed != null:
 				return
+			player.play_use_anim(item)                      # NEW
 			Server.api("till", {"x": pos.x, "y": pos.y})
 
 		elif t == ItemData.ToolType.WATERING_CAN:
@@ -36,12 +41,14 @@ static func use_item(player, item, _slot = null):
 			if tile.has_seed and tile.crop_data != null \
 			and tile.growth_stage >= tile.crop_data.crop_textures.size() - 2:
 				return
+			player.play_use_anim(item)                      # NEW
 			Server.api("water", {"x": pos.x, "y": pos.y})
 
 		elif t == ItemData.ToolType.SICKLE:
 			var tile = FarmManager.get_tile(pos)
 			if tile == null or not tile.has_seed:
 				return
+			player.play_use_anim(item)                      # NEW
 			Server.api("harvest", {"x": pos.x, "y": pos.y}, func(r):
 				if r.get("ok", false) and r.has("drop_id"):
 					var it = ItemDb.items.get(r.get("item", ""), null)

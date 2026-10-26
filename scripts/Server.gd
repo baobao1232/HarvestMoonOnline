@@ -84,7 +84,6 @@ func request_login(username, password):
 
 		var data = PlayerData.new()
 		data.from_dict(r["data"])
-
 		token = r.get("token", "")
 		is_admin = bool(r.get("is_admin", false))
 		current_id = username
