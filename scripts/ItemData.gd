@@ -41,8 +41,9 @@ enum ToolType {
 }
 @export var tool_type : ToolType = ToolType.NONE
 @export_group("Tool Display")
-@export var grip := Vector2(2, 14)      # pixel tay cầm trong icon (tính từ góc trên-trái)
-@export var icon_angle := -45.0         # hướng icon đang vẽ: chéo lên phải = -45
+@export var tool_frames : SpriteFrames           # anim riêng của tool: use_up/use_down/use_left/use_right
+@export var grip := Vector2(2, 14)
+@export var icon_angle := -45.0
 @export_group("")
 
 # ===============================

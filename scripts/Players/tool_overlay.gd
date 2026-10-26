@@ -3,12 +3,21 @@ extends Sprite2D
 const FRAMES_JSON := "res://scripts/Players/tool_frames.json"
 static var frames_data := {}
 
-# Hướng xuống: bỏ góc trong JSON, ép góc cho từng frame.
-# Góc = hướng từ tay cầm ra đầu tool (-90 = thẳng lên, 90 = thẳng xuống, 0 = sang phải).
+# ===== CHẾ ĐỘ CŨ (tool không có tool_frames) =====
 const DOWN_ANGLES := [-100.0, -80.0, 60.0]
+const UP_DOWN_SCREEN_SCALE := Vector2(0.6, 1.0)
+const TOOL_LENGTH_SCALE := 1.5
+
+# Hướng up, FRAME CUỐI: ghi đè vị trí tay cầm (pixel trong khung 32x32) + góc.
+# y nhỏ hơn = tool cao hơn, rot -90 = đầu tool chỉ thẳng lên.
+const UP_LAST_HAND := Vector2(16, 10)
+const UP_LAST_ROT := -90.0
 
 var grip := Vector2.ZERO
 var base_angle := -45.0
+
+# ===== CHẾ ĐỘ MỚI =====
+var tool_frames: SpriteFrames = null
 
 @onready var anim: AnimatedSprite2D = get_parent().get_node("AnimatedSprite2D")
 
@@ -16,7 +25,6 @@ var base_angle := -45.0
 func _ready():
 	if frames_data.is_empty() and FileAccess.file_exists(FRAMES_JSON):
 		frames_data = JSON.parse_string(FileAccess.get_file_as_string(FRAMES_JSON))
-	centered = false
 	texture_filter = TEXTURE_FILTER_NEAREST
 	visible = false
 	anim.frame_changed.connect(_update)
@@ -26,40 +34,118 @@ func _ready():
 func set_tool(item) -> void:
 	if item == null:
 		texture = null
+		tool_frames = null
 	else:
 		texture = item.icon
 		grip = item.grip
-		base_angle = item.icon_angle   # icon vẽ quay sang trái
+		base_angle = item.icon_angle
+		tool_frames = item.tool_frames
 	_update()
 
 
 func _update():
 	var an := String(anim.animation)
-	var key := "%s_%d" % [an, anim.frame]
 
-	if not an.begins_with("use_") or texture == null or not frames_data.has(key):
+	if not an.begins_with("use_"):
 		visible = false
 		return
+
+	if tool_frames != null:
+		_update_synced(an)
+	else:
+		_update_legacy(an)
+
+
+# frame hiện tại có phải frame cuối của anim không
+func _is_last_frame() -> bool:
+	return anim.frame >= anim.sprite_frames.get_frame_count(anim.animation) - 1
+
+
+# ===============================
+# MỚI: bám đúng frame của player
+# ===============================
+func _update_synced(an: String):
+
+	if not tool_frames.has_animation(an) \
+	or anim.frame >= tool_frames.get_frame_count(an):
+		visible = false
+		return
+
+	# dùng cùng khung 32x32 với player → đặt trùng sprite player là khớp
+	centered = true
+	offset = anim.offset
+	flip_h = anim.flip_h
+	flip_v = false
+	scale = Vector2.ONE
+	rotation = 0.0
+	position = anim.position
+
+	texture = tool_frames.get_frame_texture(an, anim.frame)
+
+	# up: tool nằm sau player, riêng frame cuối ra phía trước
+	show_behind_parent = (an == "use_up" and not _is_last_frame())
+	visible = true
+
+
+# ===============================
+# CŨ: tool chỉ có icon, tự xoay theo marker
+# ===============================
+func _update_legacy(an: String):
+
+	var key := "%s_%d" % [an, anim.frame]
+
+	if texture == null or not frames_data.has(key):
+		visible = false
+		return
+
+	centered = false
+	flip_v = false
 
 	var dir := an.trim_prefix("use_")
 	var f = frames_data[key]
 	var w := float(texture.get_width())
-	var g := grip + Vector2(0.5, 0.5)    # tâm pixel tay cầm
+	var g := grip + Vector2(0.5, 0.5)
 
-	# hướng phải: lật icon
 	var flip := (dir == "right")
 	flip_h = flip
 	offset = Vector2(-(w - g.x) if flip else -g.x, -g.y)
 
-	# lật thì hướng icon đổi từ a thành 180 - a
 	var icon_ang := (180.0 - base_angle) if flip else base_angle
 
-	# góc đích: down thì ép, còn lại lấy từ marker
+	# góc + vị trí tay cầm: mặc định lấy từ JSON, down/up-frame-cuối thì ghi đè
 	var target: float = f.rot
+	var hand := Vector2(f.x, f.y)
+	var up_last := (dir == "up" and _is_last_frame())
+
 	if dir == "down":
 		target = DOWN_ANGLES[mini(anim.frame, DOWN_ANGLES.size() - 1)]
+	elif up_last:
+		target = UP_LAST_ROT
+		hand = UP_LAST_HAND
 
-	position = anim.position + Vector2(f.x - 16, f.y - 16)
-	rotation_degrees = target - icon_ang
-	show_behind_parent = (dir == "up")
+	var rot := deg_to_rad(target - icon_ang)
+	var pos := anim.position + hand - Vector2(16, 16)
+
+	# kéo dài dọc theo cán (tay cầm đứng yên)
+	var ia := deg_to_rad(icon_ang)
+	var stretch := Transform2D(ia, Vector2.ZERO) \
+		* Transform2D(Vector2(TOOL_LENGTH_SCALE, 0.0), Vector2(0.0, 1.0), Vector2.ZERO) \
+		* Transform2D(-ia, Vector2.ZERO)
+
+	var t := Transform2D(rot, Vector2.ZERO) * stretch
+
+	# up/down: ép ngang theo trục màn hình
+	if dir == "up" or dir == "down":
+		var squash := Transform2D(
+			Vector2(UP_DOWN_SCREEN_SCALE.x, 0.0),
+			Vector2(0.0, UP_DOWN_SCREEN_SCALE.y),
+			Vector2.ZERO
+		)
+		t = squash * t
+
+	t.origin = pos
+	transform = t
+
+	# up: tool nằm sau player, riêng frame cuối ra phía trước để không bị thân che
+	show_behind_parent = (dir == "up" and not up_last)
 	visible = true
