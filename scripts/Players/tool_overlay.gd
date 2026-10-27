@@ -16,10 +16,10 @@ const UP_LAST_ROT := -90.0
 # Đẩy tool ra xa người chơi theo frame (pixel). Key = "use_<hướng>_<frame>".
 # Số dương = ra xa hơn theo hướng đang quay mặt.
 const FRAME_PUSH := {
-	"use_down_2": 15.0,
-	"use_up_2": 15.0,
-	"use_left_2": 15.0,
-	"use_right_2": 15.0,
+	"use_down_3": 0.0,
+	"use_up_3": 0.0,
+	"use_left_3": 0.0,
+	"use_right_3": 0.0,
 }
 
 var grip := Vector2.ZERO
@@ -65,6 +65,15 @@ func _update():
 		_update_legacy(an)
 
 
+# ===============================
+# HELPER
+# ===============================
+
+# "use_hoe_down" -> "down" | "use_down" -> "down"
+func _dir_of(an: String) -> String:
+	return an.rsplit("_", true, 1)[1]
+
+
 # frame hiện tại có phải frame cuối của anim không
 func _is_last_frame() -> bool:
 	return anim.frame >= anim.sprite_frames.get_frame_count(anim.animation) - 1
@@ -72,12 +81,13 @@ func _is_last_frame() -> bool:
 
 # offset đẩy tool ra phía trước người chơi theo hướng + frame
 func _push_offset(an: String) -> Vector2:
-	var key := "%s_%d" % [an, anim.frame]
+	var dir := _dir_of(an)
+	var key := "use_%s_%d" % [dir, anim.frame]
 	var d: float = FRAME_PUSH.get(key, 0.0)
 	if d == 0.0:
 		return Vector2.ZERO
 
-	match an.trim_prefix("use_"):
+	match dir:
 		"up": return Vector2(0, -d)
 		"down": return Vector2(0, d)
 		"left": return Vector2(-d, 0)
@@ -90,8 +100,15 @@ func _push_offset(an: String) -> Vector2:
 # ===============================
 func _update_synced(an: String):
 
-	if not tool_frames.has_animation(an) \
-	or anim.frame >= tool_frames.get_frame_count(an):
+	# tool có animation trùng tên với người thì dùng,
+	# không có thì dự phòng về use_<hướng>
+	var dir := _dir_of(an)
+	var tan := an
+	if not tool_frames.has_animation(tan):
+		tan = "use_" + dir
+
+	if not tool_frames.has_animation(tan) \
+	or anim.frame >= tool_frames.get_frame_count(tan):
 		visible = false
 		return
 
@@ -104,10 +121,10 @@ func _update_synced(an: String):
 	rotation = 0.0
 	position = anim.position + _push_offset(an)
 
-	texture = tool_frames.get_frame_texture(an, anim.frame)
+	texture = tool_frames.get_frame_texture(tan, anim.frame)
 
 	# up: tool nằm sau player, riêng frame cuối ra phía trước
-	show_behind_parent = (an == "use_up" and not _is_last_frame())
+	show_behind_parent = (dir == "up" and not _is_last_frame())
 	visible = true
 
 
@@ -116,7 +133,8 @@ func _update_synced(an: String):
 # ===============================
 func _update_legacy(an: String):
 
-	var key := "%s_%d" % [an, anim.frame]
+	var dir := _dir_of(an)
+	var key := "use_%s_%d" % [dir, anim.frame]
 
 	if texture == null or not frames_data.has(key):
 		visible = false
@@ -125,7 +143,6 @@ func _update_legacy(an: String):
 	centered = false
 	flip_v = false
 
-	var dir := an.trim_prefix("use_")
 	var f = frames_data[key]
 	var w := float(texture.get_width())
 	var g := grip + Vector2(0.5, 0.5)

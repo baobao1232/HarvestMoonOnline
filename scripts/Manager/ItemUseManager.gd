@@ -28,10 +28,12 @@ static func use_item(player, item, _slot = null):
 		if t == ItemData.ToolType.HOE:
 			var ok = can_farm_at(player, pos)
 			var existed = FarmManager.get_tile(pos)
-			Dbg.p("HOE | pos:", pos, "| can_farm:", ok, "| đã có đất:", existed != null)
 			if not ok or existed != null:
 				return
-			player.play_use_anim(item)                      # NEW
+
+			Server.hold_farm = true
+			player.play_use_anim(item)
+			player.use_finished.connect(func(_id): Server.release_farm(), CONNECT_ONE_SHOT)
 			Server.api("till", {"x": pos.x, "y": pos.y})
 
 		elif t == ItemData.ToolType.WATERING_CAN:
@@ -46,9 +48,14 @@ static func use_item(player, item, _slot = null):
 
 		elif t == ItemData.ToolType.SICKLE:
 			var tile = FarmManager.get_tile(pos)
+
+			# luôn vung liềm
+			player.play_use_anim(item)
+
+			# chỉ gọi server khi trước mặt có cây
 			if tile == null or not tile.has_seed:
 				return
-			player.play_use_anim(item)                      # NEW
+
 			Server.api("harvest", {"x": pos.x, "y": pos.y}, func(r):
 				if r.get("ok", false) and r.has("drop_id"):
 					var it = ItemDb.items.get(r.get("item", ""), null)

@@ -2,6 +2,142 @@
 
 [ext_resource type="Texture2D" uid="uid://bcgg74u4bv07r" path="res://Assest/Items/tools/liem_normal.png" id="1_1ov6v"]
 [ext_resource type="Script" uid="uid://crd5bdjovw4hg" path="res://scripts/ItemData.gd" id="1_bd6l5"]
+[ext_resource type="Texture2D" uid="uid://dd5ljw0lwrw4l" path="res://Assest/Items/tools/liem_normal_sprite.png" id="3_dvyfw"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i7xdy"]
+atlas = ExtResource("3_dvyfw")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vmejh"]
+atlas = ExtResource("3_dvyfw")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sotse"]
+atlas = ExtResource("3_dvyfw")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dgqci"]
+atlas = ExtResource("3_dvyfw")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rk0sa"]
+atlas = ExtResource("3_dvyfw")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1alxr"]
+atlas = ExtResource("3_dvyfw")
+region = Rect2(32, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ybt1g"]
+atlas = ExtResource("3_dvyfw")
+region = Rect2(64, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k7xfm"]
+atlas = ExtResource("3_dvyfw")
+region = Rect2(96, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v0l6g"]
+atlas = ExtResource("3_dvyfw")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t2hhr"]
+atlas = ExtResource("3_dvyfw")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yg087"]
+atlas = ExtResource("3_dvyfw")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kx7ti"]
+atlas = ExtResource("3_dvyfw")
+region = Rect2(96, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kdv4j"]
+atlas = ExtResource("3_dvyfw")
+region = Rect2(0, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tvuxo"]
+atlas = ExtResource("3_dvyfw")
+region = Rect2(32, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_02tfd"]
+atlas = ExtResource("3_dvyfw")
+region = Rect2(64, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tif20"]
+atlas = ExtResource("3_dvyfw")
+region = Rect2(96, 96, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1ov6v"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i7xdy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vmejh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sotse")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dgqci")
+}],
+"loop": false,
+"name": &"use_sickle_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rk0sa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1alxr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ybt1g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k7xfm")
+}],
+"loop": false,
+"name": &"use_sickle_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v0l6g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t2hhr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yg087")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kx7ti")
+}],
+"loop": false,
+"name": &"use_sickle_right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kdv4j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tvuxo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_02tfd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tif20")
+}],
+"loop": false,
+"name": &"use_sickle_up",
+"speed": 5.0
+}]
 
 [resource]
 script = ExtResource("1_bd6l5")
@@ -12,4 +148,6 @@ description = "123"
 max_stack = 1
 type = 4
 tool_type = 5
+use_anim = "sickle"
+tool_frames = SubResource("SpriteFrames_1ov6v")
 metadata/_custom_type_script = "uid://crd5bdjovw4hg"

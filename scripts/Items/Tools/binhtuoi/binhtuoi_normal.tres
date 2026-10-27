@@ -2,6 +2,142 @@
 
 [ext_resource type="Texture2D" uid="uid://mwpnrys2ghol" path="res://Assest/Items/tools/binhtuoi_normal.png" id="1_ndmol"]
 [ext_resource type="Script" uid="uid://crd5bdjovw4hg" path="res://scripts/ItemData.gd" id="2_2d1il"]
+[ext_resource type="Texture2D" uid="uid://cjmbrso4pm5yv" path="res://Assest/Items/tools/binhtuoi_normal_sprite.png" id="3_2d1il"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2d1il"]
+atlas = ExtResource("3_2d1il")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yaus8"]
+atlas = ExtResource("3_2d1il")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_05x7q"]
+atlas = ExtResource("3_2d1il")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b51uw"]
+atlas = ExtResource("3_2d1il")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fgocd"]
+atlas = ExtResource("3_2d1il")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pwh8h"]
+atlas = ExtResource("3_2d1il")
+region = Rect2(64, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8eyj6"]
+atlas = ExtResource("3_2d1il")
+region = Rect2(128, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l8583"]
+atlas = ExtResource("3_2d1il")
+region = Rect2(192, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ihd62"]
+atlas = ExtResource("3_2d1il")
+region = Rect2(0, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xhbdr"]
+atlas = ExtResource("3_2d1il")
+region = Rect2(64, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_alqvo"]
+atlas = ExtResource("3_2d1il")
+region = Rect2(128, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_evd36"]
+atlas = ExtResource("3_2d1il")
+region = Rect2(192, 128, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ismwm"]
+atlas = ExtResource("3_2d1il")
+region = Rect2(0, 192, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1fmd5"]
+atlas = ExtResource("3_2d1il")
+region = Rect2(64, 192, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_msiib"]
+atlas = ExtResource("3_2d1il")
+region = Rect2(128, 192, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5tmio"]
+atlas = ExtResource("3_2d1il")
+region = Rect2(192, 192, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ndmol"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2d1il")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yaus8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_05x7q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b51uw")
+}],
+"loop": false,
+"name": &"use_water_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fgocd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pwh8h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8eyj6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l8583")
+}],
+"loop": false,
+"name": &"use_water_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ihd62")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xhbdr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_alqvo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_evd36")
+}],
+"loop": false,
+"name": &"use_water_right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ismwm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1fmd5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_msiib")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5tmio")
+}],
+"loop": false,
+"name": &"use_water_up",
+"speed": 5.0
+}]
 
 [resource]
 script = ExtResource("2_2d1il")
@@ -11,4 +147,6 @@ icon = ExtResource("1_ndmol")
 max_stack = 1
 type = 4
 tool_type = 4
+use_anim = "water"
+tool_frames = SubResource("SpriteFrames_ndmol")
 metadata/_custom_type_script = "uid://crd5bdjovw4hg"

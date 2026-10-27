@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+signal use_finished(item)
+
 @export var speed = 200
 
 var dpad = null
@@ -287,43 +289,46 @@ func play_use_anim(item):
 	if is_showing_item or item == null:
 		return
 
-	var an := "use_" + last_dir
+	var an: String
+	if item.use_anim != "":
+		an = "use_%s_%s" % [item.use_anim, last_dir]   # use_water_down
+	else:
+		an = "use_" + last_dir                          # use_down
+
 	if not anim.sprite_frames.has_animation(an):
 		Dbg.p("❌ NO ANIM:", an)
 		return
 
 	is_showing_item = true
-	show_timer = 5.0          # chốt an toàn
+	show_timer = 5.0
 	block_anim_timer = 0.3
 	current_item_id = item.id
 	velocity = Vector2.ZERO
 
 	if item_show:
-		item_show.visible = false   # tránh icon ItemShow chồng lên tool overlay
+		item_show.visible = false
 
+	Dbg.p("▶ PLAY:", an)
 	anim.play(an)
 	anim.frame = 0
 
 	if tool_overlay:
-		tool_overlay.set_tool(item)   # gọi SAU play để _update thấy đúng anim
-
-
+		tool_overlay.set_tool(item)
+		
 func _end_use():
 	is_showing_item = false
 	show_timer = 0
 	if tool_overlay:
 		tool_overlay.set_tool(null)
 
-
-# thay cho _on_raihat_finished cũ
 func _on_anim_finished():
-
 	var an := String(anim.animation)
 
 	if an == "raihat" or an.begins_with("use_"):
+		var item_id := current_item_id
 		_end_use()
 		anim.play("idle_" + last_dir)
-
+		use_finished.emit(item_id)
 
 # ===============================
 # INTERACT (nút A)

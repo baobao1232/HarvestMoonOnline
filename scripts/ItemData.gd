@@ -31,16 +31,12 @@ enum ItemType {
 # ===============================
 # TOOL TYPE
 # ===============================
-enum ToolType {
-	NONE,
-	HOE,
-	AXE,
-	PICKAXE,
-	WATERING_CAN,
-	SICKLE
-}
+# ItemData.gd
+enum ToolType { NONE, HOE, AXE, PICKAXE, WATERING_CAN, SICKLE, HAMMER }
 @export var tool_type : ToolType = ToolType.NONE
 @export_group("Tool Display")
+@export_group("Tool Display")
+@export var use_anim := ""   # "hoe", "water", "sickle"; để trống = dùng use_<hướng> mặc định
 @export var tool_frames : SpriteFrames           # anim riêng của tool: use_up/use_down/use_left/use_right
 @export var grip := Vector2(2, 14)
 @export var icon_angle := -45.0

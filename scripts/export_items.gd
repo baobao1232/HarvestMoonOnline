@@ -6,7 +6,8 @@ const OUT_PATH := "D:/Xamp/htdocs/hvm/api/items.json"
 
 # thứ tự khớp enum trong ItemData.gd
 const TYPES := ["consumable", "equipment", "material", "quest", "tool", "seed"]
-const TOOLS := ["none", "hoe", "axe", "pickaxe", "watering_can", "sickle"]
+# export_items.gd
+const TOOLS := ["none", "hoe", "axe", "pickaxe", "watering_can", "sickle", "hammer"]
 const TYPE_TOOL := 4
 const TYPE_SEED := 5
 const TAG_FOOD := 0

@@ -34,6 +34,8 @@ var _dirty_again := false
 var _timer_pending := false
 var _api_queue: Array = []
 var _api_busy := false
+var hold_farm := false
+var pending_farm = null
 
 func _ready():
 	if not Net.is_server:
@@ -307,7 +309,10 @@ func _apply_state(r: Dictionary):
 
 	if r.has("farm"):
 		player_data.farm = r["farm"]
-		FarmManager.sync_farm(r["farm"])
+		if hold_farm:
+			pending_farm = r["farm"]          # đợi animation xong
+		else:
+			FarmManager.sync_farm(r["farm"])
 
 	var hud = UIManager.hud
 	if hud != null and is_instance_valid(hud):
@@ -316,3 +321,9 @@ func _apply_state(r: Dictionary):
 	var ui = UIManager.current_ui
 	if ui != null and is_instance_valid(ui) and ui.has_method("refresh"):
 		ui.refresh()
+
+func release_farm():
+	hold_farm = false
+	if pending_farm != null:
+		FarmManager.sync_farm(pending_farm)
+		pending_farm = null
