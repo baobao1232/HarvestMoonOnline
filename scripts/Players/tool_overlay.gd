@@ -13,6 +13,15 @@ const TOOL_LENGTH_SCALE := 1.5
 const UP_LAST_HAND := Vector2(16, 10)
 const UP_LAST_ROT := -90.0
 
+# Đẩy tool ra xa người chơi theo frame (pixel). Key = "use_<hướng>_<frame>".
+# Số dương = ra xa hơn theo hướng đang quay mặt.
+const FRAME_PUSH := {
+	"use_down_2": 15.0,
+	"use_up_2": 15.0,
+	"use_left_2": 15.0,
+	"use_right_2": 15.0,
+}
+
 var grip := Vector2.ZERO
 var base_angle := -45.0
 
@@ -61,6 +70,21 @@ func _is_last_frame() -> bool:
 	return anim.frame >= anim.sprite_frames.get_frame_count(anim.animation) - 1
 
 
+# offset đẩy tool ra phía trước người chơi theo hướng + frame
+func _push_offset(an: String) -> Vector2:
+	var key := "%s_%d" % [an, anim.frame]
+	var d: float = FRAME_PUSH.get(key, 0.0)
+	if d == 0.0:
+		return Vector2.ZERO
+
+	match an.trim_prefix("use_"):
+		"up": return Vector2(0, -d)
+		"down": return Vector2(0, d)
+		"left": return Vector2(-d, 0)
+		"right": return Vector2(d, 0)
+	return Vector2.ZERO
+
+
 # ===============================
 # MỚI: bám đúng frame của player
 # ===============================
@@ -78,7 +102,7 @@ func _update_synced(an: String):
 	flip_v = false
 	scale = Vector2.ONE
 	rotation = 0.0
-	position = anim.position
+	position = anim.position + _push_offset(an)
 
 	texture = tool_frames.get_frame_texture(an, anim.frame)
 
@@ -124,7 +148,7 @@ func _update_legacy(an: String):
 		hand = UP_LAST_HAND
 
 	var rot := deg_to_rad(target - icon_ang)
-	var pos := anim.position + hand - Vector2(16, 16)
+	var pos := anim.position + hand - Vector2(16, 16) + _push_offset(an)
 
 	# kéo dài dọc theo cán (tay cầm đứng yên)
 	var ia := deg_to_rad(icon_ang)
