@@ -25,17 +25,23 @@ static func use_item(player, item, _slot = null):
 		var pos = get_front_position(player)
 		var t: int = int(item.tool_type)
 
+		# ----- CUỐC -----
 		if t == ItemData.ToolType.HOE:
 			var ok = can_farm_at(player, pos)
 			var existed = FarmManager.get_tile(pos)
 			if not ok or existed != null:
 				return
 
-			Server.hold_farm = true
 			player.play_use_anim(item)
-			player.use_finished.connect(func(_id): Server.release_farm(), CONNECT_ONE_SHOT)
+
+			# chỉ giữ farm khi animation thật sự đang chạy
+			if player.is_showing_item:
+				Server.hold_farm = true
+				player.use_finished.connect(func(_id): Server.release_farm(), CONNECT_ONE_SHOT)
+
 			Server.api("till", {"x": pos.x, "y": pos.y})
 
+		# ----- BÌNH TƯỚI -----
 		elif t == ItemData.ToolType.WATERING_CAN:
 			var tile = FarmManager.get_tile(pos)
 			if tile == null:
@@ -43,9 +49,11 @@ static func use_item(player, item, _slot = null):
 			if tile.has_seed and tile.crop_data != null \
 			and tile.growth_stage >= tile.crop_data.crop_textures.size() - 2:
 				return
-			player.play_use_anim(item)                      # NEW
+
+			player.play_use_anim(item)
 			Server.api("water", {"x": pos.x, "y": pos.y})
 
+		# ----- LIỀM -----
 		elif t == ItemData.ToolType.SICKLE:
 			var tile = FarmManager.get_tile(pos)
 
@@ -69,6 +77,12 @@ static func use_item(player, item, _slot = null):
 						})
 			)
 
+		# ----- RÌU / CUỐC CHIM / BÚA -----
+		elif t == ItemData.ToolType.AXE \
+		or t == ItemData.ToolType.PICKAXE \
+		or t == ItemData.ToolType.HAMMER:
+			player.play_use_anim(item)
+
 		return
 
 	# ===== SEED =====
@@ -87,7 +101,6 @@ static func use_item(player, item, _slot = null):
 	# ===== FOOD =====
 	if item.is_food():
 		Server.api("eat", {"item": item.id})
-
 
 # ===============================
 # FRONT POSITION
