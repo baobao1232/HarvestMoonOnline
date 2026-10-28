@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://bcirs8hvlo21l"]
+
+[ext_resource type="Texture2D" uid="uid://dr3nri4sfdyc5" path="res://Assest/Buildings/house/Market/Market-House.png" id="1_7evr6"]
+[ext_resource type="Texture2D" uid="uid://dotjox1umcnx5" path="res://Assest/Buildings/house/Market/Market-House-Night.png" id="2_owx5g"]
+[ext_resource type="Script" uid="uid://c1evi4507st0i" path="res://scripts/Teleport.gd" id="3_ibopk"]
+[ext_resource type="PackedScene" uid="uid://djrh5nd0j6eln" path="res://scn/Icons/Sign.tscn" id="4_5ghbe"]
+
+[sub_resource type="Gradient" id="Gradient_sue1e"]
+offsets = PackedFloat32Array(0.26092127, 0.9714476)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_xoswc"]
+gradient = SubResource("Gradient_sue1e")
+fill = 1
+fill_from = Vector2(0.49427366, 0.51827586)
+fill_to = Vector2(0.81051296, 0.95646524)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uylfh"]
+size = Vector2(20, 8)
+
+[node name="Market" type="StaticBody2D" unique_id=1310657111]
+texture_filter = 1
+position = Vector2(27, -2)
+
+[node name="BanNgay" type="Sprite2D" parent="." unique_id=1900814054]
+position = Vector2(-8, -27)
+texture = ExtResource("1_7evr6")
+
+[node name="BanDem" type="Sprite2D" parent="." unique_id=1654554439]
+position = Vector2(-8, -27)
+texture = ExtResource("2_owx5g")
+
+[node name="Light" type="PointLight2D" parent="." unique_id=923919283]
+position = Vector2(-44, 2)
+scale = Vector2(0.63964844, 0.609375)
+shadow_enabled = true
+texture = SubResource("GradientTexture2D_xoswc")
+
+[node name="Light2" type="PointLight2D" parent="." unique_id=449121462]
+position = Vector2(-21, 3)
+scale = Vector2(0.63964844, 0.609375)
+shadow_enabled = true
+texture = SubResource("GradientTexture2D_xoswc")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=711101390]
+visible = false
+position = Vector2(-93, -79)
+polygon = PackedVector2Array(41, 86, 41, 35, 53, 21, 135, 22, 134, 96, 78, 98, 78, 85, 52, 84, 52, 97, 43, 94)
+
+[node name="VaoNha" type="Area2D" parent="." unique_id=1185612469]
+position = Vector2(16, 23)
+script = ExtResource("3_ibopk")
+target_map = "res://scn/House/Interior/Market_Int.tscn"
+target_spawn = "NhaMarket"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="VaoNha" unique_id=80866735]
+position = Vector2(0, -1)
+shape = SubResource("RectangleShape2D_uylfh")
+
+[node name="Sign" parent="." unique_id=1521790615 instance=ExtResource("4_5ghbe")]
+position = Vector2(41, 47)
+dialog_lines = Array[String](["Xin chao", "Day la dialog"])
+
+[connection signal="body_entered" from="VaoNha" to="VaoNha" method="_on_body_entered"]

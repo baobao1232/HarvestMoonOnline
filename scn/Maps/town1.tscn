@@ -145,9 +145,8 @@ metadata/_edit_lock_ = true
 position = Vector2(811, 471)
 metadata/_edit_lock_ = true
 
-[node name="SpawnThoRenToTown1" type="Marker2D" parent="YSort" unique_id=531371915]
-position = Vector2(294, 126)
-metadata/_edit_lock_ = true
+[node name="SpawnThoRenToTown" type="Marker2D" parent="YSort" unique_id=1535191463]
+position = Vector2(293, 116)
 
 [node name="ToTown2" type="Area2D" parent="." unique_id=754787854]
 script = ExtResource("3_asqsy")

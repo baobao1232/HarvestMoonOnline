@@ -23,6 +23,21 @@ var unread := 0
 var dragging := false
 var drag_offset := Vector2.ZERO
 
+# map -> đường dẫn + danh sách marker spawn (phần tử đầu = mặc định)
+const TP_MAPS := {
+	"farm":       {"path": "res://scn/Maps/farm.tscn",       "spawns": ["Spawn", "SpawnTown1", "SpawnFarm1"]},
+	"town1":      {"path": "res://scn/Maps/town1.tscn",      "spawns": ["SpawnFarm", "SpawnTown2", "SpawnTown3", "SpawnForest", "SpawnThoRenToTown1"]},
+	"town2":      {"path": "res://scn/Maps/town2.tscn",      "spawns": ["SpawnTown1", "SpawnTown3"]},
+	"town3":      {"path": "res://scn/Maps/town3.tscn",      "spawns": ["SpawnTown1", "SpawnTown2", "SpawnBeach"]},
+	"forest":     {"path": "res://scn/Maps/forest.tscn",     "spawns": ["SpawnFarm", "SpawnTown1", "SpawnForest1", "SpawnForest2", "SpawnNhaThoMoc"]},
+	"beach":      {"path": "res://scn/Maps/beach.tscn",      "spawns": ["SpawnTown3"]},
+	"motherhill": {"path": "res://scn/Maps/MotherHill.tscn", "spawns": ["SpawnForest1", "SpawnForest2"]},
+	"thomoc":     {"path": "res://scn/House/Interior/ThoMoc_Int.tscn", "spawns": ["SpawnForest"]},
+	"thoren":     {"path": "res://scn/House/Interior/Thoren_Int.tscn", "spawns": ["NhaThoRen"]},
+}
+const STUCK_COOLDOWN := 30.0
+
+var _last_stuck := -1000.0
 
 func _ready():
 	toggle_btn.visible = show_toggle_button
@@ -218,9 +233,17 @@ func _command(line: String):
 	match cmd:
 		"help":
 			_sys("/clear  - xoá khung chat")
+			_sys("/stuck  - thoát khi bị kẹt")
 			if Server.is_admin:
 				_sys("/give <item_id> [số lượng]  - nhận vật phẩm")
 				_sys("/items  - xem danh sách item_id")
+				_sys("/tp  - xem danh sách map / spawn")
+				_sys("/tp <map> [spawn]  - sang map khác")
+				_sys("/tp <spawn>  - tới marker trong map hiện tại")
+		"stuck":
+			_cmd_stuck()
+		"tp":
+			_cmd_tp(parts)
 		"items":
 			if not Server.is_admin:
 				_err("Bạn không có quyền dùng lệnh này")
@@ -266,3 +289,117 @@ func _cmd_give(parts: PackedStringArray):
 		else:
 			_err(str(r.get("msg", "Không give được")))
 	)
+# ===============================
+# TELEPORT
+# ===============================
+func _current_markers() -> Array:
+	var scene := get_tree().current_scene
+	var list: Array = []
+	if scene == null:
+		return list
+	var ysort := scene.get_node_or_null("YSort")
+	if ysort == null:
+		return list
+	for c in ysort.get_children():
+		if c is Marker2D:
+			list.append(c)
+	return list
+
+
+func _find_marker(spawn: String) -> Marker2D:
+	for m in _current_markers():
+		if String(m.name).to_lower() == spawn.to_lower():
+			return m
+	return null
+
+
+func _place_player(m: Marker2D):
+	var p = SceneManager.player
+	if p == null or not is_instance_valid(p):
+		_err("Chưa có nhân vật")
+		return
+	p.global_position = m.global_position
+	p.velocity = Vector2.ZERO
+	if p.has_method("snap_camera"):
+		p.snap_camera()
+
+
+func _cmd_stuck():
+	var now := Time.get_ticks_msec() / 1000.0
+	if not Server.is_admin and now - _last_stuck < STUCK_COOLDOWN:
+		_err("Đợi %d giây nữa mới dùng lại được" % int(STUCK_COOLDOWN - (now - _last_stuck)))
+		return
+
+	var p = SceneManager.player
+	if p == null or not is_instance_valid(p):
+		_err("Chưa có nhân vật")
+		return
+
+	var best: Marker2D = null
+	var best_d := INF
+	for m in _current_markers():
+		var d: float = m.global_position.distance_squared_to(p.global_position)
+		if d < best_d:
+			best_d = d
+			best = m
+
+	if best == null:
+		_err("Map này không có điểm spawn")
+		return
+
+	_last_stuck = now
+	_place_player(best)
+	_sys("Đã đưa bạn về " + String(best.name), "#9dff9d")
+
+
+func _cmd_tp(parts: PackedStringArray):
+
+	if not Server.is_admin:
+		_err("Bạn không có quyền dùng lệnh này")
+		return
+
+	# /tp  → liệt kê
+	if parts.size() < 2:
+		_sys("Map: " + ", ".join(TP_MAPS.keys()))
+		var names: Array = []
+		for m in _current_markers():
+			names.append(String(m.name))
+		_sys("Spawn map hiện tại: " + ", ".join(names))
+		return
+
+	var arg := parts[1]
+	var key := arg.to_lower()
+
+	# /tp <map> [spawn]
+	if TP_MAPS.has(key):
+		var info: Dictionary = TP_MAPS[key]
+		var spawns: Array = info["spawns"]
+		var spawn: String = spawns[0]
+
+		if parts.size() >= 3:
+			var found := ""
+			for s in spawns:
+				if String(s).to_lower() == parts[2].to_lower():
+					found = s
+			if found == "":
+				_err("Map %s có spawn: %s" % [key, ", ".join(spawns)])
+				return
+			spawn = found
+
+		var scene := get_tree().current_scene
+		if scene != null and scene.scene_file_path == info["path"]:
+			var m := _find_marker(spawn)
+			if m: _place_player(m)
+		else:
+			SceneManager.request_change_map(info["path"], spawn)
+		_sys("Tele tới %s / %s" % [key, spawn], "#9dff9d")
+		return
+
+	# /tp <spawn> trong map hiện tại
+	var marker := _find_marker(arg)
+	if marker == null:
+		_err("Không có map hay spawn: " + arg + "  (gõ /tp)")
+		return
+
+	_place_player(marker)
+	_sys("Tele tới " + String(marker.name), "#9dff9d")

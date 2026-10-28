@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cv2ln5f80reaw" path="res://scn/props/Tree/Tree02.tscn" id="4_j8u7v"]
 [ext_resource type="Texture2D" uid="uid://d1yg2h6u8dx2w" path="res://Assest/Icons/sign (1).png" id="4_jenhh"]
 [ext_resource type="PackedScene" uid="uid://duodcqcp6vd8t" path="res://scn/Animals/soc.tscn" id="5_j8u7v"]
-[ext_resource type="PackedScene" uid="uid://d25t3vrkqrnq7" path="res://scn/House/ThoMoc_Build.tscn" id="5_lpktr"]
+[ext_resource type="PackedScene" uid="uid://d25t3vrkqrnq7" path="res://scn/House/ThoMoc.tscn" id="5_lpktr"]
 [ext_resource type="PackedScene" uid="uid://djrh5nd0j6eln" path="res://scn/Icons/Sign.tscn" id="7_jenhh"]
 [ext_resource type="PackedScene" uid="uid://dbw7ixdom7ub5" path="res://scn/props/Tree/Tree.tscn" id="7_lpktr"]
 
@@ -293,8 +293,6 @@ position = Vector2(403, 436)
 
 [node name="Soc" parent="YSort/AnimalsNode2D" unique_id=1324182132 instance=ExtResource("5_j8u7v")]
 position = Vector2(2, 1)
-walk_speed = 20
-run_speed = 90
 
 [node name="ToTown1" type="Area2D" parent="." unique_id=1373726271]
 script = ExtResource("2_axsn7")

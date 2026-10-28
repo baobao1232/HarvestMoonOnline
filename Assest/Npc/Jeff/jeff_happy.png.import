@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dn6ybj60slk5c"
-path="res://.godot/imported/Jeff.png-6460ba1bf15a5080a1b4f65cdcbef7ce.ctex"
+uid="uid://bvd0iu7p10q5o"
+path="res://.godot/imported/jeff_happy.png-54497962c3748b6006ab42f07bff465a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assest/Npc/Jeff.png"
-dest_files=["res://.godot/imported/Jeff.png-6460ba1bf15a5080a1b4f65cdcbef7ce.ctex"]
+source_file="res://Assest/Npc/Jeff/jeff_happy.png"
+dest_files=["res://.godot/imported/jeff_happy.png-54497962c3748b6006ab42f07bff465a.ctex"]
 
 [params]
 

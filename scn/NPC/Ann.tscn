@@ -199,7 +199,7 @@ npc_id = "Ann"
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2049926221]
 position = Vector2(-17, -31)
 sprite_frames = SubResource("SpriteFrames_q0eyh")
-animation = &"left"
+animation = &"up"
 centered = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1705595719]

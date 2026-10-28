@@ -6,9 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://ixm7au6ffttw" path="res://Assest/Buildings/house/ThoRen-house/blacksmith_table.png" id="3_tgcpo"]
 [ext_resource type="Texture2D" uid="uid://dfy47oqdl48om" path="res://Assest/Buildings/house/ThoRen-house/Tuong1.png" id="3_xggag"]
 [ext_resource type="Texture2D" uid="uid://d3fgvrv6jraep" path="res://Assest/Buildings/house/ThoRen-house/Tuong2.png" id="4_tgcpo"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_d8ekv"]
-size = Vector2(46, 31)
+[ext_resource type="Texture2D" uid="uid://qr2rt23sc2xw" path="res://Assest/Buildings/house/ThoRen-house/NoiDong.png" id="6_d8ekv"]
+[ext_resource type="Texture2D" uid="uid://b51desixnhll" path="res://Assest/Buildings/house/ThoRen-house/caibaandai.png" id="7_wupqf"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3vakn"]
 size = Vector2(31.5, 19.75)
@@ -18,6 +17,12 @@ size = Vector2(103.5, 25)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tgcpo"]
 size = Vector2(105, 22)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tgg6q"]
+size = Vector2(28, 18)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s13r0"]
+size = Vector2(16, 25)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nwjql"]
 size = Vector2(36, 3.5)
@@ -41,10 +46,6 @@ metadata/_edit_lock_ = true
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Colli/Area2D" unique_id=1363023057]
 polygon = PackedVector2Array(231, 199, 231, 55, 144, 55, 143, 96, 232, 97, 230, 151, 191, 150, 191, 141, 170, 141, 168, 151, 135, 151, 134, 56, 80, 56, 79, 72, 47, 71, 47, 57, 10, 57, 9, 204, -36, 198, -53, 18, -5, -52, 250, -40, 275, 97, 256, 218)
-
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="Colli/Area2D" unique_id=256428406]
-position = Vector2(81, 112.5)
-shape = SubResource("RectangleShape2D_d8ekv")
 
 [node name="YSort" type="Node2D" parent="." unique_id=1977226792]
 z_index = 1
@@ -93,11 +94,31 @@ z_index = 1
 position = Vector2(107, 104.5)
 shape = SubResource("RectangleShape2D_tgcpo")
 
+[node name="NoiDong" type="StaticBody2D" parent="YSort" unique_id=841346222]
+
+[node name="Sprite2D" type="Sprite2D" parent="YSort/NoiDong" unique_id=255011433]
+position = Vector2(73, 115)
+texture = ExtResource("6_d8ekv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="YSort/NoiDong" unique_id=271228157]
+position = Vector2(74, 119)
+shape = SubResource("RectangleShape2D_tgg6q")
+
+[node name="CaiBan" type="StaticBody2D" parent="YSort" unique_id=2088669095]
+
+[node name="Sprite2D" type="Sprite2D" parent="YSort/CaiBan" unique_id=1615003694]
+position = Vector2(96, 113)
+texture = ExtResource("7_wupqf")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="YSort/CaiBan" unique_id=1545640701]
+position = Vector2(96, 116.5)
+shape = SubResource("RectangleShape2D_s13r0")
+
 [node name="ToTown1" type="Area2D" parent="." unique_id=1655111825]
 position = Vector2(121, 224)
 script = ExtResource("3_3vakn")
 target_map = "res://scn/Maps/town1.tscn"
-target_spawn = "SpawnThoRenToTown1"
+target_spawn = "SpawnThoRenToTown"
 metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ToTown1" unique_id=1583728940]

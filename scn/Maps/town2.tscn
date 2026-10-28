@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://bmxicobeva3r" path="res://Assest/Maps/North Side of Mineral Town (Autumn).png" id="1_f035c"]
 [ext_resource type="Script" uid="uid://dyiqau3qg4uo2" path="res://scripts/Maps/town2.gd" id="1_pwxgg"]
 [ext_resource type="Script" uid="uid://c1evi4507st0i" path="res://scripts/Teleport.gd" id="3_a634l"]
+[ext_resource type="PackedScene" uid="uid://bcirs8hvlo21l" path="res://scn/House/Market.tscn" id="3_el1qi"]
 [ext_resource type="PackedScene" uid="uid://b8qdu173sub00" path="res://scn/Building/CotDen.tscn" id="3_qqc3y"]
 [ext_resource type="PackedScene" uid="uid://cylfj1gxh30ow" path="res://scn/House/Ann_Building.tscn" id="4_jocjv"]
 
@@ -49,6 +50,9 @@ metadata/_edit_lock_ = true
 polygon = PackedVector2Array(125, 377, 124, 471, 126, 265, 155, 237, 773, 236, 792, 256, 788, 402, 498, 388, 488, 292, 302.5814, 290.23413, 173, 289, 174, 384)
 metadata/_edit_lock_ = true
 
+[node name="Market" parent="." unique_id=1310657111 instance=ExtResource("3_el1qi")]
+position = Vector2(671, 136)
+
 [node name="YSort" type="Node2D" parent="." unique_id=1798834072]
 
 [node name="SpawnTown1" type="Marker2D" parent="YSort" unique_id=1131560593]
@@ -58,6 +62,9 @@ metadata/_edit_lock_ = true
 [node name="SpawnTown3" type="Marker2D" parent="YSort" unique_id=1321808803]
 position = Vector2(1260, 656)
 metadata/_edit_lock_ = true
+
+[node name="CuaRaMarket" type="Marker2D" parent="YSort" unique_id=1810764320]
+position = Vector2(688, 184)
 
 [node name="CotDen" parent="YSort" unique_id=1709426782 instance=ExtResource("3_qqc3y")]
 position = Vector2(314, 195)
