@@ -23,11 +23,11 @@ texture_filter = 1
 position = Vector2(74, 61)
 
 [node name="BanNgay" type="Sprite2D" parent="." unique_id=1125097140]
-position = Vector2(-2, -4)
+position = Vector2(-7, -5)
 texture = ExtResource("1_v3s8y")
 
 [node name="BanDem" type="Sprite2D" parent="." unique_id=1732656115]
-position = Vector2(-2, -4)
+position = Vector2(-2, -5)
 texture = ExtResource("2_8sq36")
 
 [node name="Light" type="PointLight2D" parent="." unique_id=419836505]
@@ -43,8 +43,8 @@ shadow_enabled = true
 texture = SubResource("GradientTexture2D_ivn0j")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1320253898]
-position = Vector2(-93, -79)
-polygon = PackedVector2Array(41, 86, 41, 35, 53, 21, 135, 22, 134, 96, 78, 98, 78, 85, 52, 84, 52, 97, 43, 94)
+position = Vector2(-94, -79)
+polygon = PackedVector2Array(30, 95, 30, 35, 41, 35, 53, 21, 135, 22, 136, 35, 149, 35, 150, 112, 138, 111, 136, 95, 78, 98, 78, 85, 51, 86, 52, 97, 41, 94, 39, 116, 22, 115, 20, 97)
 
 [node name="VaoNha" type="Area2D" parent="." unique_id=1629614681]
 script = ExtResource("3_8sq36")

@@ -52,7 +52,7 @@ centered = false
 metadata/_edit_lock_ = true
 
 [node name="ThoRen" parent="." unique_id=2102536894 instance=ExtResource("3_102ug")]
-position = Vector2(322, 82)
+position = Vector2(321, 91)
 
 [node name="Coliision" type="Node2D" parent="." unique_id=882365525]
 metadata/_edit_lock_ = true
