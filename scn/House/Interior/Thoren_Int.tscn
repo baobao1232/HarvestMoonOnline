@@ -51,7 +51,7 @@ polygon = PackedVector2Array(231, 199, 231, 55, 144, 55, 143, 96, 232, 97, 230, 
 z_index = 1
 y_sort_enabled = true
 
-[node name="NhaThoRen" type="Marker2D" parent="YSort" unique_id=1228176165]
+[node name="ThoRen_enter" type="Marker2D" parent="YSort" unique_id=1228176165]
 position = Vector2(121, 191)
 metadata/_edit_lock_ = true
 

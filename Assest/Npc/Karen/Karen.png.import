@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://8ejrygcxx47p"
-path="res://.godot/imported/Karen.png-795620df529d7b7ce835e42ff6da0706.ctex"
+uid="uid://cjibm3p61bu6n"
+path="res://.godot/imported/Karen.png-7930e7923b2b51c96589110d5ae62148.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assest/Npc/Karen.png"
-dest_files=["res://.godot/imported/Karen.png-795620df529d7b7ce835e42ff6da0706.ctex"]
+source_file="res://Assest/Npc/Karen/Karen.png"
+dest_files=["res://.godot/imported/Karen.png-7930e7923b2b51c96589110d5ae62148.ctex"]
 
 [params]
 

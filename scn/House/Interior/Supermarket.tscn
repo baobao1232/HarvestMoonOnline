@@ -20,13 +20,13 @@ position = Vector2(3, -10)
 texture = ExtResource("2_nua0a")
 
 [node name="Colli" type="CollisionShape2D" parent="." unique_id=176575483]
-position = Vector2(-7, 172)
+position = Vector2(-9, 167)
 shape = SubResource("RectangleShape2D_cke7k")
 
 [node name="YSort" type="Node2D" parent="." unique_id=176981859]
 position = Vector2(1, 125)
 
-[node name="NhaMarket" type="Marker2D" parent="YSort" unique_id=693873735]
+[node name="Supermarket_enter" type="Marker2D" parent="YSort" unique_id=693873735]
 position = Vector2(2, 162)
 
 [node name="Karen_backroom" type="Marker2D" parent="YSort" unique_id=332792696]
@@ -36,7 +36,7 @@ position = Vector2(-53, -273)
 position = Vector2(2, 328)
 script = ExtResource("3_1dr6x")
 target_map = "res://scn/Maps/town2.tscn"
-target_spawn = "CuaRaMarket"
+target_spawn = "Supermarket_exit"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RaCuaMarket" unique_id=154383331]
 shape = SubResource("RectangleShape2D_71rfr")

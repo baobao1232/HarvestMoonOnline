@@ -20,7 +20,6 @@ script = ExtResource("1_pwxgg")
 texture_filter = 1
 texture = ExtResource("1_f035c")
 centered = false
-metadata/_edit_lock_ = true
 
 [node name="Coliision" type="Node2D" parent="Map" unique_id=665510460]
 
@@ -55,15 +54,13 @@ position = Vector2(671, 136)
 
 [node name="YSort" type="Node2D" parent="." unique_id=1798834072]
 
-[node name="SpawnTown1" type="Marker2D" parent="YSort" unique_id=1131560593]
+[node name="Town1_enter" type="Marker2D" parent="YSort" unique_id=1131560593]
 position = Vector2(101, 669)
-metadata/_edit_lock_ = true
 
-[node name="SpawnTown3" type="Marker2D" parent="YSort" unique_id=1321808803]
+[node name="Town3_enter" type="Marker2D" parent="YSort" unique_id=1321808803]
 position = Vector2(1260, 656)
-metadata/_edit_lock_ = true
 
-[node name="CuaRaMarket" type="Marker2D" parent="YSort" unique_id=1810764320]
+[node name="Supermarket_exit" type="Marker2D" parent="YSort" unique_id=1810764320]
 position = Vector2(688, 184)
 
 [node name="CotDen" parent="YSort" unique_id=1709426782 instance=ExtResource("3_qqc3y")]
@@ -98,24 +95,20 @@ position = Vector2(630, 447)
 [node name="ToTown1" type="Area2D" parent="." unique_id=1691474002]
 script = ExtResource("3_a634l")
 target_map = "res://scn/Maps/town1.tscn"
-target_spawn = "SpawnTown2"
-metadata/_edit_lock_ = true
+target_spawn = "Town1_enter"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ToTown1" unique_id=124589025]
 position = Vector2(120, 712)
 shape = SubResource("RectangleShape2D_n4ogb")
-metadata/_edit_lock_ = true
 
 [node name="ToTown3" type="Area2D" parent="." unique_id=1747599473]
 script = ExtResource("3_a634l")
 target_map = "res://scn/Maps/town3.tscn"
-target_spawn = "SpawnTown2"
-metadata/_edit_lock_ = true
+target_spawn = "Town2_enter"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ToTown3" unique_id=135256222]
 position = Vector2(1261, 704)
 shape = SubResource("RectangleShape2D_a634l")
-metadata/_edit_lock_ = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1295852239]
 

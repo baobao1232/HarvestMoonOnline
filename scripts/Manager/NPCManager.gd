@@ -54,7 +54,8 @@ var _pending := 0
 
 var _map_exists_cache := {}
 var _warned := {}     # chỉ log cảnh báo map lỗi 1 lần / NPC / map
-
+var _grids := {}            # tên map -> NavGrid (map tĩnh nên chỉ quét 1 lần)
+var _grid: NavGrid = null
 
 func _ready():
 	await get_tree().process_frame
@@ -249,8 +250,18 @@ func spawn_npcs(current_map: String, parent: Node):
 
 	_map_name = current_map
 	_parent = parent
-	_nodes.clear()    # node của map cũ đã bị free theo map
+	_nodes.clear()
 	_keys.clear()
+	_grid = _grids.get(current_map)
+
+	if _grid == null:
+		var g := NavGrid.new()
+		await g.build(parent, map_rect())
+		if not is_instance_valid(parent) or _parent != parent:
+			return        # trong lúc quét đã đổi map
+		if g.is_ready:
+			_grids[current_map] = g
+			_grid = g
 
 	# dữ liệu đang tải từ server -> đợi xong mới spawn
 	if not _loaded:
@@ -266,7 +277,7 @@ func spawn_npcs(current_map: String, parent: Node):
 
 # vị trí đích: ưu tiên Marker2D tên "<Id>_<spot>" trong map (vd Karen_counter),
 # không có thì lấy pos trong JSON
-func resolve_pos(id: String, entry: Dictionary) -> Vector2:
+func _resolve_pos_raw(id: String, entry: Dictionary) -> Vector2:
 
 	if entry.has("_target"):
 		var t: Dictionary = entry["_target"]
@@ -351,13 +362,20 @@ func find_path(from_map: String, to_map: String) -> Array:
 
 
 # vị trí cửa dẫn sang map `other` trong map hiện tại
-func door_pos(other: String) -> Vector2:
+func _door_pos_raw(other: String, kind := "enter") -> Vector2:
 
 	if _parent == null or not is_instance_valid(_parent):
 		return Vector2.ZERO
 
+	# ra khỏi nhà: ưu tiên marker <Nhà>_exit
+	if kind == "exit":
+		var mk = _find_exit_marker(other)
+		if mk != null:
+			return mk
+
 	var root := _parent.get_parent()
 
+	# vào nhà / chuyển map: đứng ngay vị trí Area2D Teleport
 	for a in root.find_children("*", "Area2D", true, false):
 
 		var tm = a.get("target_map")
@@ -374,7 +392,17 @@ func door_pos(other: String) -> Vector2:
 	var r := map_rect()
 	return r.get_center() if r.size != Vector2.ZERO else Vector2.ZERO
 
+func resolve_pos(id: String, entry: Dictionary) -> Vector2:
+	return snap_nav(_resolve_pos_raw(id, entry))
 
+
+func door_pos(other: String, kind := "enter") -> Vector2:
+	return snap_nav(_door_pos_raw(other, kind))
+
+# cửa ra của nhà mà NPC vừa ở trong (prev.map = nhà)
+func exit_pos(_id: String, prev: Dictionary) -> Vector2:
+	return door_pos(norm(str(prev.get("map", ""))), "exit")
+	
 # NPC đang ở đâu / đang làm gì NGAY BÂY GIỜ trong map hiện tại?
 # trả {} = không có mặt ở map này. Có thì: entry, key, (start, speed nếu đang đi qua map)
 func make_plan(id: String, data: NPCData, ctx: Dictionary) -> Dictionary:
@@ -427,20 +455,35 @@ func make_plan(id: String, data: NPCData, ctx: Dictionary) -> Dictionary:
 	var in_leg := dt - k * LEG_MIN
 	var frac := clampf(in_leg / LEG_MIN, 0.0, 1.0)
 
-	var start: Vector2 = resolve_pos(id, prev) if k == 0 else door_pos(path[k - 1])
-	var target: Vector2 = resolve_pos(id, entry) if last else door_pos(path[k + 1])
-	var here_pos := start.lerp(target, frac)
+		# đi từ nhà ra: bắt đầu ở <Nhà>_exit; từ map trước sang: bắt đầu ở cửa vào map này
+	var start: Vector2
+	if k == 0:
+		if str(prev.get("state", "idle")) == "inside_locked":
+			start = exit_pos(id, prev)
+		else:
+			start = resolve_pos(id, prev)
+	else:
+		# path[k-1] là nhà thì ra bằng _exit, map thường thì dùng cửa Teleport
+		start = door_pos(path[k - 1], "exit")
+
+	# đi vào nhà: đích là <Nhà>_enter
+	var target: Vector2 = resolve_pos(id, entry) if last else door_pos(path[k + 1], "enter")
+	
+	var route := find_route(start, target)
+	var total := path_length(route)
+	var here_pos := point_along(route, total * frac)
 
 	var e := entry.duplicate(true)
 	e["_target"] = {"x": target.x, "y": target.y}
 	if not last:
 		e["state"] = "walk"
 
+	var remain_dist := total * (1.0 - frac)
 	var remain_real := (LEG_MIN - in_leg) * TimeManager.real_seconds_per_game_minute
 	var spd := MAX_WALK_SPEED
 	if remain_real > 0.5:
-		spd = clampf(here_pos.distance_to(target) / remain_real, data.speed, MAX_WALK_SPEED)
-
+		spd = clampf(remain_dist / remain_real, data.speed, MAX_WALK_SPEED)
+	
 	return {
 		"entry": e,
 		"key": "%s_k%d" % [data.entry_key(entry), k],
@@ -486,7 +529,7 @@ func refresh(id: String):
 		if node == null:
 			return
 		if plan.has("start"):
-			node.global_position = plan.start      # xuất hiện ở đúng điểm đã đi được
+			node.place(plan.start)
 			node.apply_entry(entry, false)         # rồi đi tiếp
 		else:
 			node.apply_entry(entry, true)
@@ -646,3 +689,45 @@ func clamp_to_map(p: Vector2, margin := 16.0) -> Vector2:
 		clampf(p.x, r.position.x + margin, r.end.x - margin),
 		clampf(p.y, r.position.y + margin, r.end.y - margin)
 	)
+func snap_nav(p: Vector2) -> Vector2:
+	return _grid.snap(p) if _grid != null and _grid.is_ready else p
+
+
+func find_route(a: Vector2, b: Vector2) -> PackedVector2Array:
+	if _grid != null and _grid.is_ready:
+		return _grid.route(a, b)
+	return PackedVector2Array([a, b])
+
+
+func path_length(p: PackedVector2Array) -> float:
+	var t := 0.0
+	for i in range(p.size() - 1):
+		t += p[i].distance_to(p[i + 1])
+	return t
+
+
+# điểm cách đầu đường `dist` pixel, đi dọc theo đường
+func point_along(p: PackedVector2Array, dist: float) -> Vector2:
+	for i in range(p.size() - 1):
+		var seg := p[i].distance_to(p[i + 1])
+		if seg > 0.0 and dist <= seg:
+			return p[i].lerp(p[i + 1], dist / seg)
+		dist -= seg
+	return p[p.size() - 1]
+# tìm Marker2D "<Nhà>_<suffix>" trong map hiện tại (suffix: "enter" / "exit")
+# marker điểm ra khỏi nhà: "<Nhà>_exit" (đặt trong map ngoài, chỗ đi được trước cửa)
+func _find_exit_marker(building: String) -> Variant:
+
+	if _parent == null or not is_instance_valid(_parent):
+		return null
+
+	var root := _parent.get_parent()
+
+	for m in root.find_children("*", "Marker2D", true, false):
+		var n := str(m.name)
+		if not n.to_lower().ends_with("_exit"):
+			continue
+		if norm(n.substr(0, n.length() - 5)) == building:
+			return clamp_to_map(m.global_position)
+
+	return null

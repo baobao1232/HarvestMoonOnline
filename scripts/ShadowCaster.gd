@@ -12,10 +12,18 @@ enum ShadowType {
 @export var trunk_path : NodePath
 @export var foot_path : NodePath
 
-@export var flatten := 0.35
-@export var length_max := 30.0
-@export var length_min := 6.0
-@export var foot_offset := 0.0
+# ----- giữ lại để scene cũ không mất giá trị -----
+@export var length_max : float = 0.0
+@export var length_min : float = 0.0
+@export var foot_offset : float = 0.0
+
+# ----- hình dạng bóng -----
+@export var flatten : float = 0.35
+@export var min_flatten : float = 0.15
+@export var skew_max : float = 1.5
+@export var skew_min : float = 0.4
+@export var alpha_low : float = 0.25
+@export var alpha_high : float = 0.45
 
 var target
 var trunk
@@ -33,71 +41,61 @@ func _ready():
 		if found is Sprite2D or found is AnimatedSprite2D:
 			target = found
 
-	modulate = Color(0, 0, 0, 0.5)
+	modulate = Color(0, 0, 0, 0.4)
 	z_index = -1
+	centered = true
 
-	centered = true   # 🔥 giữ true
 
-
-func _process(delta):
-	if target == null:
+func _process(_delta):
+	if target == null or not is_instance_valid(target):
 		return
 
-	var dir = ShadowManager.sun_dir
-	var h = clamp(ShadowManager.sun_height, 0.0, 1.0)
-	var len = lerp(length_max, length_min, h)
+	var dir: Vector2 = ShadowManager.sun_dir
+	var h: float = clampf(float(ShadowManager.sun_height), 0.0, 1.0)
 
-	# ===============================
-	# 🎨 TEXTURE
-	# ===============================
+	# ===== TEXTURE =====
 	if target is AnimatedSprite2D:
+		if target.sprite_frames == null:
+			return
 		var tex = target.sprite_frames.get_frame_texture(target.animation, target.frame)
 		if tex == null:
 			return
 		texture = tex
 		flip_h = target.flip_h
-
 	elif target is Sprite2D:
 		if target.texture == null:
 			return
 		texture = target.texture
+		flip_h = target.flip_h
 	else:
 		return
 
-	# ===============================
-	# 🔥 BASE (FOOT)
-	# ===============================
-	var base_pos = get_base_position()
+	# pivot ở đáy texture: gốc node = chân sprite
+	offset = Vector2(0, -texture.get_height() * 0.5)
 
-	# ===============================
-	# 🔥 OFFSET PIVOT CHUẨN
-	# ===============================
-	var tex_h = texture.get_height()
-	offset = Vector2(0, -tex_h * 0.5)   # 🔥 CHỐT
+	# ===== VỊ TRÍ GỐC (chân) =====
+	var push: float = lerpf(length_max, length_min, h)
+	var origin: Vector2 = get_base_position() + dir * push
+	origin.y += foot_offset
 
-	# ===============================
-	# 📍 POSITION
-	# ===============================
-	var shadow_pos = base_pos + dir * len
-	shadow_pos.y += foot_offset
+	# ===== HÌNH DẠNG: lật dọc + nghiêng theo nắng =====
+	var sx: float = dir.x * lerpf(skew_max, skew_min, h)
+	var sy: float = lerpf(min_flatten, flatten, absf(dir.y)) * lerpf(1.0, 0.6, h)
+	var w: float = get_width_scale()
 
-	global_position = shadow_pos
+	global_transform = Transform2D(
+		Vector2(w, 0.0),
+		Vector2(-sx, -sy),
+		origin
+	)
 
-	# ===============================
-	# 📐 SHAPE
-	# ===============================
-	scale = get_shadow_scale()
-
-	# ===============================
-	# 🎭 FADE
-	# ===============================
-	modulate.a = lerp(0.6, 0.2, h)
-
+	# ===== ĐỘ ĐẬM =====
+	modulate.a = lerpf(alpha_low, alpha_high, h)
 	visible = h > 0.05
 
 
 # ===============================
-# 🎯 BASE POSITION
+# BASE POSITION
 # ===============================
 func get_base_position() -> Vector2:
 
@@ -106,12 +104,9 @@ func get_base_position() -> Vector2:
 		ShadowType.PLAYER:
 			if foot:
 				return foot.global_position
-
-			if target:
-				var parent = target.get_parent()
-				if parent:
-					return parent.global_position
-
+			var parent = target.get_parent()
+			if parent:
+				return parent.global_position
 			return target.global_position
 
 		ShadowType.TREE:
@@ -126,19 +121,16 @@ func get_base_position() -> Vector2:
 
 
 # ===============================
-# 📐 SCALE
+# BỀ NGANG
 # ===============================
-func get_shadow_scale() -> Vector2:
+func get_width_scale() -> float:
 
 	match shadow_type:
-
 		ShadowType.PLAYER:
-			return Vector2(0.7, flatten)
-
+			return 0.85
 		ShadowType.TREE:
-			return Vector2(1.0, flatten + 0.15)
-
+			return 1.0
 		ShadowType.BUILDING:
-			return Vector2(1.3, flatten + 0.25)
+			return 1.2
 
-	return Vector2(0.7, flatten)
+	return 1.0

@@ -32,19 +32,19 @@ texture = ExtResource("3_oiavt")
 position = Vector2(0, -1)
 shape = SubResource("RectangleShape2D_1y0x0")
 
-[node name="ShadowThaan" type="Sprite2D" parent="." unique_id=2086386966]
-texture_filter = 1
-position = Vector2(-0.99999976, 1)
-scale = Vector2(1.1796875, 1)
-script = ExtResource("5_rgs26")
-target_path = NodePath("../Thancay")
-trunk_path = NodePath("../Thancay")
-length_max = -2.0
-
 [node name="ShadowLa" type="Sprite2D" parent="." unique_id=2055138024]
 script = ExtResource("5_rgs26")
 shadow_type = 1
 target_path = NodePath("../Lacay")
 trunk_path = NodePath("../Thancay")
 length_max = -2.0
-foot_offset = -15.0
+foot_offset = 3.4
+
+[node name="ShadowThan" type="Sprite2D" parent="." unique_id=2086386966]
+texture_filter = 1
+position = Vector2(2.3841858e-07, 0)
+scale = Vector2(1.1796875, 1)
+script = ExtResource("5_rgs26")
+target_path = NodePath("../Thancay")
+trunk_path = NodePath("../Thancay")
+length_max = -2.0

@@ -23,10 +23,10 @@ metadata/_edit_lock_ = true
 [node name="YSort" type="Node2D" parent="." unique_id=1823480038]
 metadata/_edit_lock_ = true
 
-[node name="SpawnForest1" type="Marker2D" parent="YSort" unique_id=804276416]
+[node name="Forest_enter" type="Marker2D" parent="YSort" unique_id=804276416]
 position = Vector2(1163, 501)
 
-[node name="SpawnForest2" type="Marker2D" parent="YSort" unique_id=1812981478]
+[node name="Forest2_enter" type="Marker2D" parent="YSort" unique_id=1812981478]
 position = Vector2(1135, 752)
 
 [node name="ToForest1" type="Area2D" parent="." unique_id=671954663]

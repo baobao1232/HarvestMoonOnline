@@ -19,14 +19,14 @@ metadata/_edit_lock_ = true
 
 [node name="YSort" type="Node2D" parent="." unique_id=422135750]
 
-[node name="SpawnForest" type="Marker2D" parent="YSort" unique_id=364302764]
+[node name="ThoMoc_enter" type="Marker2D" parent="YSort" unique_id=364302764]
 position = Vector2(120, 176)
 
 [node name="ToForest" type="Area2D" parent="." unique_id=1227966206]
 visible = false
 script = ExtResource("2_l0jl5")
 target_map = "res://scn/Maps/forest.tscn"
-target_spawn = "SpawnNhaThoMoc"
+target_spawn = "ThoMoc_exit"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ToForest" unique_id=1167779896]
 position = Vector2(120, 225)

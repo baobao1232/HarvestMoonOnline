@@ -56,16 +56,15 @@ metadata/_edit_lock_ = true
 
 [node name="YSort" type="Node2D" parent="." unique_id=76723497]
 
-[node name="SpawnTown3" type="Marker2D" parent="YSort" unique_id=1463406269]
+[node name="Town3_enter" type="Marker2D" parent="YSort" unique_id=1463406269]
 position = Vector2(41, 282)
-metadata/_edit_lock_ = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1882754702]
 
 [node name="ToTown3" type="Area2D" parent="." unique_id=1046791303]
 script = ExtResource("3_wbx4h")
 target_map = "res://scn/Maps/town3.tscn"
-target_spawn = "SpawnBeach"
+target_spawn = "Beach_exit"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ToTown3" unique_id=450090904]
 position = Vector2(-1.5, 280)

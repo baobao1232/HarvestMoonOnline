@@ -127,25 +127,20 @@ polygon = PackedVector2Array(1250, 177, 1088, 179, 1088, 193, 1103, 192, 1107, 2
 metadata/_edit_lock_ = true
 
 [node name="YSort" type="Node2D" parent="." unique_id=666087279]
-metadata/_edit_lock_ = true
 
-[node name="SpawnFarm" type="Marker2D" parent="YSort" unique_id=103699160]
+[node name="Farm_exit" type="Marker2D" parent="YSort" unique_id=103699160]
 position = Vector2(103, 436)
-metadata/_edit_lock_ = true
 
-[node name="SpawnTown2" type="Marker2D" parent="YSort" unique_id=1442645363]
+[node name="Town2_exit" type="Marker2D" parent="YSort" unique_id=1442645363]
 position = Vector2(105, 45)
-metadata/_edit_lock_ = true
 
-[node name="SpawnTown3" type="Marker2D" parent="YSort" unique_id=1685215319]
+[node name="Town3_exit" type="Marker2D" parent="YSort" unique_id=1685215319]
 position = Vector2(1273, 38)
-metadata/_edit_lock_ = true
 
-[node name="SpawnForest" type="Marker2D" parent="YSort" unique_id=1796566506]
+[node name="Forest_exit" type="Marker2D" parent="YSort" unique_id=1796566506]
 position = Vector2(811, 471)
-metadata/_edit_lock_ = true
 
-[node name="SpawnThoRenToTown" type="Marker2D" parent="YSort" unique_id=1535191463]
+[node name="ThoRen_exit" type="Marker2D" parent="YSort" unique_id=1535191463]
 position = Vector2(293, 116)
 
 [node name="ToTown2" type="Area2D" parent="." unique_id=754787854]
@@ -162,7 +157,7 @@ metadata/_edit_lock_ = true
 [node name="ToTown3" type="Area2D" parent="." unique_id=505030805]
 script = ExtResource("3_asqsy")
 target_map = "res://scn/Maps/town3.tscn"
-target_spawn = "SpawnTown1"
+target_spawn = "Town1_enter"
 metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ToTown3" unique_id=1036309427]

@@ -51,7 +51,7 @@ polygon = PackedVector2Array(41, 86, 41, 35, 53, 21, 135, 22, 134, 96, 78, 98, 7
 position = Vector2(16, 23)
 script = ExtResource("3_ibopk")
 target_map = "res://scn/House/Interior/Supermarket.tscn"
-target_spawn = "NhaMarket"
+target_spawn = "Supermarket_enter"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="VaoNha" unique_id=80866735]
 position = Vector2(0, -1)

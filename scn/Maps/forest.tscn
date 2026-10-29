@@ -94,19 +94,19 @@ shape = SubResource("SegmentShape2D_j8u7v")
 y_sort_enabled = true
 position = Vector2(-399, -202)
 
-[node name="SpawnFarm" type="Marker2D" parent="YSort" unique_id=1096127737]
+[node name="Farm_enter" type="Marker2D" parent="YSort" unique_id=1096127737]
 position = Vector2(166, 43)
 
-[node name="SpawnTown1" type="Marker2D" parent="YSort" unique_id=1557676492]
+[node name="Town1_enter" type="Marker2D" parent="YSort" unique_id=1557676492]
 position = Vector2(834, 35)
 
-[node name="SpawnForest1" type="Marker2D" parent="YSort" unique_id=795597748]
+[node name="HotSpring_exit" type="Marker2D" parent="YSort" unique_id=795597748]
 position = Vector2(34, 278)
 
-[node name="SpawnForest2" type="Marker2D" parent="YSort" unique_id=1666181215]
+[node name="LakeMine_exit" type="Marker2D" parent="YSort" unique_id=1666181215]
 position = Vector2(36, 442)
 
-[node name="SpawnNhaThoMoc" type="Marker2D" parent="YSort" unique_id=290711907]
+[node name="ThoMoc_exit" type="Marker2D" parent="YSort" unique_id=290711907]
 position = Vector2(561, 250)
 
 [node name="Sign" parent="YSort" unique_id=405161927 instance=ExtResource("7_jenhh")]
@@ -271,23 +271,23 @@ position = Vector2(170, -1)
 shape = SubResource("RectangleShape2D_rsmsc")
 metadata/_edit_lock_ = true
 
-[node name="ToForest1" type="Area2D" parent="." unique_id=514682043]
+[node name="ToHotSpring" type="Area2D" parent="." unique_id=514682043]
 position = Vector2(-399, 47)
 script = ExtResource("2_axsn7")
 target_map = "res://scn/Maps/MotherHill.tscn"
-target_spawn = "SpawnForest1"
+target_spawn = "Forest_enter"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ToForest1" unique_id=321234553]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ToHotSpring" unique_id=321234553]
 shape = SubResource("RectangleShape2D_xt8nm")
 metadata/_edit_lock_ = true
 
-[node name="ToForest2" type="Area2D" parent="." unique_id=1618878718]
+[node name="ToLakeMine" type="Area2D" parent="." unique_id=1618878718]
 position = Vector2(-398, 246)
 script = ExtResource("2_axsn7")
 target_map = "res://scn/Maps/MotherHill.tscn"
-target_spawn = "SpawnForest2"
+target_spawn = "Forest2_enter"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ToForest2" unique_id=2072089660]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ToLakeMine" unique_id=2072089660]
 shape = SubResource("RectangleShape2D_b1t6b")
 metadata/_edit_lock_ = true
 
@@ -305,6 +305,6 @@ shape = SubResource("RectangleShape2D_lpktr")
 
 [connection signal="body_entered" from="ToTown1" to="ToTown1" method="_on_body_entered"]
 [connection signal="body_entered" from="ToFarm" to="ToFarm" method="_on_body_entered"]
-[connection signal="body_entered" from="ToForest1" to="ToForest1" method="_on_body_entered"]
-[connection signal="body_entered" from="ToForest2" to="ToForest2" method="_on_body_entered"]
+[connection signal="body_entered" from="ToHotSpring" to="ToHotSpring" method="_on_body_entered"]
+[connection signal="body_entered" from="ToLakeMine" to="ToLakeMine" method="_on_body_entered"]
 [connection signal="body_entered" from="ToThoMoc" to="ToThoMoc" method="_on_body_entered"]
