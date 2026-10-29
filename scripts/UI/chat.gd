@@ -240,8 +240,11 @@ func _command(line: String):
 				_sys("/tp  - xem danh sách map / spawn")
 				_sys("/tp <map> [spawn]  - sang map khác")
 				_sys("/tp <spawn>  - tới marker trong map hiện tại")
+				_sys("/tele <npc>  - dịch chuyển tới chỗ NPC")
 		"stuck":
 			_cmd_stuck()
+		"tele":
+			_cmd_tele(parts)
 		"tp":
 			_cmd_tp(parts)
 		"items":
@@ -249,6 +252,15 @@ func _command(line: String):
 				_err("Bạn không có quyền dùng lệnh này")
 				return
 			_sys("Items: " + ", ".join(ItemDb.items.keys()))
+		"npc":
+			if not Server.is_admin:
+				_err("Bạn không có quyền dùng lệnh này")
+				return
+			if parts.size() >= 2:
+				_sys(NpcManager.where(parts[1].capitalize()))
+			else:
+				for id in NpcManager.NPC_IDS:
+					_sys(NpcManager.where(id))
 		"clear":
 			lines.clear()
 			log_box.text = ""
@@ -403,3 +415,83 @@ func _cmd_tp(parts: PackedStringArray):
 
 	_place_player(marker)
 	_sys("Tele tới " + String(marker.name), "#9dff9d")
+func _cmd_tele(parts: PackedStringArray):
+
+	if not Server.is_admin:
+		_err("Bạn không có quyền dùng lệnh này")
+		return
+
+	if parts.size() < 2:
+		_err("Dùng: /tele <npc>   (NPC: " + ", ".join(NpcManager.NPC_IDS) + ")")
+		return
+
+	# tìm id không phân biệt hoa thường
+	var id := ""
+	for n in NpcManager.NPC_IDS:
+		if n.to_lower() == parts[1].to_lower():
+			id = n
+			break
+
+	if id == "":
+		_err("Không có NPC: " + parts[1])
+		return
+
+	var data = NpcManager.get_data(id)
+	if data == null:
+		_err("NPC chưa có dữ liệu: " + id)
+		return
+
+	var player = SceneManager.player
+	if player == null or not is_instance_valid(player):
+		_err("Chưa có nhân vật")
+		return
+
+	var ctx: Dictionary = NpcManager.make_context()
+	var entry: Dictionary = NpcManager.fix_entry(id, data.get_current_entry(ctx))
+
+	if entry.is_empty():
+		_err(id + " không có lịch lúc này")
+		return
+
+	var target_map := str(entry.get("map", ""))
+
+	# ===== CÙNG MAP =====
+	if target_map == str(ctx.map):
+		var node = NpcManager.get_npc_node(id)
+		var pos: Vector2 = node.global_position if node != null else NpcManager.resolve_pos(id, entry)
+		_tele_to(player, pos)
+		_sys("Đã tới chỗ %s" % id, "#9dff9d")
+		return
+
+	# ===== KHÁC MAP =====
+	var path := _map_path(target_map)
+
+	_sys("%s đang ở %s, đang chuyển map..." % [id, target_map])
+	Server.request_change_map(path, "")   # spawn rỗng -> Client dùng player_data.pos
+
+	# đợi map load + NPC spawn rồi dịch sát NPC
+	await get_tree().create_timer(1.0).timeout
+
+	var p = SceneManager.player
+	var npc = NpcManager.get_npc_node(id)
+	if p != null and is_instance_valid(p) and npc != null:
+		_tele_to(p, npc.global_position)
+		_sys("Đã tới chỗ %s" % id, "#9dff9d")
+	else:
+		_err("Đã chuyển map nhưng chưa thấy %s (đợi NPC spawn rồi gõ lại /tele)" % id)
+
+func _tele_to(player, pos: Vector2):
+	player.global_position = pos + Vector2(20, 0)   # đứng cạnh, không đè lên NPC
+	player.velocity = Vector2.ZERO
+	if player.has_method("snap_camera"):
+		player.snap_camera()
+
+
+# Không có scene map -> mặc định Forest
+func _map_path(map_name: String) -> String:
+	for dir in ["res://scn/Maps/", "res://scn/House/Interior/"]:
+		for n in [map_name, map_name.to_lower()]:
+			var p := "%s%s.tscn" % [dir, n]
+			if ResourceLoader.exists(p):
+				return p
+	return "res://scn/Maps/forest.tscn"

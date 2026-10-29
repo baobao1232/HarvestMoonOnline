@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://bmxicobeva3r" path="res://Assest/Maps/North Side of Mineral Town (Autumn).png" id="1_f035c"]
 [ext_resource type="Script" uid="uid://dyiqau3qg4uo2" path="res://scripts/Maps/town2.gd" id="1_pwxgg"]
 [ext_resource type="Script" uid="uid://c1evi4507st0i" path="res://scripts/Teleport.gd" id="3_a634l"]
-[ext_resource type="PackedScene" uid="uid://bcirs8hvlo21l" path="res://scn/House/Market.tscn" id="3_el1qi"]
+[ext_resource type="PackedScene" uid="uid://bcirs8hvlo21l" path="res://scn/House/Market_Building.tscn" id="3_el1qi"]
 [ext_resource type="PackedScene" uid="uid://b8qdu173sub00" path="res://scn/Building/CotDen.tscn" id="3_qqc3y"]
 [ext_resource type="PackedScene" uid="uid://cylfj1gxh30ow" path="res://scn/House/Ann_Building.tscn" id="4_jocjv"]
 

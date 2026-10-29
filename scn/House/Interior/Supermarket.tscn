@@ -1,37 +1,40 @@
 [gd_scene format=3 uid="uid://b1vuij24u0pk2"]
 
-[ext_resource type="Script" uid="uid://c458en3u0tb35" path="res://scripts/Maps/Houses/market.gd" id="1_cke7k"]
-[ext_resource type="Texture2D" uid="uid://c6qh6bj28fy2a" path="res://Assest/Buildings/house/Market/Ann-IJ1.png" id="1_m0wwg"]
-[ext_resource type="Script" uid="uid://c1evi4507st0i" path="res://scripts/Teleport.gd" id="2_cke7k"]
+[ext_resource type="Script" uid="uid://c458en3u0tb35" path="res://scripts/Maps/Houses/market.gd" id="1_nua0a"]
+[ext_resource type="Texture2D" uid="uid://dj1qjhejs56nv" path="res://Assest/Buildings/house/Ann-House/Supermarket.png" id="2_nua0a"]
+[ext_resource type="Script" uid="uid://c1evi4507st0i" path="res://scripts/Teleport.gd" id="3_1dr6x"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cke7k"]
 size = Vector2(71, 76)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_71rfr"]
-size = Vector2(36, 3.5)
+size = Vector2(36, 10.75)
 
-[node name="MarketInt" type="StaticBody2D" unique_id=214873957]
+[node name="Supermarket" type="StaticBody2D" unique_id=214873957]
 texture_filter = 1
-position = Vector2(141, 178)
-script = ExtResource("1_cke7k")
+position = Vector2(141, 286)
+script = ExtResource("1_nua0a")
 
 [node name="Map" type="Sprite2D" parent="." unique_id=2014111370]
 position = Vector2(3, -10)
-texture = ExtResource("1_m0wwg")
+texture = ExtResource("2_nua0a")
 
 [node name="Colli" type="CollisionShape2D" parent="." unique_id=176575483]
-position = Vector2(-2, 11)
+position = Vector2(-7, 172)
 shape = SubResource("RectangleShape2D_cke7k")
 
 [node name="YSort" type="Node2D" parent="." unique_id=176981859]
 position = Vector2(1, 125)
 
 [node name="NhaMarket" type="Marker2D" parent="YSort" unique_id=693873735]
-position = Vector2(0, -3)
+position = Vector2(2, 162)
+
+[node name="Karen_backroom" type="Marker2D" parent="YSort" unique_id=332792696]
+position = Vector2(-53, -273)
 
 [node name="RaCuaMarket" type="Area2D" parent="." unique_id=928767311]
-position = Vector2(1, 156)
-script = ExtResource("2_cke7k")
+position = Vector2(2, 328)
+script = ExtResource("3_1dr6x")
 target_map = "res://scn/Maps/town2.tscn"
 target_spawn = "CuaRaMarket"
 

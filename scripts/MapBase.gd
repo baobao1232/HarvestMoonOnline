@@ -24,6 +24,19 @@ func _ready():
 
 	_setup_camera()
 
+	_spawn_npcs()
+
+
+# ===============================
+# NPC (map nào cũng tự spawn, trừ map trong nhà)
+# ===============================
+func _spawn_npcs():
+
+	if is_indoor or ysort == null:
+		return
+
+	NpcManager.spawn_npcs(name, ysort)
+
 
 # ===============================
 # PLAYER ATTACH (SAFE)
@@ -41,6 +54,7 @@ func _attach_player():
 			player.get_parent().remove_child(player)
 
 		ysort.add_child(player)
+
 
 # ===============================
 # CAMERA
@@ -68,36 +82,30 @@ func _setup_camera():
 	cam.limit_right = size.x
 	cam.limit_bottom = size.y
 
+
 # ===============================
 # AUTO SAVE (ANTI SPAM)
 # ===============================
 func _process(delta):
 
 	var player = get_tree().get_first_node_in_group("local_player")
-	#Dbg.p("1")
 
 	if player == null:
 		Dbg.p("❌ NO LOCAL PLAYER (SAVE)")
 		return
-	#Dbg.p("2")
 
 	if SaveManager.player == null:
 		return
-	#Dbg.p("3")
-	
 
 	save_delay -= delta
-	#Dbg.p("DELAY:", save_delay)
 
 	if save_delay > 0:
 		return
-	#Dbg.p("4")
-	#Dbg.p("CUR:", player.global_position, "| LAST:", last_saved_pos)
+
 	var current_pos = player.global_position.round()
 
 	if current_pos == last_saved_pos:
 		return
-	#Dbg.p("5")
 
 	last_saved_pos = current_pos
 	save_delay = 1.0

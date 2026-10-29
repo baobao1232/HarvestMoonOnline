@@ -195,6 +195,7 @@ texture_filter = 1
 position = Vector2(0, 5)
 script = ExtResource("1_jtrui")
 npc_id = "Ann"
+speed = null
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2049926221]
 position = Vector2(-17, -31)

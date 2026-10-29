@@ -1,198 +1,147 @@
 extends CharacterBody2D
+# Npc.gd - node NPC trong map. Mọi dữ liệu (lịch, thoại, quà...) lấy từ NPCData.
+# NpcManager spawn node này rồi gọi apply_entry() mỗi khi lịch đổi.
+# Scene cần: AnimatedSprite2D (down/left/right/up, idle_*, tuỳ chọn sit_*),
+# Label tên "Name" (tuỳ chọn). Đặt npc_id = tên file, ví dụ "Karen".
+
+const ARRIVE_DIST := 3.0
+const STUCK_TIME := 1.5
 
 @export var npc_id : String
-@export var speed := 40
+@export var speed := 40.0       # bị ghi đè bằng movement.speed trong JSON
 
-
-# ===== schedule =====
-var schedule : Array = []
-var target_pos : Vector2
-var target_map : String
+var data : NPCData = null
+var entry := {}                 # mốc lịch đang áp dụng
+var state := "idle"             # idle / sit / walk / inside_open
+var target_pos := Vector2.ZERO
 var moving := false
-
-
-# ===== dialog data =====
-var dialog_data = {}
-var portraits = {}
-
-
 var last_dir := "down"
+var in_dialog := false
 
-@onready var sprite = $AnimatedSprite2D
-
-# ===== breathing =====
+var _stuck := 0.0
 var breath_mat : ShaderMaterial
 
+@onready var sprite = $AnimatedSprite2D
+@onready var name_label = get_node_or_null("Name")
 
 
 func _ready():
 
-	Dbg.p("NPC parent:", get_parent())
+	data = NpcManager.get_data(npc_id)
 
-	load_npc_data()
-
-	Dbg.p("Current map:", get_tree().current_scene.name)
-
-	check_schedule(TimeManager.hour, TimeManager.minute)
-
-	TimeManager.time_changed.connect(check_schedule)
+	if data != null:
+		speed = data.speed
+		if name_label:
+			name_label.text = data.npc_name
 
 	setup_breathing()
-
+	play_idle()
 
 
 # ===============================
-# BREATHING SETUP
+# BREATHING
 # ===============================
-
 func setup_breathing():
-
 	breath_mat = ShaderMaterial.new()
 	breath_mat.shader = load("res://shader/breathing.gdshader")
 	sprite.material = breath_mat
 
 
 func set_breathing(active: bool):
-
 	if breath_mat == null:
 		return
-
 	breath_mat.set_shader_parameter("intensity", 0.015 if active else 0.0)
 
 
-
 # ===============================
-# LOAD NPC DATA
+# NHẬN LỊCH TỪ NpcManager
 # ===============================
+func apply_entry(new_entry: Dictionary, snap := false):
 
-func load_npc_data():
+	entry = new_entry
+	state = str(entry.get("state", "idle"))
+	target_pos = NpcManager.resolve_pos(npc_id, entry)
 
-	var path = "res://scripts/NPCS/%s/%s.gd" % [npc_id, npc_id]
-
-	if not ResourceLoader.exists(path):
-		Dbg.p("NPC data missing:", path)
-		return
-
-	var script = load(path)
-	var data = script.new()
-
-	if "schedule" in data:
-		schedule = data.schedule
-
-	if "dialog" in data:
-		dialog_data = data.dialog
-
-	if "portraits" in data:
-		portraits = data.portraits
-
-	Dbg.p("Loaded schedule:", schedule)
+	if snap:
+		global_position = target_pos
+		_arrive()
+	else:
+		moving = global_position.distance_to(target_pos) > ARRIVE_DIST
+		_stuck = 0.0
 
 
-
-# ===============================
-# SCHEDULE CHECK
-# ===============================
-
-func check_schedule(hour, minute):
-
-	if schedule.is_empty():
-		return
-
-	var game_minutes = hour * 60 + minute
+func _arrive():
 	moving = false
-
-	for s in schedule:
-
-		var target_minutes = s.hour * 60
-
-		if game_minutes >= target_minutes:
-
-			target_map = s.map
-			target_pos = s.pos
-			moving = true
-
+	velocity = Vector2.ZERO
+	_stuck = 0.0
 
 
 # ===============================
 # MOVEMENT
 # ===============================
-
 func _physics_process(delta):
 
-	# ===== dialog đang mở =====
-	if DialogManager.dialog and DialogManager.dialog.visible:
-		velocity = Vector2.ZERO
-		set_breathing(false)
-		play_idle()
-		return
+	# đang nói chuyện -> đứng yên
+	if in_dialog:
+		if DialogManager.is_showing:
+			velocity = Vector2.ZERO
+			set_breathing(false)
+			play_idle()
+			return
+		in_dialog = false
 
-
-	# ===== không di chuyển =====
 	if not moving:
 		set_breathing(true)
 		play_idle()
 		return
 
+	var to_target := target_pos - global_position
 
-	var dir = target_pos - global_position
-
-	# ===== tới nơi =====
-	if dir.length() < 5:
-		moving = false
-		velocity = Vector2.ZERO
-		set_breathing(true)
-		play_idle()
+	if to_target.length() <= ARRIVE_DIST:
+		_arrive()
 		return
 
-
-	# ===== đang di chuyển =====
-	velocity = dir.normalized() * speed
-
+	velocity = to_target.normalized() * speed
 	set_breathing(false)
-	update_animation(dir)
-
+	update_animation(to_target)
 	move_and_slide()
+	global_position = NpcManager.clamp_to_map(global_position, 8.0)
 
+	# kẹt tường quá lâu -> dịch thẳng tới đích
+	if get_real_velocity().length() < speed * 0.2:
+		_stuck += delta
+		if _stuck >= STUCK_TIME:
+			global_position = target_pos
+			_arrive()
+	else:
+		_stuck = 0.0
 
 
 # ===============================
 # ANIMATION
 # ===============================
-
 func update_animation(dir: Vector2):
 
 	if abs(dir.x) > abs(dir.y):
-
-		if dir.x > 0:
-			sprite.play("right")
-			last_dir = "right"
-		else:
-			sprite.play("left")
-			last_dir = "left"
-
+		last_dir = "right" if dir.x > 0 else "left"
 	else:
+		last_dir = "down" if dir.y > 0 else "up"
 
-		if dir.y > 0:
-			sprite.play("down")
-			last_dir = "down"
-		else:
-			sprite.play("up")
-			last_dir = "up"
-
+	if sprite.animation != last_dir:
+		sprite.play(last_dir)
 
 
 func play_idle():
 
-	var anim = "idle_" + last_dir
+	var anim := "idle_" + last_dir
 
-	if sprite.animation != anim:
+	# state "sit": có anim sit_<hướng> thì ngồi, không thì idle
+	if state == "sit" and sprite.sprite_frames.has_animation("sit_" + last_dir):
+		anim = "sit_" + last_dir
+
+	if sprite.animation != anim and sprite.sprite_frames.has_animation(anim):
 		sprite.play(anim)
 
-
-
-# ===============================
-# FACE PLAYER
-# ===============================
 
 func face_player():
 
@@ -203,102 +152,63 @@ func face_player():
 	var dir = player.global_position - global_position
 
 	if abs(dir.x) > abs(dir.y):
-
-		if dir.x > 0:
-			last_dir = "right"
-		else:
-			last_dir = "left"
-
+		last_dir = "right" if dir.x > 0 else "left"
 	else:
-
-		if dir.y > 0:
-			last_dir = "down"
-		else:
-			last_dir = "up"
+		last_dir = "down" if dir.y > 0 else "up"
 
 	play_idle()
 
 
-
 # ===============================
-# INTERACT
+# INTERACT (player bấm A)
 # ===============================
-
 func interact():
 
-	Dbg.p("Talk to NPC:", npc_id)
+	if data == null:
+		return
 
 	face_player()
 
-	if dialog_data.is_empty():
+	var ctx := NpcManager.make_context()
+
+	# 1) heart event đang chờ
+	var ev := data.find_ready_event(ctx)
+
+	if not ev.is_empty():
+		_show(ev.get("lines", []), true)
+		data.register_talk(ctx)
+		NpcManager.start_event(npc_id, ev)
 		return
 
-	var lines = choose_dialog()
+	# 2) thoại thường (intro / birthday / heart / mưa / nơi chốn / tối / mùa / normal)
+	var lines := data.pick_dialog(ctx, entry)
+	data.register_talk(ctx)
+	_show(lines)
 
-	if lines.is_empty():
+
+func _show(lines: Array, with_speaker := false):
+
+	var d := data.to_dialog(lines, with_speaker)
+
+	if d.texts.is_empty():
 		return
 
-	show_dialog_sequence(lines)
-
-
-
-# ===============================
-# CHOOSE DIALOG
-# ===============================
-
-func choose_dialog():
-
-	var hour = TimeManager.hour
-	var season_name = TimeManager.SEASONS[TimeManager.season].to_lower()
-
-		# ===== weather =====
-	if WeatherManager.is_raining() and "rain" in dialog_data:
-		return dialog_data["rain"]
-
-	# ===== evening =====
-	if hour >= 18 and "evening" in dialog_data:
-		return dialog_data["evening"]
-
-	# ===== season =====
-	if season_name in dialog_data:
-		return dialog_data[season_name]
-
-	# ===== intro =====
-	if hour < 10 and "intro" in dialog_data:
-		return dialog_data["intro"]
-
-	# ===== normal =====
-	if "normal" in dialog_data:
-		return dialog_data["normal"]
-
-	return []
-
+	in_dialog = true
+	DialogManager.show(d.texts, d.portraits)
 
 
 # ===============================
-# SHOW DIALOG
+# TẶNG QUÀ
+# gọi từ nơi xử lý item: npc.give_gift(item.id)
 # ===============================
+func give_gift(item_id: String) -> bool:
 
-func show_dialog_sequence(lines):
+	if data == null:
+		return false
 
-	var text_lines = []
-	var portrait_lines = []
+	face_player()
 
-	for l in lines:
+	var r := data.give_gift(item_id, NpcManager.make_context())
+	_show(r.lines)
 
-		if "text" in l:
-			text_lines.append(l["text"])
-		else:
-			continue
-
-		var face = ""
-
-		if "face" in l:
-			face = l["face"]
-
-		if face in portraits:
-			portrait_lines.append(portraits[face])
-		else:
-			portrait_lines.append(null)
-
-	DialogManager.show(text_lines, portrait_lines)
+	return r.ok
