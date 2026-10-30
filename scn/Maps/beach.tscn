@@ -56,7 +56,7 @@ metadata/_edit_lock_ = true
 
 [node name="YSort" type="Node2D" parent="." unique_id=76723497]
 
-[node name="Town3_enter" type="Marker2D" parent="YSort" unique_id=1463406269]
+[node name="Beach_enter" type="Marker2D" parent="YSort" unique_id=1463406269]
 position = Vector2(41, 282)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1882754702]

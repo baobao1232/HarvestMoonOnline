@@ -18,8 +18,8 @@ var icon = null
 @onready var anim = $AnimatedSprite2D
 @onready var icon_anchor = $IconAnchor
 
-
 func _ready():
+	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 	randomize()
 
 	if not dev_mode:

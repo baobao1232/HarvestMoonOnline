@@ -57,6 +57,8 @@ var breath_mat : ShaderMaterial
 
 func _ready():
 
+	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
+
 	data = NpcManager.get_data(npc_id)
 
 	if data != null:

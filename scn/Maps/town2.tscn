@@ -95,7 +95,7 @@ position = Vector2(630, 447)
 [node name="ToTown1" type="Area2D" parent="." unique_id=1691474002]
 script = ExtResource("3_a634l")
 target_map = "res://scn/Maps/town1.tscn"
-target_spawn = "Town1_enter"
+target_spawn = "Town2_exit"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ToTown1" unique_id=124589025]
 position = Vector2(120, 712)

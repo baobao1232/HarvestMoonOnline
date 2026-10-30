@@ -881,5 +881,4 @@ offset_bottom = -14.0
 [node name="Shadow" type="Sprite2D" parent="." unique_id=1113478649]
 script = ExtResource("7_jk4fu")
 target_path = NodePath("../AnimatedSprite2D")
-length_max = 0.0
 length_min = 1.0

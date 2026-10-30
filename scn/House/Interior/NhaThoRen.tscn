@@ -1,0 +1,232 @@
+[gd_scene format=3 uid="uid://cooir0sxx350m"]
+
+[ext_resource type="Script" uid="uid://chlxlqsml0akh" path="res://scripts/Maps/Houses/thoren.gd" id="1_plov7"]
+[ext_resource type="Texture2D" uid="uid://c7pxmphx4h0s1" path="res://Assest/Buildings/house/ThoRen-house/Blacksmith.png" id="2_rimqr"]
+[ext_resource type="Texture2D" uid="uid://ixm7au6ffttw" path="res://Assest/Buildings/house/ThoRen-house/blacksmith_table.png" id="3_mauc2"]
+[ext_resource type="Texture2D" uid="uid://7btnaiqckjjd" path="res://Assest/Buildings/house/ThoRen-house/canhcua.png" id="4_hskoa"]
+[ext_resource type="Texture2D" uid="uid://dfy47oqdl48om" path="res://Assest/Buildings/house/ThoRen-house/Tuong1.png" id="5_jdrh5"]
+[ext_resource type="Texture2D" uid="uid://d3fgvrv6jraep" path="res://Assest/Buildings/house/ThoRen-house/Tuong2.png" id="6_xegle"]
+[ext_resource type="Texture2D" uid="uid://l2ryalj336bo" path="res://Assest/Buildings/house/ThoRen-house/LoNung.png" id="7_n1ofe"]
+[ext_resource type="Texture2D" uid="uid://qr2rt23sc2xw" path="res://Assest/Buildings/house/ThoRen-house/NoiDong.png" id="8_3n4ur"]
+[ext_resource type="Texture2D" uid="uid://b51desixnhll" path="res://Assest/Buildings/house/ThoRen-house/caibaandai.png" id="9_apdw6"]
+[ext_resource type="Texture2D" uid="uid://cr33hhq0dqhmu" path="res://Assest/Buildings/house/ThoRen-house/xeng.png" id="10_jcffq"]
+[ext_resource type="Texture2D" uid="uid://b60gk0ijemeqa" path="res://Assest/Buildings/house/ThoRen-house/CayBua.png" id="11_wl0dl"]
+[ext_resource type="Texture2D" uid="uid://f70pn3c4xq03" path="res://Assest/Buildings/house/ThoRen-house/kesach.png" id="12_fic7t"]
+[ext_resource type="Texture2D" uid="uid://dvptpdh7jj3bb" path="res://Assest/Buildings/house/ThoRen-house/CaiMem.png" id="13_fl37i"]
+[ext_resource type="Texture2D" uid="uid://cxw2g206mldv2" path="res://Assest/Buildings/house/ThoRen-house/ThauNuoc.png" id="14_7ai3e"]
+[ext_resource type="Script" uid="uid://c1evi4507st0i" path="res://scripts/Teleport.gd" id="15_mr48g"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3vakn"]
+size = Vector2(31.5, 19.75)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e6xpd"]
+size = Vector2(20, 7)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xggag"]
+size = Vector2(103.5, 25)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tgcpo"]
+size = Vector2(105, 22)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4ic2l"]
+size = Vector2(32, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tgg6q"]
+size = Vector2(28, 18)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s13r0"]
+size = Vector2(16, 25)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dvwha"]
+size = Vector2(4, 9)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_eui32"]
+size = Vector2(14, 15)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_x24ml"]
+size = Vector2(32, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tu3hv"]
+size = Vector2(32, 11)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nwjql"]
+size = Vector2(36, 6.75)
+
+[node name="Thoren" type="StaticBody2D" unique_id=1936541144]
+y_sort_enabled = true
+texture_filter = 1
+script = ExtResource("1_plov7")
+is_indoor = true
+
+[node name="Map" type="Sprite2D" parent="." unique_id=442712730]
+texture_filter = 1
+texture = ExtResource("2_rimqr")
+centered = false
+
+[node name="Colli" type="Node2D" parent="." unique_id=153748961]
+
+[node name="Area2D" type="StaticBody2D" parent="Colli" unique_id=1285690351]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Colli/Area2D" unique_id=1363023057]
+polygon = PackedVector2Array(233, 200, 231, 55, 144, 55, 143, 96, 232, 97, 230, 151, 191, 150, 191, 141, 170, 141, 168, 151, 135, 151, 134, 56, 10, 57, 9, 204, -36, 198, -53, 18, -5, -52, 250, -40, 275, 97, 256, 218)
+
+[node name="YSort" type="Node2D" parent="." unique_id=1977226792]
+z_index = 1
+y_sort_enabled = true
+
+[node name="ThoRen_enter" type="Marker2D" parent="YSort" unique_id=1228176165]
+position = Vector2(121, 191)
+
+[node name="Table" type="StaticBody2D" parent="YSort" unique_id=94722793]
+z_index = 1
+position = Vector2(117, 141)
+constant_linear_velocity = Vector2(0, 0.055)
+
+[node name="Sprite2D" type="Sprite2D" parent="YSort/Table" unique_id=1892067521]
+texture_filter = 1
+position = Vector2(-15, -20.999998)
+scale = Vector2(1.0312502, 1.0000002)
+texture = ExtResource("3_mauc2")
+centered = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="YSort/Table" unique_id=1751882665]
+position = Vector2(1, 1)
+shape = SubResource("RectangleShape2D_3vakn")
+
+[node name="CanhCua" type="StaticBody2D" parent="YSort" unique_id=1326495813]
+z_index = 1
+position = Vector2(0, -6)
+
+[node name="Sprite2D" type="Sprite2D" parent="YSort/CanhCua" unique_id=2095825618]
+position = Vector2(185, 139)
+texture = ExtResource("4_hskoa")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="YSort/CanhCua" unique_id=899511144]
+position = Vector2(185, 153.5)
+shape = SubResource("RectangleShape2D_e6xpd")
+
+[node name="Tuong" type="StaticBody2D" parent="YSort" unique_id=888802398]
+position = Vector2(81, 112.5)
+
+[node name="Tuong1" type="Sprite2D" parent="YSort/Tuong" unique_id=2121276643]
+z_index = 10
+position = Vector2(-25, 82.5)
+texture = ExtResource("5_jdrh5")
+
+[node name="Tuong2" type="Sprite2D" parent="YSort/Tuong" unique_id=1695730999]
+z_index = 10
+position = Vector2(102, 82.5)
+texture = ExtResource("6_xegle")
+
+[node name="Tuong3" type="Sprite2D" parent="YSort/Tuong" unique_id=30706292]
+position = Vector2(102, 10.5)
+texture = ExtResource("6_xegle")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="YSort/Tuong" unique_id=816047801]
+z_index = 1
+position = Vector2(-29, 102.5)
+shape = SubResource("RectangleShape2D_xggag")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="YSort/Tuong" unique_id=1439643819]
+z_index = 1
+position = Vector2(107, 104.5)
+shape = SubResource("RectangleShape2D_tgcpo")
+
+[node name="LoNung" type="StaticBody2D" parent="YSort" unique_id=784104276]
+position = Vector2(67, 61)
+
+[node name="Sprite2D" type="Sprite2D" parent="YSort/LoNung" unique_id=1379987995]
+position = Vector2(1, -18)
+texture = ExtResource("7_n1ofe")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="YSort/LoNung" unique_id=586799967]
+position = Vector2(1, 0)
+shape = SubResource("RectangleShape2D_4ic2l")
+
+[node name="NoiDong" type="StaticBody2D" parent="YSort" unique_id=841346222]
+z_index = 1
+position = Vector2(72, 116)
+
+[node name="Sprite2D" type="Sprite2D" parent="YSort/NoiDong" unique_id=255011433]
+position = Vector2(-1, -4)
+texture = ExtResource("8_3n4ur")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="YSort/NoiDong" unique_id=271228157]
+shape = SubResource("RectangleShape2D_tgg6q")
+
+[node name="CaiBan" type="StaticBody2D" parent="YSort" unique_id=2088669095]
+z_index = 1
+position = Vector2(94, 127)
+
+[node name="Sprite2D" type="Sprite2D" parent="YSort/CaiBan" unique_id=1615003694]
+position = Vector2(0, -4)
+texture = ExtResource("9_apdw6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="YSort/CaiBan" unique_id=1545640701]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_s13r0")
+
+[node name="CayXeng" type="StaticBody2D" parent="YSort" unique_id=1664406062]
+
+[node name="Sprite2D" type="Sprite2D" parent="YSort/CayXeng" unique_id=1257591273]
+position = Vector2(46, 44)
+texture = ExtResource("10_jcffq")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="YSort/CayXeng" unique_id=1734773291]
+position = Vector2(46, 55.5)
+shape = SubResource("RectangleShape2D_dvwha")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="YSort" unique_id=2077541570]
+
+[node name="Sprite2D" type="Sprite2D" parent="YSort/StaticBody2D" unique_id=5730083]
+position = Vector2(96, 45)
+texture = ExtResource("11_wl0dl")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="YSort/StaticBody2D" unique_id=964910012]
+position = Vector2(96, 54.5)
+shape = SubResource("RectangleShape2D_eui32")
+
+[node name="CaiTuSach" type="StaticBody2D" parent="YSort" unique_id=1112644281]
+
+[node name="Sprite2D" type="Sprite2D" parent="YSort/CaiTuSach" unique_id=1541030341]
+position = Vector2(158, 44)
+texture = ExtResource("12_fic7t")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="YSort/CaiTuSach" unique_id=354389949]
+position = Vector2(159, 55)
+shape = SubResource("RectangleShape2D_x24ml")
+
+[node name="CaiMem" type="StaticBody2D" parent="YSort" unique_id=839684052]
+
+[node name="Sprite2D" type="Sprite2D" parent="YSort/CaiMem" unique_id=458286458]
+position = Vector2(215, 66)
+texture = ExtResource("13_fl37i")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="YSort/CaiMem" unique_id=822394504]
+position = Vector2(215, 74.5)
+shape = SubResource("RectangleShape2D_tu3hv")
+
+[node name="ThauNuoc" type="StaticBody2D" parent="YSort" unique_id=463715442]
+position = Vector2(30, 69)
+
+[node name="Sprite2D" type="Sprite2D" parent="YSort/ThauNuoc" unique_id=696763001]
+position = Vector2(0.20000076, -5)
+texture = ExtResource("14_7ai3e")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="YSort/ThauNuoc" unique_id=2060662862]
+position = Vector2(-28.8, -69)
+polygon = PackedVector2Array(18, 57, 17, 61, 17, 67, 19, 71, 25, 75, 33, 75, 38, 72, 41, 67, 41, 59, 38, 55, 20, 55)
+
+[node name="ToTown1" type="Area2D" parent="." unique_id=1655111825]
+position = Vector2(120, 221)
+script = ExtResource("15_mr48g")
+target_map = "res://scn/Maps/town1.tscn"
+target_spawn = "ThoRen_exit"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ToTown1" unique_id=1583728940]
+position = Vector2(0, 4.625)
+shape = SubResource("RectangleShape2D_nwjql")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=904274469]
+
+[connection signal="body_entered" from="ToTown1" to="ToTown1" method="_on_body_entered"]

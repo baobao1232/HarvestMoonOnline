@@ -1,19 +1,20 @@
 [gd_scene format=3 uid="uid://brqvkx3ohe45o"]
 
+[ext_resource type="Script" uid="uid://cmwj2wnro8qgb" path="res://scripts/DayNightLight.gd" id="1_ewxjk"]
 [ext_resource type="Texture2D" uid="uid://ctl3dlr358f2x" path="res://Assest/Buildings/house/ThoRen-house/ThoRen-House-Day.png" id="1_v3s8y"]
 [ext_resource type="Texture2D" uid="uid://dooft05eiph5x" path="res://Assest/Buildings/house/ThoRen-house/ThoRen-House-Night.png" id="2_8sq36"]
 [ext_resource type="Script" uid="uid://c1evi4507st0i" path="res://scripts/Teleport.gd" id="3_8sq36"]
 [ext_resource type="PackedScene" uid="uid://djrh5nd0j6eln" path="res://scn/Icons/Sign.tscn" id="4_ivn0j"]
 
-[sub_resource type="Gradient" id="Gradient_ivn0j"]
-offsets = PackedFloat32Array(0.26092127, 0.9714476)
+[sub_resource type="Gradient" id="Gradient_q11e8"]
+offsets = PackedFloat32Array(0.8492729, 1)
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_ivn0j"]
-gradient = SubResource("Gradient_ivn0j")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ewxjk"]
+gradient = SubResource("Gradient_q11e8")
 fill = 1
-fill_from = Vector2(0.49427366, 0.51827586)
-fill_to = Vector2(0.81051296, 0.95646524)
+fill_from = Vector2(0.5199147, 0.50282055)
+fill_to = Vector2(0.70916015, 0.9686325)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ivn0j"]
 size = Vector2(20, 8)
@@ -21,42 +22,46 @@ size = Vector2(20, 8)
 [node name="ThoRen" type="StaticBody2D" unique_id=1663411217]
 texture_filter = 1
 position = Vector2(74, 61)
+script = ExtResource("1_ewxjk")
 
 [node name="BanNgay" type="Sprite2D" parent="." unique_id=1125097140]
-position = Vector2(-7, -5)
+position = Vector2(-2, -5)
 texture = ExtResource("1_v3s8y")
 
 [node name="BanDem" type="Sprite2D" parent="." unique_id=1732656115]
 position = Vector2(-2, -5)
 texture = ExtResource("2_8sq36")
 
-[node name="Light" type="PointLight2D" parent="." unique_id=419836505]
-position = Vector2(6.46875, 2.5)
-scale = Vector2(0.63964844, 0.609375)
+[node name="Light" type="PointLight2D" parent="." unique_id=1965570433]
+position = Vector2(9, 3)
+scale = Vector2(1.1356258, 1.02594)
+enabled = false
 shadow_enabled = true
-texture = SubResource("GradientTexture2D_ivn0j")
+texture = SubResource("GradientTexture2D_ewxjk")
 
-[node name="Light2" type="PointLight2D" parent="." unique_id=1831551224]
-position = Vector2(30.46875, 2.5000076)
-scale = Vector2(0.63964844, 0.609375)
+[node name="Light2" type="PointLight2D" parent="." unique_id=733158694]
+position = Vector2(33, 3)
+scale = Vector2(1.289646, 1.0525528)
+enabled = false
 shadow_enabled = true
-texture = SubResource("GradientTexture2D_ivn0j")
+texture = SubResource("GradientTexture2D_ewxjk")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1320253898]
-position = Vector2(-94, -79)
+visible = false
+position = Vector2(-89, -80)
 polygon = PackedVector2Array(30, 95, 30, 35, 41, 35, 53, 21, 135, 22, 136, 35, 149, 35, 150, 112, 138, 111, 136, 95, 78, 98, 78, 85, 51, 86, 52, 97, 41, 94, 39, 116, 22, 115, 20, 97)
 
 [node name="VaoNha" type="Area2D" parent="." unique_id=1629614681]
+position = Vector2(-23, 12)
 script = ExtResource("3_8sq36")
-target_map = "res://scn/House/Interior/Thoren_Int.tscn"
-target_spawn = "NhaThoRen"
+target_map = "res://scn/House/Interior/NhaThoRen.tscn"
+target_spawn = "ThoRen_enter"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="VaoNha" unique_id=1503048418]
-position = Vector2(-28, 14)
 shape = SubResource("RectangleShape2D_ivn0j")
 
 [node name="Sign" parent="." unique_id=1521790615 instance=ExtResource("4_ivn0j")]
-position = Vector2(-3, 23)
+position = Vector2(-3, 16)
 dialog_lines = Array[String](["Xin chao", "Day la dialog"])
 
 [connection signal="body_entered" from="VaoNha" to="VaoNha" method="_on_body_entered"]

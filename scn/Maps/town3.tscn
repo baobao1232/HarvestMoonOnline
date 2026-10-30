@@ -65,7 +65,7 @@ shape = SubResource("RectangleShape2D_g5rlq")
 [node name="ToBeach" type="Area2D" parent="." unique_id=2071159621]
 script = ExtResource("2_b2jo8")
 target_map = "res://scn/Maps/beach.tscn"
-target_spawn = "Town3_enter "
+target_spawn = "Beach_enter"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ToBeach" unique_id=133090350]
 position = Vector2(479.625, 130.625)

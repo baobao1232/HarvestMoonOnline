@@ -8,9 +8,11 @@ size = Vector2(15.75, 5.8125)
 
 [node name="Sign" type="Area2D" unique_id=1521790615]
 texture_filter = 1
+position = Vector2(8, 13)
 script = ExtResource("1_cei78")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1763298183]
+position = Vector2(0, 3)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1320890371]
 z_index = 1
@@ -19,6 +21,6 @@ shape = SubResource("RectangleShape2D_cei78")
 
 [node name="Sign" type="Sprite2D" parent="." unique_id=1899912948]
 z_index = 1
-position = Vector2(-8, -16)
+position = Vector2(-8, -13)
 texture = ExtResource("1_n8aeh")
 centered = false

@@ -2,7 +2,7 @@ extends CanvasModulate
 
 var target_color : Color = Color(1,1,1)
 var is_indoor := false
-
+const INDOOR_COLOR := Color(0.38, 0.38, 0.48)   # chỉnh sáng/tối phòng ở đây
 
 func _ready():
 	Dbg.p("🌙 DayNight READY:", self)
@@ -15,9 +15,7 @@ func _process(delta):
 
 	# 🔥 INDOOR → trắng NGAY, không lerp
 	if is_indoor:
-		if color != Color(1,1,1):
-			Dbg.p("🏠 FORCE WHITE (INDOOR)")
-		color = Color(1, 1, 1)
+		color = INDOOR_COLOR
 		return
 
 	# 🌳 OUTDOOR → lerp bình thường
@@ -33,7 +31,7 @@ func set_indoor(value: bool):
 	Dbg.p("🌙 set_indoor:", value)
 
 	if is_indoor:
-		color = Color(1,1,1) # reset ngay
+		color = INDOOR_COLOR
 
 
 # =========================================

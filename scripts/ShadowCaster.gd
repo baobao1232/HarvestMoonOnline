@@ -45,8 +45,13 @@ func _ready():
 	z_index = -1
 	centered = true
 
-
 func _process(_delta):
+
+	# interior: tắt bóng nắng, bóng do PointLight2D + LightOccluder2D lo
+	if ShadowManager.indoor:
+		visible = false
+		return
+
 	if target == null or not is_instance_valid(target):
 		return
 

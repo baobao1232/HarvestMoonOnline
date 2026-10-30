@@ -141,12 +141,12 @@ position = Vector2(1273, 38)
 position = Vector2(811, 471)
 
 [node name="ThoRen_exit" type="Marker2D" parent="YSort" unique_id=1535191463]
-position = Vector2(293, 116)
+position = Vector2(298, 126)
 
 [node name="ToTown2" type="Area2D" parent="." unique_id=754787854]
 script = ExtResource("3_asqsy")
 target_map = "res://scn/Maps/town2.tscn"
-target_spawn = "SpawnTown1"
+target_spawn = "Town1_enter"
 metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ToTown2" unique_id=2084123678]

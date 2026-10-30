@@ -28,6 +28,8 @@ var prev_anim := ""
 # ===============================
 func _ready():
 
+	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
+
 	add_to_group("player")
 	Dbg.p("ANIMS:", anim.sprite_frames.get_animation_names())
 

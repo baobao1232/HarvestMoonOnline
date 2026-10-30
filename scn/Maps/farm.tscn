@@ -203,7 +203,7 @@ dialog_lines = Array[String](["Chưa mở đâu bạn"])
 position = Vector2(338, 8)
 script = ExtResource("5_hf0jr")
 target_map = "res://scn/Maps/town1.tscn"
-target_spawn = "SpawnFarm"
+target_spawn = "Farm_exit"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ToTown" unique_id=278201021]
 position = Vector2(2, -1)
