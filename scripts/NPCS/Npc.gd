@@ -54,10 +54,7 @@ var breath_mat : ShaderMaterial
 @onready var sprite = $AnimatedSprite2D
 @onready var name_label = get_node_or_null("Name")
 
-
 func _ready():
-
-	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 
 	data = NpcManager.get_data(npc_id)
 
@@ -66,9 +63,13 @@ func _ready():
 		if name_label:
 			name_label.text = data.npc_name
 
+	# ép 4 anim đi bộ loop, khỏi phải tick tay trong SpriteFrames
+	for a in ["down", "left", "right", "up"]:
+		if sprite.sprite_frames.has_animation(a):
+			sprite.sprite_frames.set_animation_loop(a, true)
+
 	setup_breathing()
 	play_idle()
-
 
 # ===============================
 # BREATHING
@@ -250,21 +251,28 @@ func update_animation(dir: Vector2):
 	else:
 		last_dir = "down" if dir.y > 0 else "up"
 
-	if sprite.animation != last_dir:
+	if sprite.animation != last_dir or not sprite.is_playing():
 		sprite.play(last_dir)
-
 
 func play_idle():
 
 	var anim := "idle_" + last_dir
 
-	# state "sit": có anim sit_<hướng> thì ngồi, không thì idle
+	# state "sit": có anim sit_<hướng> thì ngồi
 	if state == "sit" and sprite.sprite_frames.has_animation("sit_" + last_dir):
 		anim = "sit_" + last_dir
 
-	if sprite.animation != anim and sprite.sprite_frames.has_animation(anim):
-		sprite.play(anim)
+	# có anim idle riêng -> dùng
+	if sprite.sprite_frames.has_animation(anim):
+		if sprite.animation != anim or not sprite.is_playing():
+			sprite.play(anim)
+		return
 
+	# không có idle (Karen, Jeff) -> đứng ở frame 0 của hướng hiện tại
+	if sprite.sprite_frames.has_animation(last_dir):
+		sprite.animation = last_dir
+		sprite.stop()
+		sprite.frame = 0
 
 func face_player():
 

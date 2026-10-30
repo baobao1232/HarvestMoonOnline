@@ -83,9 +83,9 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_2elvy")
 }],
-"loop": false,
+"loop": true,
 "name": &"down",
-"speed": 12.0
+"speed": 6.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -100,9 +100,9 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_5x5wn")
 }],
-"loop": false,
+"loop": true,
 "name": &"left",
-"speed": 12.0
+"speed": 6.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -117,9 +117,9 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ecll4")
 }],
-"loop": false,
+"loop": true,
 "name": &"right",
-"speed": 12.0
+"speed": 6.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -134,9 +134,9 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_sqd8j")
 }],
-"loop": false,
+"loop": true,
 "name": &"up",
-"speed": 12.0
+"speed": 6.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ousi5"]
@@ -150,7 +150,7 @@ script = ExtResource("1_kmxiv")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1860764647]
 position = Vector2(-17, -31)
 sprite_frames = SubResource("SpriteFrames_xerx4")
-animation = &"down"
+animation = &"up"
 centered = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=161048203]
@@ -171,6 +171,3 @@ position = Vector2(-1, -1)
 
 [node name="Shadow" type="Sprite2D" parent="." unique_id=1617575275]
 script = ExtResource("2_kmxiv")
-target_path = NodePath("../AnimatedSprite2D")
-foot_path = NodePath("../Marker2D")
-flatten = 1.0

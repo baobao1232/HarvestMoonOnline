@@ -1,38 +1,39 @@
 extends CanvasModulate
 
 var target_color : Color = Color(1,1,1)
-var is_indoor := false
-const INDOOR_COLOR := Color(0.38, 0.38, 0.48)   # chỉnh sáng/tối phòng ở đây
+var indoor_target : Color = Color(1,1,1)
+
+# ===== MÀU TRONG NHÀ =====
+const INDOOR_DAY   := Color(1.0, 1.0, 1.0, 1.0)               # ban ngày: sáng bình thường
+const INDOOR_LAMP  := Color(1.0, 0.82, 0.55)       # đèn bóng vàng ấm (chỉnh ở đây)
+const INDOOR_OFF   := Color(0.25, 0.27, 0.38)      # tắt đèn: tối xanh
+
 
 func _ready():
-	Dbg.p("🌙 DayNight READY:", self)
-
 	TimeManager.time_changed.connect(update_target)
 	update_target(TimeManager.hour, TimeManager.minute)
 
 
 func _process(delta):
 
-	# 🔥 INDOOR → trắng NGAY, không lerp
-	if is_indoor:
-		color = INDOOR_COLOR
-		return
+	var scene = get_tree().current_scene
+	var indoor = scene != null and scene.get("is_indoor") == true
 
-	# 🌳 OUTDOOR → lerp bình thường
-	color = color.lerp(target_color, delta * 0.5)
-
+	if indoor:
+		# vào nhà thì đổi khá nhanh, nhưng vẫn mượt
+		color = color.lerp(indoor_target, delta * 4.0)
+	else:
+		color = color.lerp(target_color, delta * 0.5)
 
 # =========================================
 # 🌙 SET INDOOR
 # =========================================
 func set_indoor(value: bool):
-	is_indoor = value
-
 	Dbg.p("🌙 set_indoor:", value)
 
-	if is_indoor:
-		color = INDOOR_COLOR
-
+	# vào nhà thì nhảy thẳng sang màu indoor hiện tại, ra ngoài thì để _process lerp
+	if value:
+		color = indoor_target
 
 # =========================================
 # 🌅 TIME UPDATE
@@ -97,5 +98,16 @@ func update_target(hour, minute):
 
 	else:
 		target_color = night
-
+	
+		# ===== MÀU INDOOR THEO GIỜ =====
+	if t >= 6 and t < 17:
+		indoor_target = INDOOR_DAY                                  # ngày
+	elif t >= 17 and t < 19:
+		indoor_target = INDOOR_DAY.lerp(INDOOR_LAMP, (t - 17) / 2.0) # chiều → bật đèn dần
+	elif t >= 19 and t < 22:
+		indoor_target = INDOOR_LAMP                                 # tối: đèn vàng
+	elif t >= 22 or t < 5:
+		indoor_target = INDOOR_OFF                                 # khuya: tối
+	else:
+		indoor_target = INDOOR_OFF.lerp(INDOOR_DAY, (t - 5))        # 5h→6h: sáng dần
 	#Dbg.p("🌙 TARGET:", target_color)
