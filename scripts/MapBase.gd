@@ -4,6 +4,9 @@ extends Node2D
 const SHADOW_SCRIPT := preload("res://scripts/ShadowCaster.gd")   # <-- THÊM
 
 @export var is_indoor := false
+@export var allow_npcs := false   # indoor nhưng vẫn có NPC (Supermarket...)
+
+var _lamps: Array = []
 
 @onready var map: Sprite2D = $Map
 @onready var ysort: Node2D = $YSort
@@ -32,12 +35,9 @@ func _ready():
 # NPC (map nào cũng tự spawn, trừ map trong nhà)
 # ===============================
 func _spawn_npcs():
-
-	if is_indoor or ysort == null:
+	if (is_indoor and not allow_npcs) or ysort == null:
 		return
-
 	NpcManager.spawn_npcs(name, ysort)
-
 
 # ===============================
 # PLAYER ATTACH (SAFE)
@@ -170,18 +170,17 @@ func _setup_indoor_lighting():
 		return
 
 	var lamps := find_children("*", "PointLight2D", true, false)
-
-	# chưa có đèn nào -> tự đặt 1 bóng đèn giữa phòng
 	if lamps.is_empty():
 		lamps.append(_make_lamp())
 
-	# đèn chỉ làm ánh sáng nền, KHÔNG đổ bóng chéo
 	for l in lamps:
 		l.shadow_enabled = false
 
-	# bóng dẹt ngay dưới chân từng đồ vật
-	_add_prop_shadows()
+	_lamps = lamps
+	TimeManager.time_changed.connect(_on_indoor_time)
+	_on_indoor_time(TimeManager.hour, TimeManager.minute)
 
+	_add_prop_shadows()
 
 func _make_lamp() -> PointLight2D:
 
@@ -200,7 +199,7 @@ func _make_lamp() -> PointLight2D:
 	l.name = "Lamp"
 	l.texture = tex
 	l.texture_scale = 3.0
-	l.energy = 0.6
+	l.energy = 0.1
 	l.color = Color(1.0, 0.93, 0.8)
 	l.shadow_enabled = false
 
@@ -234,3 +233,9 @@ func _add_prop_shadows():
 		sh.set("shadow_type", 3)                          # PROP
 		sh.set("target_path", NodePath("../" + str(s.name)))
 		s.get_parent().add_child(sh)
+func _on_indoor_time(hour, _minute):
+	# khớp với day_night.gd: 17h bật đèn dần, 22h tắt
+	var on: bool = hour >= 17 and hour < 22
+	for l in _lamps:
+		if is_instance_valid(l):
+			l.enabled = on

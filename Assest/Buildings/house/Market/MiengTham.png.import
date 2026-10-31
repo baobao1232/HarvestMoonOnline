@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://biwrtwtx0ccfl"
-path="res://.godot/imported/Ann-House-Day.png-3857d0b6858e58b58328ddaf8416b610.ctex"
+uid="uid://c662h121x4q5o"
+path="res://.godot/imported/MiengTham.png-40b730a7023893c3e52097c66490d918.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assest/Buildings/house/Ann-House/Ann-House-Day.png"
-dest_files=["res://.godot/imported/Ann-House-Day.png-3857d0b6858e58b58328ddaf8416b610.ctex"]
+source_file="res://Assest/Buildings/house/Market/MiengTham.png"
+dest_files=["res://.godot/imported/MiengTham.png-40b730a7023893c3e52097c66490d918.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ba5cfaa8ijlye"
-path="res://.godot/imported/Ann-House-Day-Night.png-40b08eba92a6920e294589819ab3eb7c.ctex"
+uid="uid://bmb0dbd3mfh1a"
+path="res://.godot/imported/BanTrungBai.png-0b48037a0c37cdf48edfeeef73ebd0f9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assest/Buildings/house/Ann-House/Ann-House-Day-Night.png"
-dest_files=["res://.godot/imported/Ann-House-Day-Night.png-40b08eba92a6920e294589819ab3eb7c.ctex"]
+source_file="res://Assest/Buildings/house/Market/BanTrungBai.png"
+dest_files=["res://.godot/imported/BanTrungBai.png-0b48037a0c37cdf48edfeeef73ebd0f9.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dj1qjhejs56nv"
-path="res://.godot/imported/Supermarket.png-656dc58ac2622368799a154656566d7f.ctex"
+uid="uid://2pgf6osl7e4x"
+path="res://.godot/imported/vachtuong.png-8c24931efdd8cdb35b6b56751c438a50.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assest/Buildings/house/Ann-House/Supermarket.png"
-dest_files=["res://.godot/imported/Supermarket.png-656dc58ac2622368799a154656566d7f.ctex"]
+source_file="res://Assest/Buildings/house/Market/vachtuong.png"
+dest_files=["res://.godot/imported/vachtuong.png-8c24931efdd8cdb35b6b56751c438a50.ctex"]
 
 [params]
 
