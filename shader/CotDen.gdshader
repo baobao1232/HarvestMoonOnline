@@ -13,4 +13,4 @@ void fragment() {
 	float l = 1.0 - smoothstep(0.0, radius, d);
 	l = pow(l, softness);
 	COLOR = vec4(light_color.rgb * l * intensity * compensate, 1.0);
-}
+}      

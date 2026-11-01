@@ -56,8 +56,8 @@ func build(owner: Node2D, rect: Rect2) -> void:
 		for x in cols:
 			q.transform = Transform2D(0.0, cell_center(Vector2i(x, y)))
 			for hit in space.intersect_shape(q, 8):
-				# CharacterBody2D (player, NPC, thú) không tính là tường
-				if hit.collider is StaticBody2D:
+				# CharacterBody2D không tính là tường; cửa thì NPC tự mở được
+				if hit.collider is StaticBody2D and not hit.collider.is_in_group("door"):
 					astar.set_point_solid(Vector2i(x, y), true)
 					solid_count += 1
 					break

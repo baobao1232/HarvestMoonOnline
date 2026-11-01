@@ -241,6 +241,7 @@ func _command(line: String):
 				_sys("/tp <map> [spawn]  - sang map khác")
 				_sys("/tp <spawn>  - tới marker trong map hiện tại")
 				_sys("/tele <npc>  - dịch chuyển tới chỗ NPC")
+				_sys("/time <giờ> [phút]  - đặt giờ (hoặc: sang, trua, chieu, toi, khuya)")
 		"stuck":
 			_cmd_stuck()
 		"tele":
@@ -266,6 +267,8 @@ func _command(line: String):
 			log_box.text = ""
 		"give":
 			_cmd_give(parts)
+		"time":
+			_cmd_time(parts)
 		_:
 			_err("Lệnh không tồn tại: /" + cmd + "  (gõ /help)")
 
@@ -495,3 +498,38 @@ func _map_path(map_name: String) -> String:
 			if ResourceLoader.exists(p):
 				return p
 	return "res://scn/Maps/forest.tscn"
+func _cmd_time(parts: PackedStringArray):
+
+	if not Server.is_admin:
+		_err("Bạn không có quyền dùng lệnh này")
+		return
+
+	if parts.size() < 2:
+		_err("Dùng: /time <giờ> [phút]  hoặc  /time sang|trua|chieu|toi|khuya")
+		return
+
+	var presets := {"sang": 7, "trua": 12, "chieu": 17, "toi": 19, "khuya": 23}
+	var arg := parts[1].to_lower()
+	var h := 0
+	var m := 0
+
+	if presets.has(arg):
+		h = presets[arg]
+	elif arg.is_valid_int():
+		h = int(arg)
+		if parts.size() >= 3 and parts[2].is_valid_int():
+			m = int(parts[2])
+	elif ":" in arg:                       # /time 19:30
+		var p := arg.split(":")
+		h = int(p[0])
+		m = int(p[1]) if p.size() > 1 else 0
+	else:
+		_err("Giờ không hợp lệ: " + arg)
+		return
+
+	if h < 0 or h > 23 or m < 0 or m > 59:
+		_err("Giờ 0-23, phút 0-59")
+		return
+
+	TimeManager.set_time(h, m)
+	_sys("Đã đặt giờ %02d:%02d" % [h, m], "#9dff9d")

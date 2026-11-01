@@ -45,6 +45,7 @@ const ADJ := {
 var _datas := {}      # id -> NPCData
 var _nodes := {}      # id -> node Npc đang có trong map hiện tại
 var _keys := {}       # id -> key mốc lịch đã áp dụng
+var _done := {}   # id -> key chặng đã đi xong (không spawn lại)
 
 var _map_name := ""
 var _parent: Node = null
@@ -312,6 +313,9 @@ func _resolve_pos_raw(id: String, entry: Dictionary) -> Vector2:
 	if _parent != null and is_instance_valid(_parent):
 		for c in _parent.get_children():
 			if c is Marker2D:
+				var n := String(c.name).to_lower()
+				if n.ends_with("_enter") or n.ends_with("_exit"):
+					continue            # bỏ marker cửa
 				return c.global_position
 
 	var rc := map_rect()
@@ -453,9 +457,8 @@ func make_plan(id: String, data: NPCData, ctx: Dictionary) -> Dictionary:
 		return {}      # đã tới nơi và vào nhà
 
 	var in_leg := dt - k * LEG_MIN
-	var frac := clampf(in_leg / LEG_MIN, 0.0, 1.0)
 
-		# đi từ nhà ra: bắt đầu ở <Nhà>_exit; từ map trước sang: bắt đầu ở cửa vào map này
+	# đi từ nhà ra: bắt đầu ở <Nhà>_exit; từ map trước sang: bắt đầu ở cửa vào map này
 	var start: Vector2
 	if k == 0:
 		if str(prev.get("state", "idle")) == "inside_locked":
@@ -463,27 +466,29 @@ func make_plan(id: String, data: NPCData, ctx: Dictionary) -> Dictionary:
 		else:
 			start = resolve_pos(id, prev)
 	else:
-		# path[k-1] là nhà thì ra bằng _exit, map thường thì dùng cửa Teleport
 		start = door_pos(path[k - 1], "exit")
 
 	# đi vào nhà: đích là <Nhà>_enter
 	var target: Vector2 = resolve_pos(id, entry) if last else door_pos(path[k + 1], "enter")
-	
+
 	var route := find_route(start, target)
 	var total := path_length(route)
-	var here_pos := point_along(route, total * frac)
+
+	# đi với tốc độ cố định từ đầu chặng: vị trí chỉ phụ thuộc giờ game
+	var spd := data.speed
+	var walked := in_leg * TimeManager.real_seconds_per_game_minute * spd
+
+	# đã đi hết quãng đường qua map này -> NPC đã sang map kế
+	if not last and walked >= total:
+		return {}
+
+	var here_pos := point_along(route, minf(walked, total))
 
 	var e := entry.duplicate(true)
 	e["_target"] = {"x": target.x, "y": target.y}
 	if not last:
 		e["state"] = "walk"
 
-	var remain_dist := total * (1.0 - frac)
-	var remain_real := (LEG_MIN - in_leg) * TimeManager.real_seconds_per_game_minute
-	var spd := MAX_WALK_SPEED
-	if remain_real > 0.5:
-		spd = clampf(remain_dist / remain_real, data.speed, MAX_WALK_SPEED)
-	
 	return {
 		"entry": e,
 		"key": "%s_k%d" % [data.entry_key(entry), k],
@@ -515,10 +520,10 @@ func refresh(id: String):
 		node = null
 
 	var key: String = plan.key
-
+	
 	if node != null and _keys.get(id, "") == key:
 		return    # mốc không đổi
-
+		
 	_keys[id] = key
 
 	var entry: Dictionary = plan.entry
@@ -530,7 +535,7 @@ func refresh(id: String):
 			return
 		if plan.has("start"):
 			node.place(plan.start)
-			node.apply_entry(entry, false)         # rồi đi tiếp
+			node.apply_entry(entry, false)
 		else:
 			node.apply_entry(entry, true)
 	else:
@@ -731,3 +736,7 @@ func _find_exit_marker(building: String) -> Variant:
 			return clamp_to_map(m.global_position)
 
 	return null
+# NPC đi xong chặng qua map này (tới cửa) -> rời map ngay
+func npc_arrived(id: String):
+	_done[id] = _keys.get(id, "")
+	_despawn(id)

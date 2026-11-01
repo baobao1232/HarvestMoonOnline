@@ -229,3 +229,53 @@ func srv_chat(text: String):
 @rpc("authority", "call_remote", "reliable")
 func cl_chat(sender_id: int, pname: String, text: String):
 	remote_chat.emit(sender_id, pname, text)
+
+signal door_changed(map, door_id, open)
+
+var door_states := {}   # CHỈ server: "map|door_id" -> bool
+
+
+# ===== CLIENT -> SERVER =====
+func send_door(map: String, door_id: String, open: bool):
+	if online:
+		srv_door.rpc_id(1, map, door_id, open)
+
+
+func query_door(map: String, door_id: String):
+	if online:
+		srv_door_query.rpc_id(1, map, door_id)
+
+
+@rpc("any_peer", "call_remote", "reliable")
+func srv_door(map: String, door_id: String, open: bool):
+	if not is_server:
+		return
+	var id := multiplayer.get_remote_sender_id()
+	if not players.has(id):
+		return
+	# chỉ cho đổi cửa của map mình đang đứng
+	if players[id].map != map:
+		return
+
+	door_states["%s|%s" % [map, door_id]] = open
+
+	for pid in players:
+		if pid != id and players[pid].map == map:
+			cl_door.rpc_id(pid, map, door_id, open)
+
+
+# người mới vào map hỏi trạng thái cửa
+@rpc("any_peer", "call_remote", "reliable")
+func srv_door_query(map: String, door_id: String):
+	if not is_server:
+		return
+	var id := multiplayer.get_remote_sender_id()
+	var key := "%s|%s" % [map, door_id]
+	if door_states.has(key):
+		cl_door.rpc_id(id, map, door_id, door_states[key])
+
+
+# ===== SERVER -> CLIENT =====
+@rpc("authority", "call_remote", "reliable")
+func cl_door(map: String, door_id: String, open: bool):
+	door_changed.emit(map, door_id, open)

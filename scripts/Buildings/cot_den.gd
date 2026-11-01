@@ -29,13 +29,14 @@ static func _soft_tex() -> GradientTexture2D:
 
 
 func _ready():
+	add_to_group("street_lamp")
 	if glow:
 		glow.visible = false          # tắt hẳn ColorRect, đã có đèn thật
 
 	light.texture = _soft_tex()
 	light.texture_scale = 1.0
 	light.color = Color(1.0, 0.82, 0.5)
-	light.energy = 1.1
+	light.energy = 2.5
 	light.shadow_enabled = false
 	light.blend_mode = Light2D.BLEND_MODE_ADD
 
@@ -53,3 +54,9 @@ func update_lamp(hour):
 	ban_dem.visible = is_night
 	light.visible = is_night
 	light.enabled = is_night
+# ShadowCaster hỏi: đèn này đang sáng ở đâu, bán kính bao nhiêu
+func get_light_info() -> Dictionary:
+	if not light.visible or not light.enabled:
+		return {}
+	var r := 64.0 * light.texture_scale * absf(light.global_scale.x)   # texture 128px → bán kính 64
+	return {"pos": light.global_position, "radius": r}

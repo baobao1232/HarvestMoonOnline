@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://c55bhgr5j0h44"]
+
+[ext_resource type="Script" uid="uid://ywjpiwvpus2m" path="res://scripts/Buildings/door.gd" id="1_8ucm8"]
+[ext_resource type="Texture2D" uid="uid://b4a1wwpald8h0" path="res://Assest/Buildings/door.png" id="1_gtblg"]
+[ext_resource type="Texture2D" uid="uid://by0wpntnwtppy" path="res://Assest/Buildings/door_open.png" id="2_8ucm8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_udbuo"]
+size = Vector2(23, 9)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gtblg"]
+size = Vector2(20, 7)
+
+[node name="Door" type="StaticBody2D" unique_id=1332236531 node_paths=PackedStringArray("sprite_closed", "sprite_open", "shape", "click_area")]
+texture_filter = 1
+position = Vector2(80, 101)
+script = ExtResource("1_8ucm8")
+sprite_closed = NodePath("SpriteClosed")
+sprite_open = NodePath("SpriteOpen")
+shape = NodePath("CollisionShape2D")
+click_area = NodePath("ClickArea")
+
+[node name="SpriteClosed" type="Sprite2D" parent="." unique_id=816755434]
+position = Vector2(0, -14)
+texture = ExtResource("1_gtblg")
+
+[node name="SpriteOpen" type="Sprite2D" parent="." unique_id=1957282327]
+position = Vector2(0, -14)
+texture = ExtResource("2_8ucm8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=960362538]
+position = Vector2(-0.5, 0.5)
+shape = SubResource("RectangleShape2D_udbuo")
+
+[node name="ClickArea" type="Area2D" parent="." unique_id=1801396509]
+position = Vector2(0, 2)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClickArea" unique_id=246219898]
+shape = SubResource("RectangleShape2D_gtblg")

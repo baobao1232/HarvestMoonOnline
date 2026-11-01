@@ -102,8 +102,10 @@ func _on_login_result(success, msg, player_data):
 	# =========================
 	var map_path = SaveManager.player.map
 
-	if map_path == "" or map_path == null:
+	if map_path == "" or map_path == null or not ResourceLoader.exists(map_path):
 		map_path = "res://scn/Maps/farm.tscn"
+		SaveManager.player.map = map_path
+		SaveManager.player.pos = Vector2.ZERO
 
 	Dbg.p("📍 LOAD MAP:", map_path)
 	Dbg.p("📍 LOAD POS:", SaveManager.player.pos)
@@ -112,8 +114,7 @@ func _on_login_result(success, msg, player_data):
 		await TimeManager.time_synced
 		
 	Net.join(Net.server_ip, SaveManager.player.name)
-	Server.request_change_map(map_path, "")
-
+	Server.request_change_map(map_path, "Spawn")
 	queue_free()
 
 # =========================

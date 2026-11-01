@@ -3,6 +3,7 @@ extends Node
 signal time_changed(hour, minute)
 signal day_changed(day, season, year)
 signal time_synced
+var dev_shift := 0.0   # lệch giờ do lệnh /time (giây thật), giữ nguyên khi resync
 
 const SEASONS = ["SPRING", "SUMMER", "AUTUMN", "WINTER"]
 
@@ -45,6 +46,18 @@ func _ready():
 func server_now() -> float:
 	return Time.get_unix_time_from_system() + clock_offset
 
+# đặt giờ trong ngày hiện tại (chỉ local, dùng để test)
+func set_time(h: int, m: int = 0):
+	h = clampi(h, 0, 23)
+	m = clampi(m, 0, 59)
+
+	var cur_hours := total_days * 24 + ((hour - START_HOUR + 24) % 24)
+	var cur_min := cur_hours * 60 + minute
+
+	var tgt_hours := total_days * 24 + ((h - START_HOUR + 24) % 24)
+	var tgt_min := tgt_hours * 60 + m
+
+	dev_shift += float(tgt_min - cur_min) * real_seconds_per_game_minute
 
 func sync_from_server():
 
@@ -115,7 +128,7 @@ func _process(_delta):
 	if not synced:
 		return
 
-	var elapsed := maxf(0.0, server_now() - server_epoch) * debug_speed
+	var elapsed := maxf(0.0, server_now() - server_epoch) * debug_speed + dev_shift
 	update_time(int(elapsed / real_seconds_per_game_minute))	
 	
 	_dbg -= _delta

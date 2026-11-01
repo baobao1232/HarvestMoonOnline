@@ -168,6 +168,7 @@ func _physics_process(delta):
 	velocity = to_goal.normalized() * spd
 	set_breathing(false)
 	update_animation(to_goal)
+	_open_doors_ahead(to_goal)
 	move_and_slide()
 	global_position = NpcManager.clamp_to_map(global_position, 8.0)
 
@@ -407,3 +408,8 @@ func _start_wander():
 		_stuck = 0.0
 		_stuck_n = 0
 		return
+func _open_doors_ahead(dir: Vector2):
+	var ahead := global_position + dir.normalized() * 10.0
+	for d in get_tree().get_nodes_in_group("door"):
+		if d.is_near(ahead, 12.0) or d.is_near(global_position, 12.0):
+			d.npc_open()

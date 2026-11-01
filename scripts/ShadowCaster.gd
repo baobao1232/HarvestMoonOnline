@@ -24,7 +24,11 @@ enum ShadowType {
 @export var skew_min : float = 0.4
 @export var alpha_low : float = 0.25
 @export var alpha_high : float = 0.45
-
+const LAMP_GROUP := "street_lamp"
+@export var lamp_alpha : float = 0.5
+@export var lamp_flatten : float = 0.3
+@export var lamp_skew_max : float = 1.5
+@export var lamp_skew_div : float = 24.0   # nhỏ hơn = bóng ngả dài hơn
 var target
 var trunk
 var foot
@@ -47,7 +51,6 @@ func _ready():
 
 func _process(_delta):
 
-	# interior: tắt bóng nắng, bóng do PointLight2D + LightOccluder2D lo
 	if ShadowManager.indoor:
 		visible = false
 		return
@@ -75,29 +78,54 @@ func _process(_delta):
 	else:
 		return
 
-	# pivot ở đáy texture: gốc node = chân sprite
 	offset = Vector2(0, -texture.get_height() * 0.5)
 
-	# ===== VỊ TRÍ GỐC (chân) =====
+	var base: Vector2 = get_base_position()
+	var w: float = get_width_scale()
+
+		# ===== TỐI / CHẠNG VẠNG: bóng từ đèn đường =====
+	if h < 0.15:
+		var lamp := _find_lamp(base)
+		if lamp.is_empty():
+			visible = false
+			return
+
+		var off: Vector2 = base - lamp.pos
+		var dist: float = off.length()
+		var dir_l: Vector2 = off / dist if dist > 0.01 else Vector2(0, 1)
+
+		# độ dài bóng: xa đèn thì dài hơn, gần chân đèn thì ngắn
+		var len_k: float = clampf(dist / lamp_skew_div, 0.15, lamp_skew_max)
+
+		# cột Y: đỉnh sprite (local y = -1 đơn vị chiều cao) đổ về hướng dir_l
+		# dấu "-" vì local y của đỉnh là âm
+		var y_axis: Vector2 = -dir_l * len_k
+
+		global_transform = Transform2D(
+			Vector2(w, 0.0),
+			y_axis,
+			base
+		)
+		modulate.a = lamp_alpha * lamp.k * lamp.k
+		visible = true
+		return
+
+	# ===== BAN NGÀY: bóng mặt trời (như cũ) =====
 	var push: float = lerpf(length_max, length_min, h)
-	var origin: Vector2 = get_base_position() + dir * push
+	var origin: Vector2 = base + dir * push
 	origin.y += foot_offset
 
-	# ===== HÌNH DẠNG: lật dọc + nghiêng theo nắng =====
-	var sx: float = dir.x * lerpf(skew_max, skew_min, h)
+	var sx2: float = dir.x * lerpf(skew_max, skew_min, h)
 	var sy: float = lerpf(min_flatten, flatten, absf(dir.y)) * lerpf(1.0, 0.6, h)
-	var w: float = get_width_scale()
 
 	global_transform = Transform2D(
 		Vector2(w, 0.0),
-		Vector2(-sx, -sy),
+		Vector2(-sx2, -sy),
 		origin
 	)
 
-	# ===== ĐỘ ĐẬM =====
 	modulate.a = lerpf(alpha_low, alpha_high, h)
-	visible = h > 0.05
-
+	visible = true
 
 # ===============================
 # BASE POSITION
@@ -139,3 +167,19 @@ func get_width_scale() -> float:
 			return 1.2
 
 	return 1.0
+# đèn sáng gần nhất có phủ tới điểm p (k: 0..1, càng gần càng lớn)
+func _find_lamp(p: Vector2) -> Dictionary:
+	var best := {}
+	var best_k := 0.0
+	for l in get_tree().get_nodes_in_group(LAMP_GROUP):
+		if not l.has_method("get_light_info"):
+			continue
+		var info: Dictionary = l.get_light_info()
+		if info.is_empty():
+			continue
+		var k: float = 1.0 - p.distance_to(info.pos) / info.radius
+		if k > best_k:
+			best_k = k
+			best = info
+			best["k"] = k
+	return best

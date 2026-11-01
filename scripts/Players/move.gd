@@ -357,21 +357,22 @@ func _process(_delta):
 
 func get_interact_target():
 
-	if ray == null:
-		return null
+	if ray != null:
+		ray.force_raycast_update()
+		if ray.is_colliding():
+			var node = ray.get_collider()
+			for i in 2:
+				if node == null:
+					break
+				if node.has_method("interact"):
+					return node
+				node = node.get_parent()
 
-	ray.force_raycast_update()
-
-	if not ray.is_colliding():
-		return null
-
-	var node = ray.get_collider()
-
-	for i in 2:
-		if node == null:
-			break
-		if node.has_method("interact"):
-			return node
-		node = node.get_parent()
+	var doors := get_tree().get_nodes_in_group("door")
+	Dbg.p("DOORS IN GROUP:", doors.size())
+	for d in doors:
+		Dbg.p("DOOR dist:", global_position.distance_to(d.shape.global_position))
+		if d.can_interact(self):
+			return d
 
 	return null
