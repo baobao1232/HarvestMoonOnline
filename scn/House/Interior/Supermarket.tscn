@@ -35,7 +35,7 @@ position = Vector2(144, 276)
 texture = ExtResource("2_nua0a")
 
 [node name="Colli" type="CollisionShape2D" parent="." unique_id=176575483]
-position = Vector2(-9, 167)
+position = Vector2(146, 455)
 shape = SubResource("RectangleShape2D_cke7k")
 
 [node name="YSort" type="Node2D" parent="." unique_id=176981859]
@@ -43,16 +43,16 @@ z_index = 1
 y_sort_enabled = true
 
 [node name="Jeff_counter" type="Marker2D" parent="YSort" unique_id=423166403]
-position = Vector2(87, -26)
+position = Vector2(228, 346)
 
 [node name="Supermarket_enter" type="Marker2D" parent="YSort" unique_id=693873735]
 position = Vector2(142, 582)
 
 [node name="Karen_backroom" type="Marker2D" parent="YSort" unique_id=332792696]
-position = Vector2(-67, -195)
+position = Vector2(94, 166)
 
 [node name="Jeff_backroom" type="Marker2D" parent="YSort" unique_id=2138984664]
-position = Vector2(-67, -291)
+position = Vector2(174, 158)
 
 [node name="Tuong1" type="StaticBody2D" parent="YSort" unique_id=811373019]
 z_index = 1
