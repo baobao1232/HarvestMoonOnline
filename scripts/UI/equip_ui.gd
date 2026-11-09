@@ -8,10 +8,11 @@ extends Control
 const COLUMNS := 2
 
 const SLOT_DEFS := [
-	{"key": "helmet",    "slot": ItemData.EquipSlot.HELMET,    "name": "Mũ"},
-	{"key": "armor",     "slot": ItemData.EquipSlot.ARMOR,     "name": "Áo giáp"},
-	{"key": "weapon",    "slot": ItemData.EquipSlot.WEAPON,    "name": "Vũ khí"},
-	{"key": "accessory", "slot": ItemData.EquipSlot.ACCESSORY, "name": "Phụ kiện"},
+	{"key": "helmet", "slot": ItemData.EquipSlot.HELMET, "name": "Mũ"},
+	{"key": "armor",  "slot": ItemData.EquipSlot.ARMOR,  "name": "Áo"},
+	{"key": "pants",  "slot": ItemData.EquipSlot.PANTS,  "name": "Quần"},
+	{"key": "gloves", "slot": ItemData.EquipSlot.GLOVES, "name": "Găng tay"},
+	{"key": "boots",  "slot": ItemData.EquipSlot.BOOTS,  "name": "Giày"},
 ]
 
 const FIRST_DELAY := 0.25
@@ -21,12 +22,14 @@ const REPEAT_DELAY := 0.1
 @onready var fallback: Panel = $Panel/BGFallback
 @onready var cursor: Panel = $Panel/Cursor
 @onready var list_box: VBoxContainer = $Panel/PickList/Items
+@onready var pick_hint: Label = $Panel/PickList/PickHint
 @onready var info: Label = $Panel/Info
 @onready var slot_nodes := [
-	$Panel/Slots/Helmet,
-	$Panel/Slots/Armor,
-	$Panel/Slots/Weapon,
-	$Panel/Slots/Accessory,
+	$Panel/Slots/Non,
+	$Panel/Slots/Ao,
+	$Panel/Slots/Quan,
+	$Panel/Slots/GangTay,
+	$Panel/Slots/Giay,
 ]
 
 var mode := "slots"      # slots | pick
@@ -38,22 +41,21 @@ var ready_for_input := false
 var _prev_dir := Vector2.ZERO
 var _hold := 0.0
 
-
 func _ready():
 	fallback.visible = bg.texture == null
 
+	# slot_nodes đã khai báo đủ 5 node trong @onready -> chỉ cần gán tên
 	for i in slot_nodes.size():
 		slot_nodes[i].get_node("Name").text = SLOT_DEFS[i].name
 
 	_refresh_slots()
 	_update_cursor()
 	_show_slot_info()
+	pick_hint.visible = true
 
-	# chờ vài frame để cú bấm A mở UI không bị tính là bấm chọn
 	await get_tree().process_frame
 	await get_tree().process_frame
 	ready_for_input = true
-
 
 # ===============================
 # LOOP
@@ -191,6 +193,7 @@ func _open_pick():
 			pick_i = i
 
 	mode = "pick"
+	pick_hint.visible = false
 	_refresh_rows()
 
 
@@ -243,6 +246,7 @@ func _confirm():
 	_equip(def.key, "" if sel == null else sel.id)
 
 	mode = "slots"
+	pick_hint.visible = true
 	_clear_rows()
 	_refresh_slots()
 	_show_slot_info()
@@ -265,6 +269,7 @@ func _back():
 
 	if mode == "pick":
 		mode = "slots"
+		pick_hint.visible = true
 		_clear_rows()
 		_show_slot_info()
 		return

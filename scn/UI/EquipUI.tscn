@@ -1,6 +1,6 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://bhdfn3ye6ebsy"]
 
-[ext_resource type="Script" path="res://scripts/UI/equip_ui.gd" id="1_equip"]
+[ext_resource type="Script" uid="uid://dua5r8qs8yl2j" path="res://scripts/UI/equip_ui.gd" id="1_equip"]
 
 [sub_resource type="StyleBoxFlat" id="Style_bg"]
 bg_color = Color(0.2, 0.14, 0.09, 0.96)
@@ -38,7 +38,7 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
-[node name="EquipUI" type="Control"]
+[node name="EquipUI" type="Control" unique_id=1351347918]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -48,7 +48,7 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_equip")
 
-[node name="Dim" type="ColorRect" parent="."]
+[node name="Dim" type="ColorRect" parent="." unique_id=2078631682]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -58,7 +58,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 0.45)
 
-[node name="Panel" type="Control" parent="."]
+[node name="Panel" type="Control" parent="." unique_id=10464919]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -66,14 +66,14 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -380.0
-offset_top = -220.0
+offset_top = -260.0
 offset_right = 380.0
-offset_bottom = 220.0
+offset_bottom = 260.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="BGFallback" type="Panel" parent="Panel"]
+[node name="BGFallback" type="Panel" parent="Panel" unique_id=1955487298]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -83,7 +83,7 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("Style_bg")
 
-[node name="BG" type="TextureRect" parent="Panel"]
+[node name="BG" type="TextureRect" parent="Panel" unique_id=211722090]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 15
@@ -94,32 +94,30 @@ grow_vertical = 2
 mouse_filter = 2
 expand_mode = 1
 
-[node name="Title" type="Label" parent="Panel"]
+[node name="Title" type="Label" parent="Panel" unique_id=2047670417]
 layout_mode = 0
 offset_top = 14.0
 offset_right = 760.0
 offset_bottom = 54.0
 theme_override_font_sizes/font_size = 30
-text = "Trang bị"
+text = "Trang phục"
 horizontal_alignment = 1
 
-[node name="Slots" type="Control" parent="Panel"]
-layout_mode = 3
+[node name="Slots" type="Control" parent="Panel" unique_id=1156239275]
 anchors_preset = 0
 offset_left = 60.0
-offset_top = 90.0
+offset_top = 70.0
 offset_right = 260.0
-offset_bottom = 310.0
+offset_bottom = 434.0
 mouse_filter = 2
 
-[node name="Helmet" type="Control" parent="Panel/Slots"]
-layout_mode = 3
+[node name="Non" type="Control" parent="Panel/Slots" unique_id=1307901786]
 anchors_preset = 0
 offset_right = 90.0
 offset_bottom = 90.0
 mouse_filter = 2
 
-[node name="Frame" type="Panel" parent="Panel/Slots/Helmet"]
+[node name="Frame" type="Panel" parent="Panel/Slots/Non" unique_id=2041983406]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -129,7 +127,7 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("Style_slot")
 
-[node name="Icon" type="TextureRect" parent="Panel/Slots/Helmet"]
+[node name="Icon" type="TextureRect" parent="Panel/Slots/Non" unique_id=1049325812]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 15
@@ -145,7 +143,7 @@ mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Name" type="Label" parent="Panel/Slots/Helmet"]
+[node name="Name" type="Label" parent="Panel/Slots/Non" unique_id=1813579625]
 layout_mode = 0
 offset_top = 92.0
 offset_right = 90.0
@@ -153,15 +151,14 @@ offset_bottom = 114.0
 theme_override_font_sizes/font_size = 16
 horizontal_alignment = 1
 
-[node name="Armor" type="Control" parent="Panel/Slots"]
-layout_mode = 3
+[node name="Ao" type="Control" parent="Panel/Slots" unique_id=949304010]
 anchors_preset = 0
 offset_left = 110.0
 offset_right = 200.0
 offset_bottom = 90.0
 mouse_filter = 2
 
-[node name="Frame" type="Panel" parent="Panel/Slots/Armor"]
+[node name="Frame" type="Panel" parent="Panel/Slots/Ao" unique_id=661086381]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -171,7 +168,7 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("Style_slot")
 
-[node name="Icon" type="TextureRect" parent="Panel/Slots/Armor"]
+[node name="Icon" type="TextureRect" parent="Panel/Slots/Ao" unique_id=1416201169]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 15
@@ -187,7 +184,7 @@ mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Name" type="Label" parent="Panel/Slots/Armor"]
+[node name="Name" type="Label" parent="Panel/Slots/Ao" unique_id=116386669]
 layout_mode = 0
 offset_top = 92.0
 offset_right = 90.0
@@ -195,15 +192,14 @@ offset_bottom = 114.0
 theme_override_font_sizes/font_size = 16
 horizontal_alignment = 1
 
-[node name="Weapon" type="Control" parent="Panel/Slots"]
-layout_mode = 3
+[node name="Quan" type="Control" parent="Panel/Slots" unique_id=1114399187]
 anchors_preset = 0
-offset_top = 130.0
+offset_top = 125.0
 offset_right = 90.0
-offset_bottom = 220.0
+offset_bottom = 215.0
 mouse_filter = 2
 
-[node name="Frame" type="Panel" parent="Panel/Slots/Weapon"]
+[node name="Frame" type="Panel" parent="Panel/Slots/Quan" unique_id=1374653808]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -213,7 +209,7 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("Style_slot")
 
-[node name="Icon" type="TextureRect" parent="Panel/Slots/Weapon"]
+[node name="Icon" type="TextureRect" parent="Panel/Slots/Quan" unique_id=1579448610]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 15
@@ -229,7 +225,7 @@ mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Name" type="Label" parent="Panel/Slots/Weapon"]
+[node name="Name" type="Label" parent="Panel/Slots/Quan" unique_id=50307966]
 layout_mode = 0
 offset_top = 92.0
 offset_right = 90.0
@@ -237,16 +233,15 @@ offset_bottom = 114.0
 theme_override_font_sizes/font_size = 16
 horizontal_alignment = 1
 
-[node name="Accessory" type="Control" parent="Panel/Slots"]
-layout_mode = 3
+[node name="GangTay" type="Control" parent="Panel/Slots" unique_id=111653178]
 anchors_preset = 0
 offset_left = 110.0
-offset_top = 130.0
+offset_top = 125.0
 offset_right = 200.0
-offset_bottom = 220.0
+offset_bottom = 215.0
 mouse_filter = 2
 
-[node name="Frame" type="Panel" parent="Panel/Slots/Accessory"]
+[node name="Frame" type="Panel" parent="Panel/Slots/GangTay" unique_id=2144846678]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -256,7 +251,7 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("Style_slot")
 
-[node name="Icon" type="TextureRect" parent="Panel/Slots/Accessory"]
+[node name="Icon" type="TextureRect" parent="Panel/Slots/GangTay" unique_id=1583299223]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 15
@@ -272,7 +267,7 @@ mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Name" type="Label" parent="Panel/Slots/Accessory"]
+[node name="Name" type="Label" parent="Panel/Slots/GangTay" unique_id=1902423551]
 layout_mode = 0
 offset_top = 92.0
 offset_right = 90.0
@@ -280,41 +275,90 @@ offset_bottom = 114.0
 theme_override_font_sizes/font_size = 16
 horizontal_alignment = 1
 
-[node name="PickList" type="Control" parent="Panel"]
-layout_mode = 3
+[node name="Giay" type="Control" parent="Panel/Slots" unique_id=195621620]
+anchors_preset = 0
+offset_top = 250.0
+offset_right = 90.0
+offset_bottom = 340.0
+mouse_filter = 2
+
+[node name="Frame" type="Panel" parent="Panel/Slots/Giay" unique_id=773846]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_slot")
+
+[node name="Icon" type="TextureRect" parent="Panel/Slots/Giay" unique_id=1851241446]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Name" type="Label" parent="Panel/Slots/Giay" unique_id=286673351]
+layout_mode = 0
+offset_top = 92.0
+offset_right = 90.0
+offset_bottom = 114.0
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+
+[node name="PickList" type="Control" parent="Panel" unique_id=131330135]
 anchors_preset = 0
 offset_left = 330.0
 offset_top = 80.0
 offset_right = 730.0
+offset_bottom = 400.0
+mouse_filter = 2
+
+[node name="Items" type="VBoxContainer" parent="Panel/PickList" unique_id=316460984]
+layout_mode = 0
+offset_right = 400.0
 offset_bottom = 320.0
 mouse_filter = 2
 
-[node name="Items" type="VBoxContainer" parent="Panel/PickList"]
+[node name="PickHint" type="Label" parent="Panel/PickList" unique_id=1976036487]
 layout_mode = 0
 offset_right = 400.0
-offset_bottom = 240.0
-mouse_filter = 2
+offset_bottom = 120.0
+theme_override_colors/font_color = Color(1, 1, 1, 0.55)
+theme_override_font_sizes/font_size = 20
+text = "Chọn một ô bên trái rồi nhấn A để xem trang phục có trong túi đồ."
+autowrap_mode = 3
 
-[node name="Info" type="Label" parent="Panel"]
+[node name="Info" type="Label" parent="Panel" unique_id=2095839546]
 layout_mode = 0
 offset_left = 60.0
-offset_top = 340.0
+offset_top = 440.0
 offset_right = 730.0
-offset_bottom = 400.0
+offset_bottom = 490.0
 theme_override_font_sizes/font_size = 20
 autowrap_mode = 3
 
-[node name="Hint" type="Label" parent="Panel"]
+[node name="Hint" type="Label" parent="Panel" unique_id=1091093184]
 layout_mode = 0
 offset_left = 60.0
-offset_top = 406.0
+offset_top = 490.0
 offset_right = 730.0
-offset_bottom = 432.0
+offset_bottom = 516.0
 theme_override_colors/font_color = Color(1, 1, 1, 0.6)
 theme_override_font_sizes/font_size = 16
 text = "A: chọn    X: quay lại"
 
-[node name="Cursor" type="Panel" parent="Panel"]
+[node name="Cursor" type="Panel" parent="Panel" unique_id=1952925424]
 layout_mode = 0
 offset_right = 98.0
 offset_bottom = 98.0

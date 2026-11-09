@@ -83,11 +83,15 @@ enum ItemTag {
 # ===============================
 enum EquipSlot {
 	NONE,
-	WEAPON,
-	ARMOR,
 	HELMET,
-	ACCESSORY
+	ARMOR,
+	PANTS,
+	GLOVES,
+	BOOTS,
+	WEAPON,      # chưa có ô UI
+	ACCESSORY,   # chưa có ô UI
 }
+
 @export var equip_slot : EquipSlot = EquipSlot.NONE
 
 
