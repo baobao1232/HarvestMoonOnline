@@ -826,6 +826,16 @@ position = Vector2(-1, -13)
 sprite_frames = SubResource("SpriteFrames_bl7xi")
 animation = &"use_swing_right"
 
+[node name="layer_non" type="AnimatedSprite2D" parent="." unique_id=1845404569]
+
+[node name="layer_ao" type="AnimatedSprite2D" parent="." unique_id=733115751]
+
+[node name="layer_quan" type="AnimatedSprite2D" parent="." unique_id=1960526972]
+
+[node name="layer_gangtay" type="AnimatedSprite2D" parent="." unique_id=1021549266]
+
+[node name="layer_giay" type="AnimatedSprite2D" parent="." unique_id=1393129360]
+
 [node name="ToolOverlay" type="Sprite2D" parent="." unique_id=1636970024]
 script = ExtResource("7_b1vre")
 

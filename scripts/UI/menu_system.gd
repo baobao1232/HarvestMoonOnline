@@ -119,7 +119,8 @@ func confirm():
 			Dbg.p("CROPS")
 
 		3:
-			Dbg.p("HOME")
+			UIManager.close()
+			UIManager.open(preload("res://scn/UI/EquipUI.tscn"), null, "equip")
 
 		4:
 			Dbg.p("SHOP")

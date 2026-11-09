@@ -89,7 +89,8 @@ func _physics_process(delta):
 			"inventory",
 			"inventory_action",
 			"hotbar",
-			"hotbar_move"
+			"hotbar_move",
+			"equip"
 		]
 
 	# INPUT

@@ -1,0 +1,322 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/UI/equip_ui.gd" id="1_equip"]
+
+[sub_resource type="StyleBoxFlat" id="Style_bg"]
+bg_color = Color(0.2, 0.14, 0.09, 0.96)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.55, 0.38, 0.2, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="Style_slot"]
+bg_color = Color(0.1, 0.07, 0.05, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45, 0.32, 0.18, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="Style_cursor"]
+draw_center = false
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(1, 0.85, 0.2, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="EquipUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_equip")
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.45)
+
+[node name="Panel" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -380.0
+offset_top = -220.0
+offset_right = 380.0
+offset_bottom = 220.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="BGFallback" type="Panel" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_bg")
+
+[node name="BG" type="TextureRect" parent="Panel"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+
+[node name="Title" type="Label" parent="Panel"]
+layout_mode = 0
+offset_top = 14.0
+offset_right = 760.0
+offset_bottom = 54.0
+theme_override_font_sizes/font_size = 30
+text = "Trang bị"
+horizontal_alignment = 1
+
+[node name="Slots" type="Control" parent="Panel"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 60.0
+offset_top = 90.0
+offset_right = 260.0
+offset_bottom = 310.0
+mouse_filter = 2
+
+[node name="Helmet" type="Control" parent="Panel/Slots"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 90.0
+offset_bottom = 90.0
+mouse_filter = 2
+
+[node name="Frame" type="Panel" parent="Panel/Slots/Helmet"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_slot")
+
+[node name="Icon" type="TextureRect" parent="Panel/Slots/Helmet"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Name" type="Label" parent="Panel/Slots/Helmet"]
+layout_mode = 0
+offset_top = 92.0
+offset_right = 90.0
+offset_bottom = 114.0
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+
+[node name="Armor" type="Control" parent="Panel/Slots"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 110.0
+offset_right = 200.0
+offset_bottom = 90.0
+mouse_filter = 2
+
+[node name="Frame" type="Panel" parent="Panel/Slots/Armor"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_slot")
+
+[node name="Icon" type="TextureRect" parent="Panel/Slots/Armor"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Name" type="Label" parent="Panel/Slots/Armor"]
+layout_mode = 0
+offset_top = 92.0
+offset_right = 90.0
+offset_bottom = 114.0
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+
+[node name="Weapon" type="Control" parent="Panel/Slots"]
+layout_mode = 3
+anchors_preset = 0
+offset_top = 130.0
+offset_right = 90.0
+offset_bottom = 220.0
+mouse_filter = 2
+
+[node name="Frame" type="Panel" parent="Panel/Slots/Weapon"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_slot")
+
+[node name="Icon" type="TextureRect" parent="Panel/Slots/Weapon"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Name" type="Label" parent="Panel/Slots/Weapon"]
+layout_mode = 0
+offset_top = 92.0
+offset_right = 90.0
+offset_bottom = 114.0
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+
+[node name="Accessory" type="Control" parent="Panel/Slots"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 110.0
+offset_top = 130.0
+offset_right = 200.0
+offset_bottom = 220.0
+mouse_filter = 2
+
+[node name="Frame" type="Panel" parent="Panel/Slots/Accessory"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_slot")
+
+[node name="Icon" type="TextureRect" parent="Panel/Slots/Accessory"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Name" type="Label" parent="Panel/Slots/Accessory"]
+layout_mode = 0
+offset_top = 92.0
+offset_right = 90.0
+offset_bottom = 114.0
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+
+[node name="PickList" type="Control" parent="Panel"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 330.0
+offset_top = 80.0
+offset_right = 730.0
+offset_bottom = 320.0
+mouse_filter = 2
+
+[node name="Items" type="VBoxContainer" parent="Panel/PickList"]
+layout_mode = 0
+offset_right = 400.0
+offset_bottom = 240.0
+mouse_filter = 2
+
+[node name="Info" type="Label" parent="Panel"]
+layout_mode = 0
+offset_left = 60.0
+offset_top = 340.0
+offset_right = 730.0
+offset_bottom = 400.0
+theme_override_font_sizes/font_size = 20
+autowrap_mode = 3
+
+[node name="Hint" type="Label" parent="Panel"]
+layout_mode = 0
+offset_left = 60.0
+offset_top = 406.0
+offset_right = 730.0
+offset_bottom = 432.0
+theme_override_colors/font_color = Color(1, 1, 1, 0.6)
+theme_override_font_sizes/font_size = 16
+text = "A: chọn    X: quay lại"
+
+[node name="Cursor" type="Panel" parent="Panel"]
+layout_mode = 0
+offset_right = 98.0
+offset_bottom = 98.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Style_cursor")
