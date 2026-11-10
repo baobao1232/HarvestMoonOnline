@@ -1,29 +1,29 @@
 extends Control
-# UI mặc trang bị. Mở bằng:
-#   UIManager.open(preload("res://scn/UI/EquipUI.tscn"), null, "equip")
-#
-# Điều khiển (giống inventory): D-pad di chuyển, A (interact) chọn, X (interactx) quay lại.
-# Muốn gắn background tự vẽ: kéo ảnh vào Panel/BG -> Texture (BGFallback tự ẩn).
-
-const COLUMNS := 2
-
-const SLOT_DEFS := [
-	{"key": "helmet", "slot": ItemData.EquipSlot.HELMET, "name": "Mũ"},
-	{"key": "armor",  "slot": ItemData.EquipSlot.ARMOR,  "name": "Áo"},
-	{"key": "pants",  "slot": ItemData.EquipSlot.PANTS,  "name": "Quần"},
-	{"key": "gloves", "slot": ItemData.EquipSlot.GLOVES, "name": "Găng tay"},
-	{"key": "boots",  "slot": ItemData.EquipSlot.BOOTS,  "name": "Giày"},
-]
 
 const FIRST_DELAY := 0.25
 const REPEAT_DELAY := 0.1
 
+const SLOT_DEFS := [
+	{"key": "helmet", "slot": ItemData.EquipSlot.HELMET, "name": "Mũ"},
+	{"key": "armor", "slot": ItemData.EquipSlot.ARMOR, "name": "Áo"},
+	{"key": "pants", "slot": ItemData.EquipSlot.PANTS, "name": "Quần"},
+	{"key": "gloves", "slot": ItemData.EquipSlot.GLOVES, "name": "Găng tay"},
+	{"key": "boots", "slot": ItemData.EquipSlot.BOOTS, "name": "Giày"},
+]
+
 @onready var bg: TextureRect = $Panel/BG
 @onready var fallback: Panel = $Panel/BGFallback
 @onready var cursor: Panel = $Panel/Cursor
-@onready var list_box: VBoxContainer = $Panel/PickList/Items
-@onready var pick_hint: Label = $Panel/PickList/PickHint
+@onready var slots_root: Control = $Panel/Slots
+@onready var pick_bar: Panel = $Panel/PickBar
+@onready var list_box: HBoxContainer = $Panel/PickBar/Scroll/Items
+@onready var player_preview: TextureRect = $Panel/PlayerPreview
+@onready var selected_icon: TextureRect = $Panel/SelectedIcon
+@onready var selected_name: Label = $Panel/SelectedName
+@onready var selected_desc: Label = $Panel/SelectedDesc
+@onready var stats: Label = $Panel/Stats
 @onready var info: Label = $Panel/Info
+
 @onready var slot_nodes := [
 	$Panel/Slots/Non,
 	$Panel/Slots/Ao,
@@ -32,36 +32,32 @@ const REPEAT_DELAY := 0.1
 	$Panel/Slots/Giay,
 ]
 
-var mode := "slots"      # slots | pick
+var mode := "slots" # slots | pick
 var slot_i := 0
 var pick_i := 0
-var candidates: Array = []   # [null (tháo), ItemData, ...]
+var candidates: Array = []
 
 var ready_for_input := false
 var _prev_dir := Vector2.ZERO
 var _hold := 0.0
 
-func _ready():
+func _ready() -> void:
 	fallback.visible = bg.texture == null
 
-	# slot_nodes đã khai báo đủ 5 node trong @onready -> chỉ cần gán tên
 	for i in slot_nodes.size():
 		slot_nodes[i].get_node("Name").text = SLOT_DEFS[i].name
 
 	_refresh_slots()
 	_update_cursor()
 	_show_slot_info()
-	pick_hint.visible = true
+	pick_bar.visible = false
 
 	await get_tree().process_frame
 	await get_tree().process_frame
 	ready_for_input = true
 
-# ===============================
-# LOOP
-# ===============================
-func _process(delta):
 
+func _process(delta: float) -> void:
 	if not ready_for_input:
 		return
 	if UIManager.input_mode != "equip" or DialogManager.is_showing:
@@ -75,14 +71,27 @@ func _process(delta):
 		_back()
 
 
-func _handle_dpad(delta):
+func _input(event: InputEvent) -> void:
+	if not ready_for_input or UIManager.input_mode != "equip":
+		return
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		if mode == "slots":
+			for i in slot_nodes.size():
+				if slot_nodes[i].get_global_rect().has_point(event.position):
+					slot_i = i
+					_update_cursor()
+					_show_slot_info()
+					_open_pick()
+					get_viewport().set_input_as_handled()
+					return
 
+
+func _handle_dpad(delta: float) -> void:
 	var dpad = get_tree().get_first_node_in_group("dpad")
 	if dpad == null:
 		return
 
 	var dir: Vector2 = dpad.direction
-
 	if dir == Vector2.ZERO:
 		_prev_dir = Vector2.ZERO
 		_hold = 0.0
@@ -100,176 +109,204 @@ func _handle_dpad(delta):
 		_move(dir)
 
 
-func _move(dir: Vector2):
-
+func _move(dir: Vector2) -> void:
 	if mode == "slots":
-		var col := slot_i % COLUMNS
-		var row := slot_i / COLUMNS
+		var col := slot_i % 2
+		var row := int(slot_i / 2)
 
-		if dir.x > 0: col += 1
-		elif dir.x < 0: col -= 1
-		elif dir.y > 0: row += 1
-		elif dir.y < 0: row -= 1
+		if dir.x > 0:
+			col += 1
+		elif dir.x < 0:
+			col -= 1
+		elif dir.y > 0:
+			row += 1
+		elif dir.y < 0:
+			row -= 1
 
-		if col < 0 or col >= COLUMNS or row < 0:
+		if col < 0 or col >= 2 or row < 0:
 			return
 
-		var n := row * COLUMNS + col
-		if n >= slot_nodes.size():
+		var next_index := row * 2 + col
+		if next_index >= slot_nodes.size():
 			return
 
-		slot_i = n
+		slot_i = next_index
 		_update_cursor()
 		_show_slot_info()
-
 	else:
-		if dir.y > 0: pick_i += 1
-		elif dir.y < 0: pick_i -= 1
-		else: return
+		if dir.x > 0:
+			pick_i += 1
+		elif dir.x < 0:
+			pick_i -= 1
+		else:
+			return
 
 		pick_i = clampi(pick_i, 0, candidates.size() - 1)
 		_refresh_rows()
 
 
-# ===============================
-# SLOTS
-# ===============================
-func _refresh_slots():
-
+func _refresh_slots() -> void:
 	for i in slot_nodes.size():
 		var icon: TextureRect = slot_nodes[i].get_node("Icon")
-		var it := EquipData.get_item(SLOT_DEFS[i].key)
-		icon.texture = it.icon if it != null else null
-		icon.visible = it != null
+		var item: ItemData = EquipData.get_item(SLOT_DEFS[i].key)
+		icon.texture = item.icon if item != null else null
+		icon.visible = item != null
 
 
-func _update_cursor():
-	var n: Control = slot_nodes[slot_i]
-	cursor.size = n.size + Vector2(8, 8)
-	cursor.global_position = n.global_position - Vector2(4, 4)
+func _update_cursor() -> void:
+	var node: Control = slot_nodes[slot_i]
+	cursor.visible = true
+	cursor.size = node.size + Vector2(8, 8)
+	cursor.global_position = node.global_position - Vector2(4, 4)
 
 
-func _show_slot_info():
+func _show_slot_info() -> void:
+	var def: Dictionary = SLOT_DEFS[slot_i]
+	var item: ItemData = EquipData.get_item(def.key)
 
-	var def = SLOT_DEFS[slot_i]
-	var it := EquipData.get_item(def.key)
+	if item == null:
+		selected_icon.texture = null
+		selected_name.text = def.name + " — (trống)"
+		selected_desc.text = "Chọn ô này để xem các trang bị phù hợp trong túi đồ."
+		stats.text = "ATK  +%d\nDEF  +%d" % [EquipData.total_atk(), EquipData.total_def()]
+		info.text = "Chưa trang bị vật phẩm ở ô này."
+	else:
+		selected_icon.texture = item.icon
+		selected_name.text = item.name
+		selected_desc.text = item.description
+		stats.text = "ATK  +%d\nDEF  +%d\nHP   +%d\nMP   +%d" % [item.atk, item.def, item.max_hp, item.max_mp]
+		info.text = "Tổng nhân vật: ATK %d  |  DEF %d" % [EquipData.total_atk(), EquipData.total_def()]
 
-	var t: String = "%s: " % def.name
-	t += it.name if it != null else "(trống)"
-	t += "\nTổng ATK %d  |  DEF %d" % [EquipData.total_atk(), EquipData.total_def()]
-	info.text = t
 
-
-# ===============================
-# PICK
-# ===============================
-func _open_pick():
-
-	var def = SLOT_DEFS[slot_i]
-
-	candidates = [null]   # null = tháo
+func _open_pick() -> void:
+	var def: Dictionary = SLOT_DEFS[slot_i]
+	candidates = [null] # null = tháo
 	var seen := {}
 
-	for s in InventoryManager.slots:
-		if s == null:
+	for slot_data in InventoryManager.slots:
+		if slot_data == null:
 			continue
-		var it: ItemData = s["item"]
-		if it == null or not it.is_equipment():
+		var item: ItemData = slot_data.get("item") if slot_data is Dictionary else null
+		if item == null or not item.is_equipment():
 			continue
-		if it.equip_slot != def.slot or seen.has(it.id):
+		if item.equip_slot != def.slot or seen.has(item.id):
 			continue
-		seen[it.id] = true
-		candidates.append(it)
+		seen[item.id] = true
+		candidates.append(item)
 
 	if candidates.size() == 1 and EquipData.get_item(def.key) == null:
-		info.text = "Không có trang bị phù hợp cho ô %s" % def.name
+		pick_bar.visible = false
+		info.text = "Không có trang bị phù hợp cho ô %s." % def.name
 		return
 
-	# đặt con trỏ ngay món đang mặc
 	pick_i = 0
-	var cur: String = EquipData.get_id(def.key)
+	var current_id: String = EquipData.get_id(def.key)
 	for i in range(1, candidates.size()):
-		if candidates[i].id == cur:
+		if candidates[i].id == current_id:
 			pick_i = i
 
 	mode = "pick"
-	pick_hint.visible = false
+	pick_bar.visible = true
 	_refresh_rows()
 
 
-func _refresh_rows():
+func _refresh_rows() -> void:
+	for child in list_box.get_children():
+		child.queue_free()
 
-	for c in list_box.get_children():
-		c.queue_free()
-
-	var def = SLOT_DEFS[slot_i]
-	var cur: String = EquipData.get_id(def.key)
+	var current_id: String = EquipData.get_id(SLOT_DEFS[slot_i].key)
 
 	for i in candidates.size():
-		var it = candidates[i]
-		var l := Label.new()
-		l.add_theme_font_size_override("font_size", 22)
+		var item = candidates[i]
+		var button := Button.new()
+		button.custom_minimum_size = Vector2(76, 62)
+		button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+		button.focus_mode = Control.FOCUS_NONE
+		button.add_theme_font_size_override("font_size", 13)
+		button.pressed.connect(_on_item_button_pressed.bind(i))
 
-		var txt: String = "— Tháo —" if it == null else it.name
-		if it != null and it.id == cur:
-			txt += "  (đang mặc)"
+		if item == null:
+			button.text = "Tháo"
+		else:
+			button.icon = item.icon
+			button.expand_icon = true
+			button.text = item.name
+			button.tooltip_text = item.name + ("\nĐang mặc" if item.id == current_id else "")
 
-		l.text = ("▶ " if i == pick_i else "    ") + txt
 		if i == pick_i:
-			l.add_theme_color_override("font_color", Color(1, 0.9, 0.4))
-		list_box.add_child(l)
+			button.add_theme_stylebox_override("normal", _make_selected_style())
+			button.add_theme_color_override("font_color", Color(0.25, 0.13, 0.05))
+		list_box.add_child(button)
 
-	var sel = candidates[pick_i]
-	if sel == null:
-		info.text = "Tháo trang bị khỏi ô %s" % def.name
+	var selected = candidates[pick_i]
+	if selected == null:
+		selected_icon.texture = null
+		selected_name.text = "Tháo " + SLOT_DEFS[slot_i].name
+		selected_desc.text = "Bỏ trang bị đang mặc ở ô này."
+		stats.text = "Không cộng chỉ số"
 	else:
-		info.text = "%s\n%s\nATK +%d  DEF +%d" % [sel.name, sel.description, sel.atk, sel.def]
+		selected_icon.texture = selected.icon
+		selected_name.text = selected.name
+		selected_desc.text = selected.description
+		stats.text = "ATK  +%d\nDEF  +%d\nHP   +%d\nMP   +%d" % [selected.atk, selected.def, selected.max_hp, selected.max_mp]
+
+	info.text = "A: xác nhận    X: quay lại    ← →: chọn vật phẩm"
 
 
-func _clear_rows():
-	for c in list_box.get_children():
-		c.queue_free()
+func _make_selected_style() -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(1.0, 0.84, 0.48, 1)
+	style.border_color = Color(1.0, 0.66, 0.12, 1)
+	style.set_border_width_all(3)
+	style.set_corner_radius_all(7)
+	return style
 
 
-# ===============================
-# ACTIONS
-# ===============================
-func _confirm():
+func _on_item_button_pressed(index: int) -> void:
+	if mode != "pick":
+		return
+	pick_i = index
+	_refresh_rows()
 
+
+func _clear_rows() -> void:
+	for child in list_box.get_children():
+		child.queue_free()
+
+
+func _confirm() -> void:
 	if mode == "slots":
 		_open_pick()
 		return
 
-	var def = SLOT_DEFS[slot_i]
-	var sel = candidates[pick_i]
+	if candidates.is_empty():
+		return
 
-	_equip(def.key, "" if sel == null else sel.id)
+	var def: Dictionary = SLOT_DEFS[slot_i]
+	var selected = candidates[pick_i]
+	_equip(def.key, "" if selected == null else selected.id)
 
 	mode = "slots"
-	pick_hint.visible = true
+	pick_bar.visible = false
 	_clear_rows()
 	_refresh_slots()
 	_show_slot_info()
+	_update_cursor()
 
 
-# Chỗ duy nhất đổi trang bị. Sau này muốn server quyết định thì thay bằng
-# Server.api("equip", {...}, callback) ở đây.
-func _equip(key: String, item_id: String):
-
+func _equip(key: String, item_id: String) -> void:
 	EquipData.set_item(key, item_id)
 	Server._save_remote(true)
 
-	# hook để vẽ layer lên nhân vật (move.gd tự thêm hàm này khi làm layer)
-	var p = SceneManager.player
-	if p != null and is_instance_valid(p) and p.has_method("apply_equipment"):
-		p.apply_equipment()
+	var player = SceneManager.player
+	if player != null and is_instance_valid(player) and player.has_method("apply_equipment"):
+		player.apply_equipment()
 
 
-func _back():
-
+func _back() -> void:
 	if mode == "pick":
 		mode = "slots"
-		pick_hint.visible = true
+		pick_bar.visible = false
 		_clear_rows()
 		_show_slot_info()
 		return

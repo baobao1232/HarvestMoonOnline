@@ -112,8 +112,14 @@ func _process(_delta):
 
 	# ===== BAN NGÀY: bóng mặt trời (như cũ) =====
 	var push: float = lerpf(length_max, length_min, h)
+
+	# Bóng player luôn bắt đầu sát chân
 	var origin: Vector2 = base + dir * push
-	origin.y += foot_offset
+
+	if shadow_type == ShadowType.PLAYER:
+		origin += Vector2(0, -1)
+	else:
+		origin.y += foot_offset
 
 	var sx2: float = dir.x * lerpf(skew_max, skew_min, h)
 	var sy: float = lerpf(min_flatten, flatten, absf(dir.y)) * lerpf(1.0, 0.6, h)
