@@ -201,6 +201,9 @@ func change_map_local(path, spawn):
 
 	if player.has_method("snap_camera"):
 		player.snap_camera()
+		
+	if player.has_method("apply_equipment"):
+		player.apply_equipment()
 
 	# ===== SPAWN LẠI NGƯỜI CHƠI KHÁC Ở MAP MỚI =====
 	for id in remote_data.keys():

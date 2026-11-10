@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://b7paimesaomht"]
+
+[ext_resource type="Texture2D" uid="uid://c1q7qw65dse11" path="res://Assest/Items/costume/Black/black_icon.png" id="1_dgdct"]
+[ext_resource type="Script" uid="uid://crd5bdjovw4hg" path="res://scripts/ItemData.gd" id="1_wwcm7"]
+[ext_resource type="Texture2D" uid="uid://cjbumgtqqwybu" path="res://Assest/Items/costume/Black/idle_black.png" id="2_k8o5k"]
+[ext_resource type="Texture2D" uid="uid://6pt5wgvmjb6f" path="res://Assest/Items/costume/Black/raihat.png" id="3_q6djt"]
+[ext_resource type="Texture2D" uid="uid://be0bw5urkhvgh" path="res://Assest/Items/costume/Black/run_black.png" id="4_p00el"]
+[ext_resource type="Texture2D" uid="uid://xc37j1f2os40" path="res://Assest/Items/costume/Black/hoe_black.png" id="5_01dju"]
+[ext_resource type="Texture2D" uid="uid://erdkgr6cvylu" path="res://Assest/Items/costume/Black/swing_black.png" id="6_dj3ta"]
+[ext_resource type="Texture2D" uid="uid://bbhoeyxp1inq2" path="res://Assest/Items/costume/Black/water_black.png" id="7_xuyt5"]
+
+[resource]
+script = ExtResource("1_wwcm7")
+id = "Non_Black_01"
+name = "Nón Màu Đen"
+icon = ExtResource("1_dgdct")
+description = "Nón được nhuộm màu đen"
+max_stack = 1
+price = 1
+type = 1
+layer_idle = ExtResource("2_k8o5k")
+layer_run = ExtResource("4_p00el")
+layer_raihat = ExtResource("3_q6djt")
+layer_use_hoe = ExtResource("5_01dju")
+layer_use_swing = ExtResource("6_dj3ta")
+layer_use_water = ExtResource("7_xuyt5")
+equip_slot = 1
+metadata/_custom_type_script = "uid://crd5bdjovw4hg"

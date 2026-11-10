@@ -52,6 +52,45 @@ enum ToolType { NONE, HOE, AXE, PICKAXE, WATERING_CAN, SICKLE, HAMMER }
 @export var regrow : bool = false
 @export var regrow_days : int = 0
 
+# ===============================
+# EQUIP LAYER (sheet vẽ lên nhân vật, cùng bố cục với sheet gốc của player)
+# ===============================
+@export_group("Equip Layer")
+@export var layer_idle : Texture2D        # ↔ idle_animation.png
+@export var layer_run : Texture2D         # ↔ Run_animation.png
+@export var layer_raihat : Texture2D      # ↔ raihatgiong.png
+@export var layer_showitem : Texture2D    # ↔ show_item.png
+@export var layer_use_hoe : Texture2D     # ↔ use_tool_animation.png
+@export var layer_use_sickle : Texture2D  # ↔ use_sickle_animation.png
+@export var layer_use_swing : Texture2D   # ↔ use_swing_animation.png
+@export var layer_use_water : Texture2D   # ↔ use_water_animation.png
+@export_group("")
+
+# tên property → tên file (không đuôi) của sheet gốc trên Player
+const LAYER_BASE_NAMES := {
+	"layer_idle": "idle_animation",
+	"layer_run": "Run_animation",
+	"layer_raihat": "raihatgiong",
+	"layer_showitem": "show_item",
+	"layer_use_hoe": "use_tool_animation",
+	"layer_use_sickle": "use_sickle_animation",
+	"layer_use_swing": "use_swing_animation",
+	"layer_use_water": "use_water_animation",
+}
+
+
+# {tên sheet gốc: texture layer}, chỉ gồm những ô đã kéo ảnh vào
+func get_layer_sheets() -> Dictionary:
+	var out := {}
+	for prop in LAYER_BASE_NAMES:
+		var t = get(prop)
+		if t != null:
+			out[LAYER_BASE_NAMES[prop]] = t
+	return out
+
+
+func has_layer() -> bool:
+	return not get_layer_sheets().is_empty()
 
 # ===============================
 # RARITY

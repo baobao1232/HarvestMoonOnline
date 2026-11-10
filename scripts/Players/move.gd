@@ -49,7 +49,8 @@ func _ready():
 	# NEW: 1 handler duy nhất cho mọi anim không loop (raihat, use_*)
 	if not anim.animation_finished.is_connected(_on_anim_finished):
 		anim.animation_finished.connect(_on_anim_finished)
-
+	
+	apply_equipment.call_deferred()
 
 # ===============================
 # CAMERA LIMIT
@@ -377,3 +378,53 @@ func get_interact_target():
 			return d
 
 	return null
+
+# ===============================
+# EQUIPMENT LAYER
+# ===============================
+const LAYER_NODES := {
+	"helmet": "layer_non",
+	"armor":  "layer_ao",
+	"pants":  "layer_quan",
+	"gloves": "layer_gangtay",
+	"boots":  "layer_giay",
+}
+
+
+# equip_ui gọi hàm này sau mỗi lần đổi đồ
+func apply_equipment():
+
+	for key in LAYER_NODES:
+
+		var layer = get_node_or_null(LAYER_NODES[key])
+		if layer == null or not layer.has_method("set_sheets"):
+			continue
+
+		var it := EquipData.get_item(key)
+
+		if it == null or not it.has_layer():
+			layer.set_sheets({})
+		else:
+			layer.set_sheets(_build_sheet_map(it.get_layer_sheets()))
+
+
+# {sheet gốc (Texture) : sheet layer (Texture)} dựa vào tên file của sheet gốc
+func _build_sheet_map(by_name: Dictionary) -> Dictionary:
+
+	var map := {}
+	var frames: SpriteFrames = anim.sprite_frames
+
+	for an in frames.get_animation_names():
+		for i in frames.get_frame_count(an):
+
+			var tex = frames.get_frame_texture(an, i)
+			var base = tex.atlas if tex is AtlasTexture else tex   # showitem dùng cả ảnh
+
+			if base == null or map.has(base):
+				continue
+
+			var n: String = base.resource_path.get_file().get_basename()
+			if by_name.has(n):
+				map[base] = by_name[n]
+
+	return map
